@@ -1,0 +1,73 @@
+# Cloudflare Pages Build Configuration
+
+## Important Notes:
+
+### 1. Next.js Config
+- We removed `output: 'standalone'` from next.config.ts
+- This was causing the warning: "next start does not work with output: standalone"
+- Cloudflare Pages handles the build automatically - no special config needed!
+
+### 2. Cloudflare Build Settings
+
+When deploying to Cloudflare Pages, use these settings:
+
+**Framework preset**: Next.js (Static HTML Export)
+**Build command**: `npm run build`
+**Build output directory**: `out`
+
+OR use the default Next.js preset and Cloudflare will auto-detect.
+
+### 3. Environment Variables
+
+Set these in Cloudflare Pages dashboard:
+
+- `BACKEND_URL`: Your Railway backend URL
+- `API_KEY`: Your production API key
+- `NODE_VERSION`: 18 or 20
+
+### 4. Local Development
+
+For local development, use:
+```bash
+npm run dev        # Development server
+npm run build      # Build for production
+npm run start      # Production server (local)
+```
+
+### 5. Production Build
+
+Cloudflare Pages will automatically:
+- Install dependencies
+- Run `npm run build`
+- Deploy the built files
+- Handle image optimization
+- Provide global CDN
+
+No special configuration needed in next.config.ts!
+
+### 6. Alternative: Standalone Mode
+
+If you need standalone mode for other platforms (Vercel, Railway, etc.):
+
+```typescript
+const nextConfig: NextConfig = {
+  output: process.env.PLATFORM === 'standalone' ? 'standalone' : undefined,
+  images: {
+    unoptimized: true,
+  },
+};
+```
+
+Then set `PLATFORM=standalone` in your deployment environment.
+
+## Summary
+
+✅ Current config works for:
+- Local development (npm run dev)
+- Cloudflare Pages deployment
+- Standard Next.js deployments
+
+❌ Removed standalone mode because:
+- Not needed for Cloudflare Pages
+- Breaks `next start` command
+- Adds unnecessary complexity
