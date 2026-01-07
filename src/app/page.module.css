@@ -1,141 +1,255 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
 .main {
-  display: flex;
   min-height: 100vh;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+  background: var(--white);
 }
 
-.intro {
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+  padding: 160px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero .container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+  align-items: center;
+  gap: 60px;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.heroContent {
+  flex: 1;
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.badge {
+  display: none;
 }
 
-.intro a {
+.hero h1 {
+  font-size: 60px;
+  line-height: 1.2;
   font-weight: 500;
-  color: var(--text-primary);
+  margin-bottom: 35px;
+  color: var(--black);
 }
 
-.ctas {
+.hero p {
+  font-size: 20px;
+  color: var(--black);
+  margin-bottom: 35px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.heroActions {
   display: flex;
-  flex-direction: row;
+  gap: 14px;
+}
+
+.heroVisual {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardMockup {
   width: 100%;
-  max-width: 440px;
-  gap: 16px;
+  max-width: 600px;
+  background: var(--dark);
+  border-radius: 45px;
+  padding: 0;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.mockupHeader {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px 20px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.mockupBody {
+  padding: 30px;
+  font-family: 'Space Grotesk', monospace;
+  color: var(--white);
+}
+
+.inputLine {
+  color: var(--green);
+  margin-bottom: 20px;
+  font-weight: 600;
   font-size: 14px;
 }
 
-.ctas a {
+.codeBlock {
+  color: #a0aec0;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.glow {
+  display: none;
+}
+
+/* Services Section */
+.features {
+  padding: 100px 0;
+}
+
+.sectionHeader {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
+  gap: 40px;
+  margin-bottom: 80px;
+}
+
+.sectionTitle {
+  display: inline-block;
+  background: var(--green);
+  color: var(--black);
+  border-radius: 7px;
+  padding: 0 7px;
+  font-size: 40px;
   font-weight: 500;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.sectionDesc {
+  max-width: 580px;
+  font-size: 18px;
+  line-height: 1.5;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+.featureCard {
+  border-radius: 45px;
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border: 1px solid var(--black);
+  min-height: 310px;
+}
+
+.featureCardGray {
+  background: var(--gray);
+}
+
+.featureCardGreen {
+  background: var(--green);
+}
+
+.featureCardDark {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.featureCardTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+}
+
+.featureCardTitle h3 {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.featureCardTitle h3 span {
+  display: inline-block;
+  padding: 0 7px;
+  border-radius: 7px;
+}
+
+.icon {
+  font-size: 2.5rem;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dark);
+  border-radius: 50%;
+}
+
+.learnMore {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.learnMore svg {
+  width: 41px;
+  height: 41px;
+}
+
+.footer {
+  padding: 60px 0;
+  background: var(--dark);
+  color: var(--white);
+  border-radius: 45px 45px 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 1024px) {
+  .hero .container {
+    flex-direction: column;
+    text-align: center;
+    gap: 50px;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  .hero h1 {
+    font-size: 43px;
+  }
+
+  .hero p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .heroActions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 36px;
   }
 
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .heroVisual {
+    display: none;
   }
 }

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch-All Detection Test</title>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+        }
+        .container {
+            background: #f3f3f3;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        h1 {
+            color: #000;
+            margin-bottom: 10px;
+        }
+        .info {
+            background: rgba(185, 255, 102, 0.1);
+            border: 1px solid #b9ff66;
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button {
+            background: #191a23;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #b9ff66;
+            color: #000;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            background: #191a23;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+        }
+        .result h2 {
+            margin-top: 0;
+            color: #b9ff66;
+        }
+        .field {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .field:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: 600;
+        }
+        .value {
+            color: #b9ff66;
+        }
+        .value.yes {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        .value.no {
+            color: #10b981;
+        }
+        .score {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            color: #b9ff66;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Catch-All Detection Test</h1>
+        <p>Test the email verification system with catch-all detection</p>
+        
+        <div class="info">
+            <strong>💡 Test Case:</strong> Try <code>support@penniesuntouched.com</code> - 
+            This is a known catch-all domain that should be detected!
+        </div>
+
+        <input 
+            type="email" 
+            id="emailInput" 
+            placeholder="Enter email address (e.g., support@penniesuntouched.com)"
+            value="support@penniesuntouched.com"
+        >
+        
+        <button id="verifyBtn" onclick="verifyEmail()">Verify Email</button>
+
+        <div id="result" style="display: none;" class="result">
+            <h2>Verification Results</h2>
+            <div class="score" id="score"></div>
+            <div class="field">
+                <span class="label">Email:</span>
+                <span class="value" id="email"></span>
+            </div>
+            <div class="field">
+                <span class="label">Syntax:</span>
+                <span class="value" id="syntax"></span>
+            </div>
+            <div class="field">
+                <span class="label">Domain:</span>
+                <span class="value" id="domain"></span>
+            </div>
+            <div class="field">
+                <span class="label">MX Records:</span>
+                <span class="value" id="mx"></span>
+            </div>
+            <div class="field">
+                <span class="label">SMTP:</span>
+                <span class="value" id="smtp"></span>
+            </div>
+            <div class="field">
+                <span class="label">🎯 Catch-All:</span>
+                <span class="value" id="catchAll"></span>
+            </div>
+            <div class="field">
+                <span class="label">Role-Based:</span>
+                <span class="value" id="roleBased"></span>
+            </div>
+            <div class="field">
+                <span class="label">Disposable:</span>
+                <span class="value" id="disposable"></span>
+            </div>
+            <div class="field">
+                <span class="label">Spam Risk:</span>
+                <span class="value" id="spamRisk"></span>
+            </div>
+            <div class="field">
+                <span class="label">Final Status:</span>
+                <span class="value" id="finalStatus"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function verifyEmail() {
+            const email = document.getElementById('emailInput').value;
+            const btn = document.getElementById('verifyBtn');
+            const resultDiv = document.getElementById('result');
+
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Verification failed');
+                }
+
+                const data = await response.json();
+
+                // Display results
+                document.getElementById('score').textContent = data.safety_score;
+                document.getElementById('email').textContent = data.email;
+                document.getElementById('syntax').textContent = data.syntax;
+                document.getElementById('domain').textContent = data.domain;
+                document.getElementById('mx').textContent = data.mx;
+                document.getElementById('smtp').textContent = data.smtp;
+                
+                const catchAllEl = document.getElementById('catchAll');
+                catchAllEl.textContent = data.catch_all ? 'YES ⚠️' : 'NO ✅';
+                catchAllEl.className = data.catch_all ? 'value yes' : 'value no';
+                
+                const roleBasedEl = document.getElementById('roleBased');
+                roleBasedEl.textContent = data.role_based ? 'YES ⚠️' : 'NO ✅';
+                roleBasedEl.className = data.role_based ? 'value yes' : 'value no';
+                
+                const disposableEl = document.getElementById('disposable');
+                disposableEl.textContent = data.disposable ? 'YES ⛔' : 'NO ✅';
+                disposableEl.className = data.disposable ? 'value yes' : 'value no';
+                
+                document.getElementById('spamRisk').textContent = data.spam_risk;
+                document.getElementById('finalStatus').textContent = data.final_status;
+
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                alert('Error: ' + error.message + '\n\nMake sure the backend is running on port 8000');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Verify Email';
+            }
+        }
+
+        // Auto-verify on load
+        window.addEventListener('load', () => {
+            setTimeout(verifyEmail, 500);
+        });
+    </script>
+</body>
+</html>

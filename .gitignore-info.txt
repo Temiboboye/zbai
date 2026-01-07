@@ -1,0 +1,66 @@
+# Files Excluded from Git Repository
+
+This file explains what is excluded from git via .gitignore
+
+## Excluded File Types:
+
+1. **Documentation Files (*.md)**
+   - All markdown files EXCEPT README.md
+   - Includes: deployment guides, checklists, summaries, etc.
+   - To keep specific MD files, uncomment lines in .gitignore
+
+2. **Deployment Scripts**
+   - deploy-*.sh (e.g., deploy-cloudflare.sh)
+   - These are local helper scripts
+
+3. **Test Files**
+   - test_*.py
+   - test_*.txt
+   - *_test.py
+
+4. **Data Files**
+   - *.csv (CSV data files)
+   - Exception: example.csv (if you create one)
+
+5. **Python/Backend**
+   - backend/venv/ (virtual environment)
+   - __pycache__/ (Python cache)
+   - *.pyc, *.pyo (compiled Python)
+
+6. **Environment Files**
+   - .env*
+   - Contains sensitive keys and local config
+
+7. **IDE Files**
+   - .vscode/, .idea/
+   - Editor-specific settings
+
+8. **Build Artifacts**
+   - .next/, /out/
+   - node_modules/
+   - dist/, build/
+
+## Files INCLUDED in Git:
+
+✅ README.md (main documentation)
+✅ Source code (src/, backend/app/)
+✅ Configuration files (package.json, next.config.ts, etc.)
+✅ Railway/deployment configs (railway.json, Procfile)
+
+## To Include a Specific MD File:
+
+Edit .gitignore and add:
+!YOUR_FILE.md
+
+Example:
+!SETUP_GUIDE.md
+!PROJECT_SUMMARY.md
+
+## To Check What's Ignored:
+
+git status --ignored
+
+## To Remove Already-Tracked Files:
+
+git rm --cached filename.md
+git commit -m "Remove tracked file"

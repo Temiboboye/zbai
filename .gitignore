@@ -39,3 +39,49 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Documentation files (exclude from git)
+*.md
+!README.md
+# Uncomment below to keep specific MD files
+# !SETUP_GUIDE.md
+# !PROJECT_SUMMARY.md
+
+# Deployment scripts
+deploy-*.sh
+
+# Test files
+test_*.py
+test_*.txt
+*_test.py
+
+# CSV data files
+*.csv
+!example.csv
+
+# Backend virtual environment
+backend/venv/
+backend/__pycache__/
+backend/.pytest_cache/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
