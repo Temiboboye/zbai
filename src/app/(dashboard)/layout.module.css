@@ -161,6 +161,31 @@
     background: var(--green);
 }
 
+.logoutBtn {
+    padding: 12px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: var(--black);
+    color: var(--white);
+    border: 1px solid var(--black);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+    background: var(--dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logoutBtn:active {
+    transform: translateY(0);
+}
+
 .scrollArea {
     flex: 1;
     overflow-y: auto;

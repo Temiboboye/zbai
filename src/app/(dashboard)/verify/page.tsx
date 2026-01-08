@@ -4,6 +4,9 @@ import { useState } from 'react';
 import styles from './page.module.css';
 import { useCredits } from '@/contexts/CreditContext';
 
+// Note: Metadata must be in a separate layout.tsx for client components
+// This page uses client-side features, so metadata is in the parent layout
+
 export default function VerifyPage() {
     const [email, setEmail] = useState('');
     const [result, setResult] = useState<any>(null);
@@ -127,8 +130,8 @@ export default function VerifyPage() {
                                 💳 1 Credit Used
                             </span>
                             <span className={`${styles.statusBadge} ${result.statusLabel === 'Safe to Send' ? styles.valid :
-                                    result.statusLabel === 'Risky' ? styles.risky :
-                                        styles.invalid
+                                result.statusLabel === 'Risky' ? styles.risky :
+                                    styles.invalid
                                 }`}>
                                 {result.statusLabel}
                             </span>

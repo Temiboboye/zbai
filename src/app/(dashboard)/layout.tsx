@@ -67,8 +67,21 @@ function DashboardInner({
                 <header className={styles.topHeader}>
                     <h2>Welcome back, John</h2>
                     <div className={styles.headerActions}>
-                        <button className={styles.iconBtn}>🔔</button>
-                        <button className={styles.iconBtn}>⚙️</button>
+                        <button className={styles.iconBtn} title="Notifications">🔔</button>
+                        <button className={styles.iconBtn} title="Settings">⚙️</button>
+                        <button
+                            className={styles.logoutBtn}
+                            onClick={() => {
+                                // Clear any auth tokens/session
+                                localStorage.removeItem('authToken');
+                                sessionStorage.clear();
+                                // Redirect to login
+                                window.location.href = '/login';
+                            }}
+                            title="Logout"
+                        >
+                            🚪 Logout
+                        </button>
                     </div>
                 </header>
                 <div className={styles.scrollArea}>
