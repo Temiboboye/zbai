@@ -147,6 +147,7 @@ function VerifyEmailContent() {
                 <div className={styles.icon}>📧</div>
                 <h1>Verify Your Email</h1>
                 <p>We sent a 6-digit code to <strong>{email || 'your email'}</strong></p>
+                <a href="/signup" className={styles.changeEmail}>Wrong email? Go back</a>
 
                 {error && (
                     <div className={styles.error}>

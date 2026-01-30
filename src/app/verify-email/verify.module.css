@@ -37,6 +37,21 @@
     color: #B9FF66;
 }
 
+.changeEmail {
+    display: inline-block;
+    color: #888;
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+}
+
+.changeEmail:hover {
+    color: #B9FF66;
+    text-decoration: underline;
+}
+
 .error {
     background: rgba(255, 59, 48, 0.1);
     border: 1px solid rgba(255, 59, 48, 0.3);
