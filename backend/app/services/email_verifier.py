@@ -11,11 +11,13 @@ import requests
 import random
 import string
 import asyncio
+import logging
 from typing import Dict, Tuple, Optional
 from email_validator import validate_email, EmailNotValidError
 import aiosmtplib
 from app.services.office365_checker import office365_checker
 from app.services.gmail_checker import gmail_checker
+from app.services.avatar_checker import avatar_checker
 
 
 class EmailVerificationService:
@@ -30,14 +32,8 @@ class EmailVerificationService:
     - Role-based email detection
     - Catch-all detection
     - Spam trap identification
+    - Social Profile Validation (Avatar)
     """
-    
-    # Common disposable email domains
-    DISPOSABLE_DOMAINS = {
-        'tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com',
-        'throwaway.email', 'temp-mail.org', 'getnada.com', 'maildrop.cc',
-        'yopmail.com', 'fakeinbox.com', 'trashmail.com', 'sharklasers.com'
-    }
     
     # Common role-based prefixes
     ROLE_BASED_PREFIXES = {
@@ -50,6 +46,34 @@ class EmailVerificationService:
         self.user_agent = 'Microsoft Office/16.0 (Windows NT 10.0; Microsoft Outlook 16.0.12026; Pro)'
         self.headers = {'User-Agent': self.user_agent, 'Accept': 'application/json'}
         self.domain_cache = {}
+        
+        # Load disposable domains from file (5000+ domains)
+        self.disposable_domains = self._load_disposable_domains()
+    
+    def _load_disposable_domains(self) -> set:
+        """Load disposable email domains from file"""
+        import os
+        
+        # Path to the disposable domains file
+        file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'disposable_domains.txt')
+        
+        try:
+            with open(file_path, 'r') as f:
+                # Read all lines, strip whitespace, and create a set
+                domains = {line.strip().lower() for line in f if line.strip()}
+            print(f"✅ Loaded {len(domains)} disposable email domains")
+            return domains
+        except FileNotFoundError:
+            print(f"⚠️ Disposable domains file not found at {file_path}, using fallback list")
+            # Fallback to small list if file not found
+            return {
+                'tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com',
+                'throwaway.email', 'temp-mail.org', 'getnada.com', 'maildrop.cc',
+                'yopmail.com', 'fakeinbox.com', 'trashmail.com', 'sharklasers.com'
+            }
+        except Exception as e:
+            print(f"⚠️ Error loading disposable domains: {e}")
+            return set()
     
     async def verify_email(self, email: str) -> Dict:
         """
@@ -72,6 +96,8 @@ class EmailVerificationService:
             'final_status': 'unknown',
             'safety_score': 0,
             'reason': None,  # Reason for the status
+            'has_social': False,
+            'social_platform': None,
             'details': {}
         }
         
@@ -141,8 +167,17 @@ class EmailVerificationService:
                     
                     # Handle valid emails
                     if specialized_check_result['valid']:
-                        # If catch-all detected, mark as risky
-                        if is_catch_all:
+                        # Check if this was verified via Login API (most reliable)
+                        method = specialized_check_result.get('method', '')
+                        
+                        if 'microsoft_login_api' in method:
+                            # Login API confirmation is definitive, even on catch-all
+                            result['final_status'] = 'valid_safe'
+                            result['safety_score'] = 90 if not result['role_based'] else 80
+                            result['spam_risk'] = 'low'
+                            result['reason'] = 'Confirmed via Microsoft Login API'
+                        elif is_catch_all:
+                            # Catch-all without Login API confirmation
                             result['final_status'] = 'valid_risky'
                             result['safety_score'] = 60
                             result['spam_risk'] = 'medium'
@@ -179,10 +214,26 @@ class EmailVerificationService:
                 if result['catch_all']:
                     result['details']['catch_all_source'] = 'known_database'
             
-            # 10. Calculate Final Status and Safety Score
+            # 10. Social Profile Check (Avatar)
+            # This is a strong signal for valid emails, even on catch-all domains
+            if result['catch_all'] or result['final_status'] == 'unknown':
+                logger = logging.getLogger(__name__) # Ensure logger
+                
+                # Run async check (wrapping the sync method for now, or make avatar_checker async)
+                social_result = await avatar_checker.check_social_presence(email)
+                
+                if social_result['has_social']:
+                    result['has_social'] = True
+                    result['social_platform'] = social_result['platform']
+                    result['details']['social'] = social_result['details']
+                    # Increase score significantly if social profile found
+                    result['safety_score'] = max(result['safety_score'], 90)
+                    result['final_status'] = 'valid_safe'
+            
+            # 11. Calculate Final Status and Safety Score
             result['final_status'], result['safety_score'], result['reason'] = self._calculate_final_status(result)
             
-            # 11. Spam Risk Assessment
+            # 12. Spam Risk Assessment
             result['spam_risk'] = self._assess_spam_risk(result)
             
         except Exception as e:
@@ -244,7 +295,19 @@ class EmailVerificationService:
         mx_is_o365 = any('outlook' in mx.lower() or 'microsoft' in mx.lower() for mx in mx_records)
         domain_is_o365 = any(indicator in domain.lower() for indicator in o365_indicators)
         
-        if mx_is_o365 or domain_is_o365:
+        # Check SPF record for Office 365 (catches domains behind mail gateways)
+        spf_is_o365 = False
+        try:
+            spf_records = dns.resolver.resolve(domain, 'TXT')
+            for record in spf_records:
+                txt_value = str(record).lower()
+                if 'spf.protection.outlook.com' in txt_value:
+                    spf_is_o365 = True
+                    break
+        except Exception:
+            pass  # SPF check is optional, continue if it fails
+        
+        if mx_is_o365 or domain_is_o365 or spf_is_o365:
             # Use Office 365 specialized checker
             result = office365_checker.check_email(email)
             return result
@@ -312,10 +375,30 @@ class EmailVerificationService:
             code, message = await smtp.rcpt(email)
             await smtp.quit()
             
+            message_str = message.decode() if isinstance(message, bytes) else str(message)
+            message_lower = message_str.lower()
+            
             if code == 250:
                 return True, "responsive"
             elif code == 550:
-                return False, "rejected"
+                # Check for specific rejection reasons
+                if 'mailbox full' in message_lower or 'quota' in message_lower or 'over quota' in message_lower:
+                    return False, "mailbox_full"
+                elif 'does not exist' in message_lower or 'user unknown' in message_lower or 'no such user' in message_lower:
+                    return False, "user_not_found"
+                elif 'disabled' in message_lower or 'suspended' in message_lower:
+                    return False, "account_disabled"
+                else:
+                    return False, "rejected"
+            elif code == 552:
+                # Mailbox full
+                return False, "mailbox_full"
+            elif code == 553:
+                # Mailbox name not allowed
+                return False, "invalid_mailbox"
+            elif code == 450 or code == 451:
+                # Temporary failure
+                return False, "temporary_failure"
             else:
                 return False, f"code_{code}"
                 
@@ -342,7 +425,7 @@ class EmailVerificationService:
     
     def _is_disposable(self, domain: str) -> bool:
         """Check if domain is a known disposable email provider"""
-        return domain.lower() in self.DISPOSABLE_DOMAINS
+        return domain.lower() in self.disposable_domains
     
     def _is_role_based(self, local_part: str) -> bool:
         """Check if email is role-based"""
@@ -391,15 +474,33 @@ class EmailVerificationService:
         if result['mx'] != 'found':
             return 'no_mx', 15, 'No MX records found'
         
-        if result['smtp'] == 'rejected':
+        # Check SMTP status for specific rejection reasons
+        smtp_status = result['smtp']
+        
+        if smtp_status == 'mailbox_full':
+            return 'mailbox_full', 40, 'Mailbox is full - cannot receive emails'
+        
+        if smtp_status == 'account_disabled':
+            return 'account_disabled', 25, 'Account disabled or suspended'
+        
+        if smtp_status == 'user_not_found':
+            return 'invalid', 20, 'User does not exist'
+        
+        if smtp_status == 'invalid_mailbox':
+            return 'invalid', 15, 'Invalid mailbox name'
+        
+        if smtp_status == 'rejected':
             return 'invalid', 20, 'Email rejected by server'
         
+        if smtp_status == 'temporary_failure':
+            return 'temporary_failure', 60, 'Temporary server issue - try again later'
+        
         # CRITICAL: Catch-all + Unreachable SMTP = Cannot verify = Risky
-        if result['smtp'] == 'unreachable' and result['catch_all']:
+        if smtp_status == 'unreachable' and result['catch_all']:
             # Cannot verify if email exists on a catch-all domain with blocked SMTP
             return 'risky', 50, 'ACCEPT ALL'
         
-        if result['smtp'] == 'unreachable':
+        if smtp_status == 'unreachable':
             score -= 30
         
         if result['catch_all']:
@@ -410,11 +511,13 @@ class EmailVerificationService:
         
         # Determine status and reason
         if score >= 90:
-            return 'valid_safe', score, 'Valid and safe'
+            return 'valid_safe', score, 'Valid and safe to send'
         elif score >= 70:
             reason = 'Valid but risky'
             if result['catch_all']:
-                reason = 'Catch-all domain'
+                reason = 'Catch-all domain - cannot verify specific mailbox'
+            if result['role_based']:
+                reason = 'Role-based email address'
             return 'valid_risky', score, reason
         elif score >= 50:
             return 'risky', score, 'Risky email address'

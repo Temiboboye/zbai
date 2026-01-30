@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './layout.module.css';
 import { CreditProvider, useCredits } from '@/contexts/CreditContext';
 
@@ -14,6 +15,19 @@ function DashboardInner({
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
+
+    const navItems = [
+        { href: '/dashboard', icon: '📊', label: 'Dashboard' },
+        { href: '/verify', icon: '🔍', label: 'Real-Time Verify' },
+        { href: '/bulk', icon: '📁', label: 'Bulk Verifier' },
+        { href: '/sort', icon: '📧', label: 'Email Sorter' },
+        { href: '/email-finder', icon: '🔎', label: 'Email Finder' },
+        { href: '/api-keys', icon: '🔑', label: 'API Keys' },
+        { href: '/blacklist', icon: '🚫', label: 'Blacklist Monitor' },
+        { href: '/billing', icon: '💳', label: 'Billing' },
+    ];
+
     return (
         <div className={styles.layout}>
             <aside className={styles.sidebar}>
@@ -25,27 +39,15 @@ function DashboardInner({
                 </div>
 
                 <nav className={styles.nav}>
-                    <Link href="/dashboard" className={styles.navLink}>
-                        <span>📊</span> Dashboard
-                    </Link>
-                    <Link href="/verify" className={styles.navLink}>
-                        <span>🔍</span> Real-Time Verify
-                    </Link>
-                    <Link href="/bulk" className={styles.navLink}>
-                        <span>📁</span> Bulk Tasks
-                    </Link>
-                    <Link href="/sort" className={styles.navLink}>
-                        <span>📊</span> Sort Emails
-                    </Link>
-                    <Link href="/api-keys" className={styles.navLink}>
-                        <span>🔑</span> API Keys
-                    </Link>
-                    <Link href="/blacklist" className={styles.navLink}>
-                        <span>🚫</span> Blacklist Monitor
-                    </Link>
-                    <Link href="/billing" className={styles.navLink}>
-                        <span>💳</span> Billing
-                    </Link>
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`${styles.navLink} ${pathname === item.href ? styles.navLinkActive : ''}`}
+                        >
+                            <span>{item.icon}</span> {item.label}
+                        </Link>
+                    ))}
                 </nav>
 
                 <div className={styles.sidebarFooter}>

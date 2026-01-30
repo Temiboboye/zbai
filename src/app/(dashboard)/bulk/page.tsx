@@ -41,16 +41,57 @@ export default function BulkPage() {
     };
 
     const processFile = (file: File) => {
+        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+        // Handle plain text files (one email per line)
+        if (fileExtension === 'txt') {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target?.result as string;
+                if (!text) {
+                    alert('Could not read file.');
+                    return;
+                }
+
+                // Split by newlines and filter for valid emails
+                const emailList = text
+                    .split(/[\r\n]+/)
+                    .map(line => line.trim())
+                    .filter(line => line.includes('@') && line.includes('.'));
+
+                if (emailList.length === 0) {
+                    alert('No valid emails found in this file.');
+                    return;
+                }
+
+                setParsedFile({
+                    name: file.name,
+                    count: emailList.length,
+                    data: emailList
+                });
+            };
+            reader.onerror = () => {
+                alert('Error reading file.');
+            };
+            reader.readAsText(file);
+            return;
+        }
+
+        // Handle CSV files with PapaParser
         Papa.parse(file, {
             complete: (results) => {
                 const emailList: string[] = [];
-                // Simple heuristic: find first column that looks like an email
+                // Find emails in any column
                 results.data.forEach((row: any) => {
                     const rowVals = Array.isArray(row) ? row : Object.values(row);
-                    const email = rowVals.find((val: any) =>
-                        typeof val === 'string' && val.includes('@') && val.includes('.')
-                    );
-                    if (email) emailList.push(email as string);
+                    rowVals.forEach((val: any) => {
+                        if (typeof val === 'string') {
+                            const trimmed = val.trim();
+                            if (trimmed.includes('@') && trimmed.includes('.') && !emailList.includes(trimmed)) {
+                                emailList.push(trimmed);
+                            }
+                        }
+                    });
                 });
 
                 if (emailList.length === 0) {
@@ -64,7 +105,8 @@ export default function BulkPage() {
                     data: emailList
                 });
             },
-            header: false // Auto-detect headers usually safer to treat as array of arrays
+            header: false,
+            skipEmptyLines: true
         });
     };
 
@@ -107,26 +149,52 @@ export default function BulkPage() {
     const pollJob = (jobId: string) => {
         const interval = setInterval(async () => {
             try {
+                // Get job status
                 const res = await fetch(`/api/verify/bulk/${jobId}`);
                 if (!res.ok) return;
                 const jobStatus = await res.json();
                 setActiveJob(jobStatus);
 
+                // Try to fetch partial results even while processing
+                try {
+                    const resultsRes = await fetch(`/api/verify/bulk/${jobId}/results`);
+                    if (resultsRes.ok) {
+                        const data = await resultsRes.json();
+                        // Update results even if job isn't complete yet
+                        if (data.results && data.results.length > 0) {
+                            setResults(data.results);
+                        }
+                    }
+                } catch (e) {
+                    // Results not ready yet, that's okay
+                }
+
                 if (jobStatus.status === 'completed') {
                     clearInterval(interval);
+                    // Final fetch to ensure we have all results
                     fetchResults(jobId);
                 }
             } catch (e) { console.error(e); }
-        }, 1000);
+        }, 1000); // Poll every second
     };
 
     const fetchResults = async (jobId: string) => {
-        const res = await fetch(`/api/verify/bulk/${jobId}/results`);
-        const data = await res.json();
-        setResults(data.results);
-        setLoading(false);
-        setParsedFile(null); // Clear input state on success
-        setEmails('');
+        try {
+            const res = await fetch(`/api/verify/bulk/${jobId}/results`);
+            if (!res.ok) {
+                // If 400 (not completed), keep current partial results
+                if (res.status === 400) return;
+                throw new Error('Failed to fetch results');
+            }
+            const data = await res.json();
+            setResults(data.results);
+            setLoading(false);
+            setParsedFile(null); // Clear input state on success
+            setEmails('');
+        } catch (error) {
+            console.error('Error fetching results:', error);
+            setLoading(false);
+        }
     };
 
     // -- Valid/Invalid    // Categorize results
@@ -160,7 +228,7 @@ export default function BulkPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1 style={{ color: '#000' }}>Bulk Verification</h1>
+                <h1 style={{ color: '#000' }}>Bulk Verifier</h1>
                 <p>Verify thousands of emails accurately. Upload a CSV or paste your list.</p>
             </div>
 

@@ -1,0 +1,52 @@
+# Cloudflare Pages Configuration for Next.js
+
+## Build Settings (Use in Cloudflare Dashboard)
+
+**Framework preset**: Next.js
+**Build command**: `npm run build`
+**Build output directory**: `.next`
+**Root directory**: (leave empty)
+
+## Environment Variables
+
+Add these in Cloudflare Pages dashboard:
+
+```
+NODE_VERSION=18
+BACKEND_URL=https://your-railway-backend-url.up.railway.app
+API_KEY=zb_live_demo_key_123456
+NEXT_PUBLIC_APP_URL=https://zbai.pages.dev
+```
+
+## Important Notes
+
+1. **DO NOT** set a custom deploy command
+2. Cloudflare Pages automatically handles Next.js deployment
+3. The build output `.next` is correct
+4. No wrangler.toml needed for Pages (only for Workers)
+
+## If You See Wrangler Error
+
+This means Cloudflare is trying to use Workers instead of Pages.
+
+**Solution:**
+1. Delete the current deployment
+2. Create a NEW Pages project (not Workers)
+3. Make sure you select "Pages" tab, not "Workers"
+4. Leave "Deploy command" EMPTY or use default
+
+## Correct Cloudflare Pages Setup
+
+1. Go to: https://dash.cloudflare.com
+2. Click "Workers & Pages"
+3. Click "Create application"
+4. Select **"Pages"** tab (NOT Workers!)
+5. Click "Connect to Git"
+6. Select your repository
+7. Configure:
+   - Framework: Next.js
+   - Build command: `npm run build`
+   - Build output: `.next`
+   - **Deploy command: LEAVE EMPTY**
+
+The build log shows it compiled successfully! The error is just in the deploy step.

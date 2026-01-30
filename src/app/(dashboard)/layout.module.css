@@ -2,28 +2,31 @@
     display: flex;
     height: 100vh;
     overflow: hidden;
-    background: var(--white);
+    background: linear-gradient(135deg, #e8f4fc 0%, #f0f7f4 50%, #e8f0fc 100%);
 }
 
 .sidebar {
-    width: 280px;
-    background: var(--gray);
-    border-right: 1px solid var(--surface-border);
+    width: 260px;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.03);
 }
 
 .sidebarHeader {
-    padding: 30px;
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     color: var(--black);
+    letter-spacing: -0.5px;
 }
 
 .logo span {
@@ -35,75 +38,123 @@
 
 .nav {
     flex: 1;
-    padding: 0 15px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .navLink {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 14px 15px;
-    border-radius: 14px;
-    color: var(--black);
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #555;
     font-weight: 500;
-    margin-bottom: 4px;
-    transition: all 0.2s;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .navLink:hover {
-    background: var(--white);
+    background: white;
+    color: var(--black);
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transform: translateX(2px);
+}
+
+.navLink:active {
+    transform: translateX(0);
 }
 
 .navLink span {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* Active nav link - applied via JS or pathname matching */
+.navLinkActive {
+    background: var(--green) !important;
+    color: var(--black) !important;
+    font-weight: 600;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(185, 255, 102, 0.3);
 }
 
 .sidebarFooter {
-    padding: 20px;
-    border-top: 1px solid var(--surface-border);
+    padding: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(0, 0, 0, 0.01);
 }
 
 .creditCard {
-    background: var(--green);
+    background: linear-gradient(135deg, var(--green) 0%, #c4ff80 100%);
     color: var(--black);
-    padding: 20px;
-    border-radius: 20px;
-    margin-bottom: 20px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(185, 255, 102, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.creditCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .creditCard p {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 5px;
-    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    font-weight: 600;
+    opacity: 0.8;
 }
 
 .creditCard h3 {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
+    letter-spacing: -1px;
 }
 
 .userProfile {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    transition: background 0.2s;
+}
+
+.userProfile:hover {
+    background: rgba(0, 0, 0, 0.02);
 }
 
 .avatar {
-    width: 44px;
-    height: 44px;
-    background: var(--dark);
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    font-size: 14px;
     color: white;
 }
 
 .userInfo p {
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .userName {
@@ -114,72 +165,81 @@
 
 .userEmail {
     font-size: 12px;
-    color: var(--text-muted);
+    color: #888;
 }
 
+/* Main Content Area */
 .content {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: transparent;
 }
 
 .topHeader {
-    height: 80px;
-    padding: 0 40px;
+    height: 72px;
+    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--surface-border);
-    background: var(--white);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .topHeader h2 {
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
+    color: #333;
 }
 
 .headerActions {
     display: flex;
-    gap: 12px;
+    gap: 10px;
+    align-items: center;
 }
 
 .iconBtn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: var(--gray);
-    border: 1px solid var(--surface-border);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     transition: all 0.2s;
+    font-size: 16px;
 }
 
 .iconBtn:hover {
     background: var(--green);
+    border-color: var(--green);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(185, 255, 102, 0.3);
 }
 
 .logoutBtn {
-    padding: 12px 20px;
-    border-radius: 14px;
+    padding: 10px 18px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
     background: var(--black);
     color: var(--white);
-    border: 1px solid var(--black);
+    border: none;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.2s;
 }
 
 .logoutBtn:hover {
-    background: var(--dark);
+    background: #333;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .logoutBtn:active {
@@ -189,6 +249,78 @@
 .scrollArea {
     flex: 1;
     overflow-y: auto;
-    padding: 40px;
-    background: var(--white);
+    padding: 32px;
+}
+
+/* Scrollbar styling */
+.scrollArea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebarHeader {
+        padding: 16px;
+    }
+
+    .logo {
+        justify-content: center;
+        font-size: 0;
+    }
+
+    .logo span {
+        font-size: 1.5rem;
+    }
+
+    .navLink {
+        padding: 12px;
+        justify-content: center;
+    }
+
+    .navLink span {
+        font-size: 1.3rem;
+    }
+
+    /* Hide text on mobile */
+    .navLink::after {
+        display: none;
+    }
+
+    .creditCard p {
+        display: none;
+    }
+
+    .creditCard h3 {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .userInfo {
+        display: none;
+    }
+
+    .scrollArea {
+        padding: 16px;
+    }
+
+    .topHeader {
+        padding: 0 16px;
+    }
 }
