@@ -85,3 +85,9 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Ignore personal/temp files
+*.pdf
+valid.txt
+DEPLOY-NOW.txt
+CLOUDFLARE-PAGES-CONFIG.txt
