@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 // List of common disposable email domains (subset - full list should be loaded from file)
 const DISPOSABLE_DOMAINS = new Set([
@@ -13,6 +14,14 @@ const DISPOSABLE_DOMAINS = new Set([
 const signupAttempts = new Map<string, { count: number; firstAttempt: number }>();
 const MAX_SIGNUPS_PER_IP = 3;
 const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000; // 24 hours
+
+// Pending verification store (in production, use Redis)
+const pendingVerifications = new Map<string, {
+    code: string;
+    email: string;
+    userData: any;
+    expires: number;
+}>();
 
 function getClientIP(req: NextRequest): string {
     const forwarded = req.headers.get('x-forwarded-for');
@@ -44,6 +53,19 @@ function isDisposableEmail(email: string): boolean {
     const domain = email.split('@')[1]?.toLowerCase();
     if (!domain) return false;
     return DISPOSABLE_DOMAINS.has(domain);
+}
+
+function generateCode(): string {
+    return crypto.randomInt(100000, 999999).toString();
+}
+
+// Export for use by verify-email route
+export function getPendingVerification(token: string) {
+    return pendingVerifications.get(token);
+}
+
+export function deletePendingVerification(token: string) {
+    pendingVerifications.delete(token);
 }
 
 export async function POST(req: NextRequest) {
@@ -91,34 +113,36 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Create user with 49 free credits
-        const newUser = {
-            id: Math.floor(Math.random() * 10000),
+        // Generate verification code and token
+        const code = generateCode();
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+
+        // Store pending verification
+        pendingVerifications.set(verificationToken, {
+            code,
             email,
-            full_name,
-            credits_balance: 49, // Free tier credits
-            signup_ip: clientIP,
-            created_at: new Date().toISOString()
-        };
-
-        // Generate token
-        const token = Buffer.from(`${newUser.id}:${newUser.email}:${Date.now()}`).toString('base64');
-
-        const response = NextResponse.json({
-            token,
-            user: newUser,
-            message: 'Account created successfully! You received 49 free credits.'
+            userData: {
+                full_name,
+                email,
+                password, // In production, hash this
+                signup_ip: clientIP
+            },
+            expires: Date.now() + 15 * 60 * 1000 // 15 minutes
         });
 
-        // Set HTTP-only cookie
-        response.cookies.set('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 7 days
-        });
+        // Auto-cleanup after expiry
+        setTimeout(() => pendingVerifications.delete(verificationToken), 15 * 60 * 1000);
 
-        return response;
+        // Mock email sending (in production, use real email service)
+        console.log(`[EMAIL VERIFICATION] Code ${code} sent to ${email}`);
+
+        // Return token for verification page
+        return NextResponse.json({
+            requiresVerification: true,
+            verificationToken,
+            email: email.replace(/(.{2}).*(@.*)/, '$1***$2'), // Masked email
+            message: 'Please check your email for the verification code.'
+        });
 
     } catch (error) {
         console.error('Signup error:', error);

@@ -58,10 +58,16 @@ export default function SignupPage() {
                 throw new Error(data.error || 'Signup failed');
             }
 
-            // Store token and redirect to dashboard
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            router.push('/dashboard');
+            // Check if email verification is required
+            if (data.requiresVerification) {
+                // Redirect to verification page with token
+                router.push(`/verify-email?token=${data.verificationToken}&email=${encodeURIComponent(data.email)}`);
+            } else {
+                // Direct login (fallback)
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                router.push('/dashboard');
+            }
         } catch (err: any) {
             setError(err.message);
         } finally {
