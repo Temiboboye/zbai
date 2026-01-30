@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { sendVerificationEmail } from '@/lib/email';
 
 // List of common disposable email domains (subset - full list should be loaded from file)
 const DISPOSABLE_DOMAINS = new Set([
@@ -133,8 +134,11 @@ export async function POST(req: NextRequest) {
         // Auto-cleanup after expiry
         setTimeout(() => pendingVerifications.delete(verificationToken), 15 * 60 * 1000);
 
-        // Mock email sending (in production, use real email service)
-        console.log(`[EMAIL VERIFICATION] Code ${code} sent to ${email}`);
+        // Send verification email
+        const emailSent = await sendVerificationEmail(email, code);
+        if (!emailSent) {
+            console.error('[SIGNUP] Failed to send verification email to', email);
+        }
 
         // Return token for verification page
         return NextResponse.json({

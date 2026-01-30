@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPendingVerification, deletePendingVerification } from '../../signup/route';
+import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
     try {
@@ -49,6 +50,11 @@ export async function POST(req: NextRequest) {
             email_verified: true,
             created_at: new Date().toISOString()
         };
+
+        // Send welcome email (async, don't wait)
+        sendWelcomeEmail(userData.email, userData.full_name).catch(err =>
+            console.error('[WELCOME EMAIL] Failed to send:', err)
+        );
 
         // Generate auth token
         const authToken = Buffer.from(`${newUser.id}:${newUser.email}:${Date.now()}`).toString('base64');
