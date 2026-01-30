@@ -77,7 +77,7 @@ export default function SignupPage() {
                 </div>
 
                 <h1>Create Account</h1>
-                <p className={styles.subtitle}>Start verifying emails with 100 free credits</p>
+                <p className={styles.subtitle}>Start verifying emails with 49 free credits</p>
 
                 {error && (
                     <div className={styles.error}>
@@ -178,7 +178,7 @@ export default function SignupPage() {
                 <div className={styles.pricingHighlight}>
                     <div className={styles.freeTier}>
                         <h3>Free Trial</h3>
-                        <div className={styles.price}>100</div>
+                        <div className={styles.price}>49</div>
                         <p>Free Credits</p>
                         <ul>
                             <li>✅ No credit card required</li>

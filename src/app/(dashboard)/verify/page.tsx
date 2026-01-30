@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 import { useCredits } from '@/contexts/CreditContext';
+import CreditsBanner from '@/components/CreditsBanner';
+import PaywallModal from '@/components/PaywallModal';
 
 // Note: Metadata must be in a separate layout.tsx for client components
 // This page uses client-side features, so metadata is in the parent layout
@@ -11,14 +13,16 @@ export default function VerifyPage() {
     const [email, setEmail] = useState('');
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const { balance, deductCredits } = useCredits();
+    const [showPaywall, setShowPaywall] = useState(false);
+    const { balance, deductCredits, refreshBalance } = useCredits();
 
     const handleVerify = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) return;
 
+        // Show paywall if no credits
         if (balance < 1) {
-            alert('Insufficient credits! Please purchase more credits.');
+            setShowPaywall(true);
             return;
         }
 
@@ -37,7 +41,7 @@ export default function VerifyPage() {
 
             if (!response.ok) {
                 if (response.status === 402) {
-                    alert('Insufficient credits! Please purchase more credits.');
+                    setShowPaywall(true);
                     return;
                 }
                 throw new Error('Verification failed');
@@ -90,6 +94,17 @@ export default function VerifyPage() {
 
     return (
         <div className={styles.container}>
+            {/* Paywall Modal */}
+            <PaywallModal
+                isOpen={showPaywall}
+                onClose={() => setShowPaywall(false)}
+                creditsNeeded={1}
+                feature="email verification"
+            />
+
+            {/* Credits Banner */}
+            <CreditsBanner credits={balance} onRefresh={refreshBalance} />
+
             {/* Info Box */}
             <div style={{
                 background: 'rgba(185, 255, 102, 0.1)',

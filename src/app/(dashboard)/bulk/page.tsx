@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import styles from './page.module.css';
 import { useCredits } from '@/contexts/CreditContext';
+import CreditsBanner from '@/components/CreditsBanner';
+import PaywallModal from '@/components/PaywallModal';
 import Papa from 'papaparse';
 
 interface BulkJob {
@@ -29,9 +31,11 @@ export default function BulkPage() {
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'valid' | 'invalid' | 'catchall'>('valid');
     const [isDragging, setIsDragging] = useState(false);
+    const [showPaywall, setShowPaywall] = useState(false);
+    const [creditsNeeded, setCreditsNeeded] = useState(0);
 
     // Hooks
-    const { balance, deductCredits } = useCredits();
+    const { balance, deductCredits, refreshBalance } = useCredits();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // -- File Handling --
@@ -118,8 +122,11 @@ export default function BulkPage() {
 
         if (emailList.length === 0) return alert('No emails to verify');
 
+        // Show paywall if insufficient credits
         if (balance < emailList.length) {
-            return alert(`Insufficient credits. You need ${emailList.length} credits.`);
+            setCreditsNeeded(emailList.length);
+            setShowPaywall(true);
+            return;
         }
 
         setLoading(true);
@@ -133,7 +140,15 @@ export default function BulkPage() {
                 body: JSON.stringify({ emails: emailList })
             });
 
-            if (!res.ok) throw new Error('Start failed');
+            if (!res.ok) {
+                if (res.status === 402) {
+                    setCreditsNeeded(emailList.length);
+                    setShowPaywall(true);
+                    setLoading(false);
+                    return;
+                }
+                throw new Error('Start failed');
+            }
 
             const job = await res.json();
             setActiveJob(job);
@@ -227,6 +242,17 @@ export default function BulkPage() {
 
     return (
         <div className={styles.container}>
+            {/* Paywall Modal */}
+            <PaywallModal
+                isOpen={showPaywall}
+                onClose={() => setShowPaywall(false)}
+                creditsNeeded={creditsNeeded}
+                feature="bulk verification"
+            />
+
+            {/* Credits Banner */}
+            <CreditsBanner credits={balance} onRefresh={refreshBalance} />
+
             <div className={styles.header}>
                 <h1 style={{ color: '#000' }}>Bulk Verifier</h1>
                 <p>Verify thousands of emails accurately. Upload a CSV or paste your list.</p>

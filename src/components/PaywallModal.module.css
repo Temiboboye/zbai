@@ -1,0 +1,197 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    background: linear-gradient(135deg, #1a1b24, #252633);
+    border-radius: 24px;
+    border: 1px solid rgba(185, 255, 102, 0.2);
+    max-width: 900px;
+    width: 95%;
+    padding: 40px;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.lockIcon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.header h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #888;
+    font-size: 1rem;
+}
+
+.header strong {
+    color: #B9FF66;
+}
+
+.tiers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .tiers {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.tier {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 25px 20px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tier:hover {
+    border-color: rgba(185, 255, 102, 0.3);
+    transform: translateY(-5px);
+}
+
+.tier.popular {
+    border-color: #B9FF66;
+    background: rgba(185, 255, 102, 0.05);
+}
+
+.badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #B9FF66, #8BC34A);
+    color: #191A23;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.tierCredits {
+    margin-bottom: 15px;
+}
+
+.tierCredits strong {
+    display: block;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.tierCredits span {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.tierPrice {
+    margin-bottom: 5px;
+}
+
+.currency {
+    font-size: 1rem;
+    color: #B9FF66;
+    vertical-align: top;
+}
+
+.amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #B9FF66;
+}
+
+.perCredit {
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+}
+
+.buyBtn {
+    display: block;
+    background: linear-gradient(135deg, #B9FF66, #8BC34A);
+    color: #191A23;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.buyBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(185, 255, 102, 0.3);
+}
+
+.footer {
+    text-align: center;
+}
+
+.guarantee {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+.closeBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #888;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}

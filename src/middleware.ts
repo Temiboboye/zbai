@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
     // Check if the request is for a protected route
-    const protectedPaths = ['/dashboard', '/verify', '/bulk', '/sort', '/api-keys', '/blacklist', '/billing'];
+    const protectedPaths = ['/dashboard', '/verify', '/bulk', '/sort', '/api-keys', '/blacklist', '/billing', '/email-finder'];
     const path = request.nextUrl.pathname;
 
     // Check if current path is protected
@@ -38,5 +38,6 @@ export const config = {
         '/api-keys/:path*',
         '/blacklist/:path*',
         '/billing/:path*',
+        '/email-finder/:path*',
     ],
 };

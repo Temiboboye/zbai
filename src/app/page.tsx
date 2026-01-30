@@ -22,7 +22,8 @@ export default function Home() {
               and spam trap identification.
             </p>
             <div className={styles.heroActions}>
-              <button className="btn btn-primary">Book a consultation</button>
+              <a href="/signup" className="btn btn-primary">Get 49 Free Credits</a>
+              <a href="/login" className="btn btn-secondary">Login</a>
             </div>
           </div>
 
