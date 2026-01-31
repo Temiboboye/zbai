@@ -65,6 +65,11 @@ class EmailSorterService:
     
     def __init__(self):
         self.mx_cache = {}
+        # Configure custom DNS resolver with public DNS servers
+        self.resolver = dns.resolver.Resolver()
+        self.resolver.nameservers = ['8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1']
+        self.resolver.timeout = 5
+        self.resolver.lifetime = 10
     
     def sort_emails(self, emails: List[str]) -> Dict:
         """
@@ -146,8 +151,8 @@ class EmailSorterService:
             return self.mx_cache[domain]
         
         try:
-            # Query MX records
-            mx_records = dns.resolver.resolve(domain, 'MX')
+            # Query MX records using custom resolver with public DNS
+            mx_records = self.resolver.resolve(domain, 'MX')
             mx_hosts = [str(r.exchange).lower().rstrip('.') for r in mx_records]
             
             if not mx_hosts:
