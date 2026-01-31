@@ -15,14 +15,11 @@
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 8px;
-    background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #000;
 }
 
 .title p {
-    color: var(--gray-400);
+    color: #666;
 }
 
 .statsGrid {
@@ -60,13 +57,13 @@
 .statValue {
     font-size: 24px;
     font-weight: 700;
-    color: white;
+    color: #000;
     margin-bottom: 4px;
 }
 
 .statLabel {
     font-size: 14px;
-    color: var(--gray-400);
+    color: #666;
 }
 
 .chartsGrid {
@@ -94,7 +91,7 @@
 .chartHeader h3 {
     font-size: 18px;
     font-weight: 600;
-    color: white;
+    color: #000;
 }
 
 .recentActivity {
@@ -141,7 +138,7 @@
 .activityDetails h4 {
     font-size: 14px;
     font-weight: 500;
-    color: white;
+    color: #000;
     margin-bottom: 2px;
 }
 
