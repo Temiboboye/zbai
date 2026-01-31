@@ -73,30 +73,32 @@ export default function DashboardPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Analytics Dashboard</h1>
-                <p>Overview of your email verification performance</p>
+                <div className={styles.title}>
+                    <h1>Analytics Dashboard</h1>
+                    <p>Overview of your email verification performance</p>
+                </div>
             </div>
 
             {/* Quick Stats Grid */}
             <div className={styles.statsGrid}>
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ color: '#b9ff66' }}>✓</div>
-                    <div className={styles.statValue}>{data.total_verified.toLocaleString()}</div>
+                    <div className={styles.statValue} style={{ color: '#ffffff' }}>{data.total_verified.toLocaleString()}</div>
                     <div className={styles.statLabel}>Total Verified</div>
                 </div>
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ color: '#00ccff' }}>🛡️</div>
-                    <div className={styles.statValue}>{data.avg_safety_score}%</div>
+                    <div className={styles.statValue} style={{ color: '#ffffff' }}>{data.avg_safety_score}%</div>
                     <div className={styles.statLabel}>Avg Safety Score</div>
                 </div>
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ color: '#ffaa00' }}>⚡</div>
-                    <div className={styles.statValue}>{balance.toLocaleString()}</div>
+                    <div className={styles.statValue} style={{ color: '#ffffff' }}>{balance.toLocaleString()}</div>
                     <div className={styles.statLabel}>Credits Available</div>
                 </div>
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ color: '#ff5050' }}>🚫</div>
-                    <div className={styles.statValue}>
+                    <div className={styles.statValue} style={{ color: '#ffffff' }}>
                         {((data.quality_distribution['Invalid'] / data.total_verified) * 100).toFixed(1)}%
                     </div>
                     <div className={styles.statLabel}>Invalid Rate</div>
