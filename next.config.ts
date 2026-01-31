@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Note: Cloudflare Pages handles the build automatically
-  // No need for 'output: standalone' - it breaks local dev
+  output: 'standalone', // Required for Docker production builds
   images: {
     unoptimized: true, // Cloudflare handles image optimization
   },
