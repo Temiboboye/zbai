@@ -13,8 +13,8 @@ const DISPOSABLE_DOMAINS = new Set([
 
 // Simple in-memory rate limiting (in production, use Redis)
 const signupAttempts = new Map<string, { count: number; firstAttempt: number }>();
-const MAX_SIGNUPS_PER_IP = 3;
-const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000; // 24 hours
+const MAX_SIGNUPS_PER_IP = 10;
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
 
 // Pending verification store (in production, use Redis)
 const pendingVerifications = new Map<string, {
@@ -138,6 +138,9 @@ export async function POST(req: NextRequest) {
         const emailSent = await sendVerificationEmail(email, code);
         if (!emailSent) {
             console.error('[SIGNUP] Failed to send verification email to', email);
+            // Don't block the user if it's just a transient email failure,
+            // but in production we might want to know.
+            // For now, let's return a specific message if it fails in a way we want to expose.
         }
 
         // Return token for verification page
@@ -145,7 +148,9 @@ export async function POST(req: NextRequest) {
             requiresVerification: true,
             verificationToken,
             email: email.replace(/(.{2}).*(@.*)/, '$1***$2'), // Masked email
-            message: 'Please check your email for the verification code.'
+            message: emailSent
+                ? 'Please check your email for the verification code.'
+                : 'Account created, but we had trouble sending the verification email. Please contact support or try logging in.'
         });
 
     } catch (error) {

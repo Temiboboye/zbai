@@ -13,11 +13,13 @@ export function middleware(request: NextRequest) {
     );
 
     if (isProtected) {
-        // Check for auth token in cookies
+        // Check for auth token in cookies (legacy or NextAuth)
         const token = request.cookies.get('token');
+        const nextAuthToken = request.cookies.get('next-auth.session-token');
+        const secureNextAuthToken = request.cookies.get('__Secure-next-auth.session-token');
 
-        // If no token, redirect to login
-        if (!token) {
+        // If no token found, redirect to login
+        if (!token && !nextAuthToken && !secureNextAuthToken) {
             const loginUrl = new URL('/login', request.url);
             // Add redirect parameter to return user after login
             loginUrl.searchParams.set('redirect', path);
