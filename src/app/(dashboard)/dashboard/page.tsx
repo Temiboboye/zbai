@@ -93,6 +93,9 @@ export default function DashboardPage() {
                     <div className={styles.statIcon} style={{ color: '#ffaa00' }}>⚡</div>
                     <div className={styles.statValue}>{balance.toLocaleString()}</div>
                     <div className={styles.statLabel}>Credits Available</div>
+                    <a href="/billing" className="btn btn-sm btn-primary" style={{ marginTop: '10px', display: 'inline-block', fontSize: '12px', padding: '4px 12px' }}>
+                        + Add Credits
+                    </a>
                 </div>
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ color: '#ff5050' }}>🚫</div>
