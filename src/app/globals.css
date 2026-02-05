@@ -205,3 +205,66 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .card,
+  .card-dark,
+  .card-green,
+  .glass-card {
+    padding: 30px;
+    border-radius: 30px;
+  }
+
+  .btn {
+    padding: 16px 28px;
+    font-size: 0.938rem;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.75rem !important;
+  }
+
+  h3 {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+
+  .card,
+  .card-dark,
+  .card-green,
+  .glass-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .btn {
+    padding: 14px 24px;
+    font-size: 0.875rem;
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+}
