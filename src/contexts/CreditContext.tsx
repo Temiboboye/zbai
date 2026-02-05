@@ -22,7 +22,7 @@ export function CreditProvider({ children }: { children: ReactNode }) {
 
         setLoading(true);
         try {
-            const response = await fetch('/api/credits/balance', {
+            const response = await fetch('/api/credits', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
