@@ -213,50 +213,50 @@ export default function BillingPage() {
 
             {/* Transaction History */}
             <div className={styles.enterpriceSection} style={{ marginTop: '4rem', background: 'transparent', boxShadow: 'none' }}>
-                <h3 style={{ marginBottom: '1rem' }}>Transaction History</h3>
-                <div style={{ overflowX: 'auto', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', padding: '1rem', border: '1px solid #eee' }}>
+                <h3 style={{ marginBottom: '1.5rem', color: 'var(--white)' }}>Transaction History</h3>
+                <div style={{ overflowX: 'auto', background: 'var(--gray-900)', borderRadius: '12px', padding: '1rem', border: '1px solid var(--gray-800)' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                         <thead>
-                            <tr style={{ borderBottom: '1px solid #eee' }}>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Date</th>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Description</th>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Type</th>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Credits</th>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Amount</th>
-                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Status</th>
+                            <tr style={{ borderBottom: '1px solid var(--gray-800)' }}>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Date</th>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Description</th>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Type</th>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Credits</th>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Amount</th>
+                                <th style={{ padding: '1rem', color: 'var(--gray-400)', fontSize: '0.9rem' }}>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {transactions.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: '#999' }}>
+                                    <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--gray-500)' }}>
                                         No transactions found
                                     </td>
                                 </tr>
                             ) : transactions.map(tx => (
-                                <tr key={tx.id} style={{ borderBottom: '1px solid #f9f9f9' }}>
-                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{new Date(tx.timestamp).toLocaleDateString()}</td>
-                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{tx.description}</td>
+                                <tr key={tx.id} style={{ borderBottom: '1px solid var(--gray-800)' }}>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--white)' }}>{new Date(tx.timestamp).toLocaleDateString()}</td>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--white)' }}>{tx.description}</td>
                                     <td style={{ padding: '1rem' }}>
                                         <span style={{
                                             textTransform: 'capitalize',
                                             padding: '4px 8px',
                                             borderRadius: '6px',
-                                            background: tx.type === 'credit' ? '#ecfdf5' : '#fff1f2',
-                                            color: tx.type === 'credit' ? '#059669' : '#e11d48',
+                                            background: tx.type === 'credit' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                            color: tx.type === 'credit' ? 'var(--green)' : '#ef4444',
                                             fontSize: '0.75rem',
                                             fontWeight: '600'
                                         }}>
                                             {tx.type}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', fontWeight: '500', fontSize: '0.9rem', color: tx.type === 'debit' ? '#ef4444' : '#10b981' }}>
+                                    <td style={{ padding: '1rem', fontWeight: '600', fontSize: '0.9rem', color: tx.type === 'debit' ? '#ef4444' : 'var(--green)' }}>
                                         {tx.type === 'debit' ? '-' : '+'}{tx.amount.toLocaleString()}
                                     </td>
-                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--white)' }}>
                                         {tx.currency_amount && tx.currency_amount > 0 ? `$${tx.currency_amount}` : '-'}
                                     </td>
-                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--white)' }}>
                                         {tx.status}
                                     </td>
                                 </tr>

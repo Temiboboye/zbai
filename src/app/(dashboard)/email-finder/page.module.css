@@ -13,11 +13,11 @@
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #000;
+    color: var(--white);
 }
 
 .header p {
-    color: #666;
+    color: var(--gray-400);
     font-size: 16px;
 }
 
@@ -32,11 +32,11 @@
 .modeBtn {
     padding: 14px 28px;
     border-radius: 12px;
-    border: 2px solid #ddd;
-    background: #fff;
+    border: 1px solid var(--gray-700);
+    background: var(--gray-900);
     font-size: 15px;
     font-weight: 600;
-    color: #555;
+    color: var(--gray-400);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -50,25 +50,24 @@
 
 .modeBtn.active {
     border-color: var(--green);
-    background: rgba(185, 255, 102, 0.15);
-    color: #000;
+    background: var(--green);
+    color: var(--black);
 }
 
 /* Card */
 .card {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 16px;
     padding: 28px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .card h3 {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 20px;
-    color: #000;
+    color: var(--white);
 }
 
 /* Input Group */
@@ -80,7 +79,7 @@
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--gray-300);
     margin-bottom: 8px;
 }
 
@@ -88,11 +87,12 @@
 .select {
     width: 100%;
     padding: 14px 16px;
-    border: 2px solid #ddd;
+    border: 1px solid var(--gray-700);
     border-radius: 10px;
     font-size: 15px;
     transition: border-color 0.2s;
-    background: #fff;
+    background: var(--dark);
+    color: var(--white);
 }
 
 .input:focus,

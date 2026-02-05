@@ -43,18 +43,31 @@ export default function ProfilePage() {
 
     return (
         <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '2rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>My Profile</h1>
+            <h1 style={{
+                fontSize: '2.5rem',
+                marginBottom: '1.5rem',
+                fontWeight: '800',
+                color: 'var(--black)',
+                background: 'var(--green)',
+                display: 'inline-block',
+                padding: '0 12px',
+                borderRadius: '6px'
+            }}>My Profile</h1>
 
-            <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
-                <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', fontWeight: '600' }}>Account Details</h2>
+            <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'var(--gray-900)', borderRadius: '12px', border: '1px solid var(--gray-800)' }}>
+                <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', fontWeight: '600', color: 'var(--white)' }}>Account Details</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem 2rem', alignItems: 'center' }}>
-                    <div style={{ color: '#666' }}>Email</div>
-                    <div style={{ fontWeight: '500' }}>{user?.email}</div>
+                    <div style={{ color: 'var(--gray-400)' }}>Email</div>
+                    <div>
+                        <span className="greenhead" style={{ color: 'var(--black)', fontWeight: '600' }}>
+                            {user?.email}
+                        </span>
+                    </div>
 
-                    <div style={{ color: '#666' }}>Credits Available</div>
-                    <div style={{ fontWeight: '500', color: '#10b981' }}>{user?.credits?.toLocaleString()}</div>
+                    <div style={{ color: 'var(--gray-400)' }}>Credits Available</div>
+                    <div style={{ fontWeight: '600', color: 'var(--green)' }}>{user?.credits?.toLocaleString()}</div>
 
-                    <div style={{ color: '#666' }}>Account Status</div>
+                    <div style={{ color: 'var(--gray-400)' }}>Account Status</div>
                     <div>
                         <span style={{
                             background: user?.is_verified ? '#ecfdf5' : '#fef2f2',
@@ -70,24 +83,40 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            <div style={{ padding: '1.5rem', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
-                <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', fontWeight: '600' }}>Security</h2>
+            <div style={{ padding: '1.5rem', background: 'var(--gray-900)', borderRadius: '12px', border: '1px solid var(--gray-800)' }}>
+                <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', fontWeight: '600', color: 'var(--white)' }}>Security</h2>
                 <form onSubmit={handlePasswordUpdate}>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#444' }}>Current Password</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--gray-300)' }}>Current Password</label>
                         <input
                             type="password"
-                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd', fontSize: '1rem' }}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid var(--gray-700)',
+                                background: 'var(--dark)',
+                                color: 'var(--white)',
+                                fontSize: '1rem'
+                            }}
                             value={currentPassword}
                             onChange={e => setCurrentPassword(e.target.value)}
                             required
                         />
                     </div>
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#444' }}>New Password</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--gray-300)' }}>New Password</label>
                         <input
                             type="password"
-                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd', fontSize: '1rem' }}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid var(--gray-700)',
+                                background: 'var(--dark)',
+                                color: 'var(--white)',
+                                fontSize: '1rem'
+                            }}
                             value={newPassword}
                             onChange={e => setNewPassword(e.target.value)}
                             required

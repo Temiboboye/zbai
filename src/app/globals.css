@@ -165,8 +165,8 @@ a {
 
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--black);
-  color: var(--black);
+  border: 1px solid var(--white);
+  color: var(--white);
 }
 
 .btn-outline:hover {

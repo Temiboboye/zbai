@@ -53,30 +53,30 @@
 }
 
 .count {
-    color: #191A23;
+    color: var(--white);
     font-size: 0.95rem;
 }
 
 .count strong {
     font-size: 1.1rem;
-    color: #191A23;
+    color: var(--white);
     font-weight: 700;
 }
 
 .banner.good .count strong {
-    color: #1a7a2e;
+    color: var(--green);
 }
 
 .banner.medium .count strong {
-    color: #d68910;
+    color: #ffbd2e;
 }
 
 .banner.low .count strong {
-    color: #d65d0e;
+    color: #ff9500;
 }
 
 .banner.critical .count strong {
-    color: #cc241d;
+    color: #ff3b30;
 }
 
 .warning {
