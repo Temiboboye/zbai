@@ -11,6 +11,8 @@ function CreditBalance() {
     return <h3>{loading ? '...' : balance.toLocaleString()}</h3>;
 }
 
+import { useAuth } from '@/contexts/AuthContext';
+
 function DashboardInner({
     children,
 }: {
@@ -18,6 +20,7 @@ function DashboardInner({
 }) {
     const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { user, logout } = useAuth(); // Use Auth Context
 
     const navItems = [
         { href: '/dashboard', icon: '📊', label: 'Dashboard' },
@@ -67,10 +70,10 @@ function DashboardInner({
                         <CreditBalance />
                     </div>
                     <div className={styles.userProfile}>
-                        <div className={styles.avatar}>JD</div>
+                        <div className={styles.avatar}>{user?.email?.[0]?.toUpperCase() || 'U'}</div>
                         <div className={styles.userInfo}>
-                            <p className={styles.userName}>John Doe</p>
-                            <p className={styles.userEmail}>john@example.com</p>
+                            <p className={styles.userName} style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user ? 'User' : 'Guest'}</p>
+                            <p className={styles.userEmail} style={{ fontSize: '10px' }}>{user?.email || 'Not logged in'}</p>
                         </div>
                     </div>
                 </div>
@@ -97,19 +100,13 @@ function DashboardInner({
                         <span></span>
                     </button>
 
-                    <h2>Welcome back, John</h2>
+                    <h2>Welcome back, {user?.email?.split('@')[0] || 'Guest'}</h2>
                     <div className={styles.headerActions}>
                         <button className={styles.iconBtn} title="Notifications">🔔</button>
                         <button className={styles.iconBtn} title="Settings">⚙️</button>
                         <button
                             className={styles.logoutBtn}
-                            onClick={() => {
-                                // Clear any auth tokens/session
-                                localStorage.removeItem('authToken');
-                                sessionStorage.clear();
-                                // Redirect to login
-                                window.location.href = '/login';
-                            }}
+                            onClick={logout}
                             title="Logout"
                         >
                             🚪 Logout
@@ -130,8 +127,6 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     return (
-        <CreditProvider>
-            <DashboardInner>{children}</DashboardInner>
-        </CreditProvider>
+        <DashboardInner>{children}</DashboardInner>
     );
 }
