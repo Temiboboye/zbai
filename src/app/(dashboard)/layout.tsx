@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './layout.module.css';
 import { CreditProvider, useCredits } from '@/contexts/CreditContext';
 
@@ -19,8 +19,25 @@ function DashboardInner({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { user, logout } = useAuth(); // Use Auth Context
+    const { user, logout, isAuthenticated, isLoading } = useAuth();
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            router.push('/login');
+        }
+    }, [isLoading, isAuthenticated, router]);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                Loading...
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) return null;
 
     const navItems = [
         { href: '/dashboard', icon: '📊', label: 'Dashboard' },

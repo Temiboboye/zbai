@@ -33,21 +33,28 @@ export default function LoginPage() {
             });
 
             if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.detail || 'Login failed');
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    throw new Error(data.detail || 'Login failed');
+                } catch (e) {
+                    // If parsing failed, use the text (likely HTML error)
+                    throw new Error(`Server returned error: ${response.status} ${response.statusText}`);
+                }
             }
 
             const data = await response.json();
             login(data.access_token);
         } catch (err: any) {
+            console.error(err);
             setError(err.message || 'An unexpected error occurred');
             setLoading(false);
         }
     };
 
     const handleGoogleLogin = async () => {
-        // TODO: Implement Google Login with backend
-        setError("Google login not yet implemented");
+        // Placeholder for Google Login
+        alert("Google Login is coming soon! Please use email and password.");
     };
 
     return (
