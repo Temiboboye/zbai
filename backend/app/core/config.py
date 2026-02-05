@@ -46,8 +46,23 @@ class Settings(BaseSettings):
     ]
     
     # Monitoring
+    MONITORING_ENABLED: bool = True
     SENTRY_DSN: Optional[str] = None
     LOG_LEVEL: str = "INFO"
+
+    # Email
+    RESEND_API_KEY: Optional[str] = None
+    FROM_EMAIL: str = "noreply@zerobounceai.com"
+
+    # Payments
+    STRIPE_SECRET_KEY: Optional[str] = None
+    STRIPE_WEBHOOK_SECRET: Optional[str] = None
+    NOWPAYMENTS_API_KEY: Optional[str] = None
+    NOWPAYMENTS_IPN_SECRET: Optional[str] = None
+    
+    # Validation
+    LOW_CREDITS_THRESHOLD: int = 1000
+    ENABLE_AUTO_CREDIT_ALERTS: bool = True
     
     class Config:
         env_file = ".env"

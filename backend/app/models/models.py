@@ -50,6 +50,8 @@ class Transaction(Base):
     currency_amount = Column(Float, nullable=True)  # Payment amount if applicable
     description = Column(String)
     source = Column(String)  # 'stripe', 'crypto', 'bonus', 'verification'
+    status = Column(String, default="completed")  # pending, completed, failed
+    reference_id = Column(String, nullable=True, index=True)  # External Payment ID
     timestamp = Column(DateTime, default=datetime.utcnow, index=True)
     
     user = relationship("User", back_populates="transactions")

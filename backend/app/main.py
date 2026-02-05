@@ -66,8 +66,9 @@ app.include_router(blacklist.router, prefix="/v1/blacklist", tags=["blacklist"])
 app.include_router(sort.router, prefix="/v1/sort", tags=["sort"])
 app.include_router(analytics.router, prefix="/v1/analytics", tags=["analytics"])
 app.include_router(keys.router, prefix="/v1/keys", tags=["keys"])
-from app.api import auth
+from app.api import auth, payment
 app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
+app.include_router(payment.router, prefix="/v1/payment", tags=["payment"])
 
 # CORS middleware - Production ready with environment configuration
 ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
