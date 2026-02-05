@@ -136,14 +136,22 @@ try:
     db.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE'))
     db.commit()
     
-    # 2. Promote first user
-    user = db.query(User).order_by(User.id).first()
+    # 2. Promote specific admin user
+    email = 'workwithtems@gmail.com'
+    user = db.query(User).filter(User.email == email).first()
     if user:
         user.is_admin = True
+        # Revoke test user if exists
+        db.query(User).filter(User.email == 'test789@example.com').update({'is_admin': False})
         db.commit()
-        print(f'Promoted {user.email} (ID: {user.id}) to Admin.')
+        print(f'Promoted {email} to Admin.')
     else:
-        print('No users found.')
+        # Fallback to first user if primary doesn't exist yet
+        user = db.query(User).order_by(User.id).first()
+        if user:
+            user.is_admin = True
+            db.commit()
+            print(f'Primary admin not found. Fallback promoted {user.email}.')
 except Exception as e:
     print(f'Error: {e}')
 finally:
