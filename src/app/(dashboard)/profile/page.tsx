@@ -59,7 +59,7 @@ export default function ProfilePage() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem 2rem', alignItems: 'center' }}>
                     <div style={{ color: 'var(--gray-400)' }}>Email</div>
                     <div>
-                        <span className="greenhead" style={{ color: 'var(--black)', fontWeight: '600' }}>
+                        <span className="greenhead" style={{ color: 'var(--white)', fontWeight: '600' }}>
                             {user?.email}
                         </span>
                     </div>
