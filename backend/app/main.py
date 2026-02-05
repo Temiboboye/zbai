@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, Request, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -63,7 +63,7 @@ app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
 @app.get("/v1/credits")
 async def get_user_credits(
     db: Session = Depends(get_db),
-    user_id: int = Depends(deps.get_current_user_id)
+    user_id: int = Depends(get_current_user_id)
 ):
     """Get current user credit balance"""
     from app.models.models import User
