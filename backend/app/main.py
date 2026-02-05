@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, Request
+from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from datetime import datetime
@@ -84,7 +85,6 @@ async def health_check():
 @app.get("/health/detailed")
 async def detailed_health_check(db: Session = Depends(get_db)):
     """Detailed health check with component status"""
-    from sqlalchemy.orm import Session
     import redis
     
     health = {
