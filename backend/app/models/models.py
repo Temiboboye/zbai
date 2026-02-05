@@ -10,6 +10,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
     is_verified = Column(Boolean, default=False)
     verification_token = Column(String, nullable=True)
     reset_token = Column(String, nullable=True)

@@ -265,6 +265,7 @@ def read_users_me(
         "id": current_user.id,
         "email": current_user.email,
         "is_active": current_user.is_active,
+        "is_admin": current_user.is_admin,
         "is_verified": current_user.is_verified,
         "credits": current_user.credits
     }

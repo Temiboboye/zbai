@@ -123,27 +123,43 @@ print('Success!' if result.get('success') else 'Failed: ' + str(result.get('erro
     echo -e "${GREEN}✅ Check your inbox at $TEST_EMAIL${NC}"
 }
 
-# Function: Database Backup
-backup_database() {
-    echo -e "${YELLOW}💾 Creating database backup...${NC}"
+# Function: Promote Admin
+promote_admin() {
+    echo -e "${YELLOW}🔑 Promoting user to admin...${NC}"
+    run_remote "cd $PROJECT_DIR && docker exec zerobounce_backend python -c \"
+from app.core.database import SessionLocal
+from app.models.models import User
+from sqlalchemy import text
+db = SessionLocal()
+try:
+    # 1. Add column if it doesn't exist (Postgres)
+    db.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE'))
+    db.commit()
     
-    BACKUP_FILE="zerobounce_backup_$(date +%Y%m%d_%H%M%S).sql"
-    
-    run_remote "cd $PROJECT_DIR && docker exec zerobounce_postgres pg_dump -U zerobounce zerobounce_db > /tmp/$BACKUP_FILE"
-    
-    echo "Downloading backup..."
-    scp -i ~/.ssh/zerobounce_vps $SERVER:/tmp/$BACKUP_FILE ./backups/
-    
-    echo -e "${GREEN}✅ Backup saved to ./backups/$BACKUP_FILE${NC}"
+    # 2. Promote first user
+    user = db.query(User).order_by(User.id).first()
+    if user:
+        user.is_admin = True
+        db.commit()
+        print(f'Promoted {user.email} (ID: {user.id}) to Admin.')
+    else:
+        print('No users found.')
+except Exception as e:
+    print(f'Error: {e}')
+finally:
+    db.close()
+\""
 }
 
 # Main menu
 case "$1" in
     full)
         full_deploy
+        promote_admin
         ;;
     quick)
         quick_deploy
+        promote_admin
         ;;
     restart)
         restart_services
