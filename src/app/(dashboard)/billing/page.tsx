@@ -75,10 +75,12 @@ export default function BillingPage() {
                 });
 
                 if (!response.ok) throw new Error('Checkout failed');
-                const { sessionId } = await response.json();
-                const stripe = await stripePromise;
-                if (!stripe) throw new Error('Stripe failed');
-                await (stripe as any).redirectToCheckout({ sessionId });
+                const { url } = await response.json();
+                if (url) {
+                    window.location.href = url;
+                } else {
+                    throw new Error('No checkout URL received');
+                }
             } else {
                 const response = await fetch('/api/payment/crypto/create-invoice', {
                     method: 'POST',
