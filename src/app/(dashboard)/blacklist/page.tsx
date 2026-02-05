@@ -68,7 +68,7 @@ export default function BlacklistPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>🚫 Domain & IP Blacklist Monitor</h1>
+                <h1>Blacklist Monitor</h1>
                 <p>Check if your domain or IP is listed on major spam blacklists (RBLs).</p>
             </div>
 

@@ -105,6 +105,11 @@ export default function VerifyPage() {
 
     return (
         <div className={styles.container}>
+            <div className={styles.header}>
+                <h1>Real-Time Verification</h1>
+                <p>Instantly verify any email address with 99.9% accuracy.</p>
+            </div>
+
             {/* Paywall Modal */}
             <PaywallModal
                 isOpen={showPaywall}
@@ -131,7 +136,7 @@ export default function VerifyPage() {
             </div>
 
             <div className={styles.inputSection}>
-                <h2>Real-Time Verification</h2>
+                <h2>Single Email Verification</h2>
                 <form onSubmit={handleVerify} className={styles.form}>
                     <input
                         type="email"

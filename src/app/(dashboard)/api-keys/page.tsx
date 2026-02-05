@@ -96,8 +96,13 @@ export default function ApiKeysPage() {
 
     return (
         <div className={styles.container}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>API Key Management</h1>
+                <p className={styles.subtitle}>Manage your API keys for integrating ZeroBounce AI into your own applications.</p>
+            </div>
+
             <div className={styles.section}>
-                <h2>API Key Management</h2>
+                <h2><span>🔑</span> Generate New Key</h2>
                 <div className={styles.form}>
                     <input
                         type="text"

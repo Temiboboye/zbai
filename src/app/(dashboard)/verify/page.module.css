@@ -1,47 +1,70 @@
 .container {
-    max-width: 900px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--black);
+}
+
+.header p {
+    color: var(--gray-600);
+    font-size: 16px;
 }
 
 .inputSection {
-    background: var(--gray);
-    border: 1px solid var(--surface-border);
-    border-radius: 45px;
-    padding: 50px;
-    margin-bottom: 40px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .inputSection h2 {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--black);
 }
 
 .form {
     display: flex;
-    gap: 12px;
+    gap: 16px;
 }
 
 .input {
     flex: 1;
-    padding: 18px 24px;
-    border-radius: 14px;
-    border: 1px solid var(--surface-border);
-    background: var(--white);
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--gray-300);
+    background: white;
     font-size: 16px;
-    font-family: 'Space Grotesk', sans-serif;
     color: var(--black);
+    transition: all 0.2s;
 }
 
 .input:focus {
     outline: none;
-    border-color: var(--green);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(185, 255, 102, 0.2);
 }
 
 .resultSection {
     background: var(--dark);
-    color: var(--white);
-    border-radius: 45px;
-    padding: 50px;
+    color: white;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .resultHeader {
@@ -49,18 +72,23 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .resultHeader h3 {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 700;
+    color: white;
 }
 
 .statusBadge {
     padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
+    border-radius: 12px;
+    font-weight: 700;
     font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .valid {
@@ -74,109 +102,136 @@
 }
 
 .invalid {
-    background: var(--error);
-    color: var(--white);
+    background: #ef4444;
+    color: white;
 }
 
 .creditsBadge {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 13px;
-    background: rgba(185, 255, 102, 0.15);
-    color: var(--green);
-    border: 1px solid rgba(185, 255, 102, 0.3);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .scoreCard {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(185, 255, 102, 0.03);
     border-radius: 20px;
-    padding: 30px;
+    padding: 40px;
     margin-bottom: 40px;
     text-align: center;
+    border: 1px solid rgba(185, 255, 102, 0.1);
 }
 
 .scoreCard p {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-400);
+    margin-bottom: 12px;
 }
 
 .scoreValue {
-    font-size: 64px;
-    font-weight: 700;
+    font-size: 80px;
+    font-weight: 800;
     color: var(--green);
+    line-height: 1;
 }
 
 .checksGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
     margin-bottom: 40px;
 }
 
 .checkItem {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.2s;
+}
+
+.checkItem:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 14px;
 }
 
 .checkLabel {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-400);
 }
 
 .checkValue {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    width: fit-content;
 }
 
 .pass {
-    background: var(--green);
-    color: var(--black);
+    background: rgba(185, 255, 102, 0.1);
+    color: var(--green);
 }
 
 .fail {
-    background: rgba(239, 68, 68, 0.2);
-    color: var(--error);
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
 }
 
 .warn {
-    background: rgba(245, 158, 11, 0.2);
+    background: rgba(245, 158, 11, 0.1);
     color: #f59e0b;
 }
 
 .jsonBlock {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 14px;
+    background: #0d0d12;
+    border-radius: 16px;
     padding: 24px;
-    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .jsonBlock h4 {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .jsonBlock pre {
-    font-family: 'Space Grotesk', monospace;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
     font-size: 13px;
     line-height: 1.6;
-    color: var(--green);
+    color: var(--gray-300);
+    margin: 0;
 }
 
-@media (max-width: 768px) {
-    .checksGrid {
-        grid-template-columns: 1fr;
+@media (max-width: 640px) {
+    .container {
+        padding: 12px;
     }
 
     .form {
         flex-direction: column;
+    }
+
+    .resultSection {
+        padding: 24px 16px;
+    }
+
+    .resultHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
     }
 }
