@@ -31,6 +31,7 @@ function DashboardInner({
         { href: '/api-keys', icon: '🔑', label: 'API Keys' },
         { href: '/blacklist', icon: '🚫', label: 'Blacklist Monitor' },
         { href: '/billing', icon: '💳', label: 'Billing' },
+        { href: '/profile', icon: '👤', label: 'Profile' },
     ];
 
     const toggleMobileMenu = () => {
@@ -103,7 +104,7 @@ function DashboardInner({
                     <h2>Welcome back, {user?.email?.split('@')[0] || 'Guest'}</h2>
                     <div className={styles.headerActions}>
                         <button className={styles.iconBtn} title="Notifications">🔔</button>
-                        <button className={styles.iconBtn} title="Settings">⚙️</button>
+                        <Link href="/profile" className={styles.iconBtn} title="Profile">⚙️</Link>
                         <button
                             className={styles.logoutBtn}
                             onClick={logout}

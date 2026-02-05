@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { loadStripe } from '@stripe/stripe-js';
 import styles from './page.module.css';
 
@@ -25,9 +26,35 @@ const creditPacks: CreditPack[] = [
     { id: 'pack_1m', credits: 1000000, price: 380, per_credit: 0.00038 },
 ];
 
+interface Transaction {
+    id: number;
+    type: string;
+    amount: number;
+    currency_amount: number;
+    description: string;
+    status: string;
+    reference_id: string;
+    timestamp: string;
+}
+
 export default function BillingPage() {
     const [loading, setLoading] = useState<string | null>(null);
     const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'crypto'>('stripe');
+    const { token } = useAuth();
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+    useEffect(() => {
+        if (token) {
+            fetch('/api/payment/history', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data)) setTransactions(data);
+                })
+                .catch(err => console.error(err));
+        }
+    }, [token]);
 
     const handlePurchase = async (pack: CreditPack) => {
         setLoading(pack.id);
@@ -173,6 +200,61 @@ export default function BillingPage() {
                         <h4>Transparent & Fair</h4>
                         <p>1 credit = 1 verification. Catch-alls consume credits. No hidden multipliers or confusing rules.</p>
                     </div>
+                </div>
+            </div>
+
+            {/* Transaction History */}
+            <div className={styles.enterpriceSection} style={{ marginTop: '4rem', background: 'transparent', boxShadow: 'none' }}>
+                <h3 style={{ marginBottom: '1rem' }}>Transaction History</h3>
+                <div style={{ overflowX: 'auto', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', padding: '1rem', border: '1px solid #eee' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <thead>
+                            <tr style={{ borderBottom: '1px solid #eee' }}>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Date</th>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Description</th>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Type</th>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Credits</th>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Amount</th>
+                                <th style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {transactions.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: '#999' }}>
+                                        No transactions found
+                                    </td>
+                                </tr>
+                            ) : transactions.map(tx => (
+                                <tr key={tx.id} style={{ borderBottom: '1px solid #f9f9f9' }}>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{new Date(tx.timestamp).toLocaleDateString()}</td>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{tx.description}</td>
+                                    <td style={{ padding: '1rem' }}>
+                                        <span style={{
+                                            textTransform: 'capitalize',
+                                            padding: '4px 8px',
+                                            borderRadius: '6px',
+                                            background: tx.type === 'credit' ? '#ecfdf5' : '#fff1f2',
+                                            color: tx.type === 'credit' ? '#059669' : '#e11d48',
+                                            fontSize: '0.75rem',
+                                            fontWeight: '600'
+                                        }}>
+                                            {tx.type}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '1rem', fontWeight: '500', fontSize: '0.9rem', color: tx.type === 'debit' ? '#ef4444' : '#10b981' }}>
+                                        {tx.type === 'debit' ? '-' : '+'}{tx.amount.toLocaleString()}
+                                    </td>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>
+                                        {tx.currency_amount && tx.currency_amount > 0 ? `$${tx.currency_amount}` : '-'}
+                                    </td>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>
+                                        {tx.status}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
