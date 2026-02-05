@@ -5,7 +5,6 @@ from app.models.models import User, BulkJob
 from app.services.email_verifier import email_verifier
 from app.services.credit_manager import CreditManager
 from app.tasks import process_bulk_job
-from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Any
 import uuid
 import structlog
@@ -14,11 +13,28 @@ from datetime import datetime
 router = APIRouter()
 logger = structlog.get_logger()
 
+from pydantic import BaseModel, EmailStr, validator
+
 class VerifyRequest(BaseModel):
     email: EmailStr
 
 class BulkVerifyRequest(BaseModel):
-    emails: List[str]
+    emails: List[EmailStr]
+    
+    @validator('emails')
+    def validate_emails(cls, v):
+        if len(v) == 0:
+            raise ValueError('At least 1 email required')
+        if len(v) > 100000:
+            raise ValueError('Maximum 100,000 emails per batch')
+        # Remove duplicates while preserving order
+        seen = set()
+        unique = []
+        for email in v:
+            if email.lower() not in seen:
+                seen.add(email.lower())
+                unique.append(email)
+        return unique
 
 @router.post("")
 async def verify_single(

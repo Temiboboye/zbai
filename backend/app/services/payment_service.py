@@ -4,7 +4,10 @@ import requests
 import hashlib
 import hmac
 import json
+import logging
 from typing import Dict, Optional, Any
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.models.models import Transaction, User
@@ -106,15 +109,26 @@ class PaymentService:
         """Handle IPN callback from NOWPayments"""
         # 1. Verify Signature (if secret set)
         if self.nowpayments_ipn_secret:
-            # Sort keys
+            # NOWPayments IPN signature verification
+            # The signature is sent in the x-nowpayments-sig header
+            # It's an HMAC-SHA512 of the JSON body (sorted keys) using the IPN secret
+            
+            # 1. Sort the data by keys
             sorted_data = dict(sorted(data.items()))
-            # Remove signature itself usually is in headers not body? NO, NOWPayments sends `x-nowpayments-sig` header.
-            # The body is JSON.
+            # 2. Stringify the data
             msg = json.dumps(sorted_data, separators=(',', ':'))
-            # Actually, documentation says it sorts valid JSON keys.
-            # Usually simpler to verify specific fields if signature check is hard.
-            # But let's assume valid for now or basic check.
-            pass
+            # 3. Calculate HMAC-SHA512
+            calculated_sig = hmac.new(
+                self.nowpayments_ipn_secret.encode(),
+                msg.encode(),
+                hashlib.sha512
+            ).hexdigest()
+            
+            if calculated_sig != signature:
+                logger.error("nowpayments_signature_mismatch", 
+                             received=signature, 
+                             calculated=calculated_sig)
+                raise ValueError("Invalid NOWPayments signature")
 
         payment_status = data.get("payment_status")
         order_id = data.get("order_id") # txn_123

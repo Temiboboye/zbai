@@ -2,8 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from app.core.database import get_db
-from app.core.dependencies import get_current_user_id
+from app.core.deps import get_db, get_current_user_id
 from app.services.api_key_manager import api_key_manager
 
 router = APIRouter()

@@ -8,8 +8,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from app.services.email_sorter import email_sorter
 from app.services.credit_manager import credit_manager, InsufficientCreditsError
-from app.core.database import get_db
-from app.core.dependencies import get_current_user_id
+from app.core.deps import get_db, get_current_user_id
 
 router = APIRouter()
 

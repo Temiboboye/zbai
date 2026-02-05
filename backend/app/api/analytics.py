@@ -5,14 +5,10 @@ import random
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
-from app.core.database import get_db
+from app.core.deps import get_db, get_current_user_id
 from app.models.models import Transaction, BulkJob
 
 router = APIRouter()
-
-# Helper for current user (Demo User 1)
-def get_current_user_id() -> int:
-    return 1
 
 class DailyStat(BaseModel):
     date: str

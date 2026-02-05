@@ -5,8 +5,7 @@ from typing import Optional
 from datetime import datetime
 from app.services.blacklist_monitor import blacklist_monitor
 from app.services.credit_manager import credit_manager, InsufficientCreditsError
-from app.core.database import get_db
-from app.core.dependencies import get_current_user_id
+from app.core.deps import get_db, get_current_user_id
 from app.models.models import BlacklistEntry
 
 router = APIRouter()

@@ -1,31 +1,18 @@
-"""
-FastAPI Main Application
-Comprehensive Email Verification Platform Backend
-"""
-
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, Header, Request
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr, validator
-from typing import Optional, List, Dict
-import asyncio
-from datetime import datetime
-import uuid
 import os
-from sqlalchemy.orm import Session
+from datetime import datetime
 import structlog
 import sentry_sdk
 
 from app.core.database import engine, Base, get_db
-from app.core.rate_limiter import limiter, RATE_LIMITS
+from app.core.rate_limiter import limiter
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.services.email_verifier import email_verifier
-from app.services.email_sorter import email_sorter
-from app.services.credit_manager import credit_manager, InsufficientCreditsError
-from app.models.models import BulkJob, ApiKey, User
-from app.api import blacklist, sort, analytics, keys
+from app.api import blacklist, sort, analytics, keys, auth, payment, verify
+from app.core.deps import get_current_user_id
 
-# Initialize Sentry for error tracking (optional - only if DSN provided)
+# Initialize Sentry for error tracking
 SENTRY_DSN = os.getenv('SENTRY_DSN')
 if SENTRY_DSN:
     sentry_sdk.init(
@@ -62,16 +49,16 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+# Routes
+app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
+app.include_router(verify.router, prefix="/v1/verify", tags=["verify"])
 app.include_router(blacklist.router, prefix="/v1/blacklist", tags=["blacklist"])
 app.include_router(sort.router, prefix="/v1/sort", tags=["sort"])
 app.include_router(analytics.router, prefix="/v1/analytics", tags=["analytics"])
 app.include_router(keys.router, prefix="/v1/keys", tags=["keys"])
-from app.api import auth, payment, verify
-app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
 app.include_router(payment.router, prefix="/v1/payment", tags=["payment"])
-app.include_router(verify.router, prefix="/v1/verify", tags=["verify"])
 
-# CORS middleware - Production ready with environment configuration
+# CORS middleware
 ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
 app.add_middleware(
     CORSMiddleware,
@@ -81,116 +68,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# Pydantic Models
-class EmailVerifyRequest(BaseModel):
-    email: EmailStr
-
-
-class EmailVerifyResponse(BaseModel):
-    email: str
-    syntax: str
-    domain: str
-    mx: str
-    mx_records: list = []  # List of MX records
-    smtp: str
-    smtp_provider: Optional[str] = None  # SMTP provider name
-    catch_all: bool
-    disposable: bool
-    role_based: bool
-    is_o365: bool
-    spam_risk: str
-    final_status: str
-    safety_score: int
-    credits_used: int = 1
-    timestamp: str
-    reason: Optional[str] = None  # Reason for the status
-
-
-class BulkVerifyRequest(BaseModel):
-    emails: List[EmailStr]
-    
-    @validator('emails')
-    def validate_emails(cls, v):
-        if len(v) == 0:
-            raise ValueError('At least 1 email required')
-        if len(v) > 100000:
-            raise ValueError('Maximum 100,000 emails per batch')
-        # Remove duplicates while preserving order
-        seen = set()
-        unique = []
-        for email in v:
-            if email.lower() not in seen:
-                seen.add(email.lower())
-                unique.append(email)
-        return unique
-
-
-class BulkJobResponse(BaseModel):
-    job_id: str
-    status: str
-    total_emails: int
-    processed: int
-    created_at: str
-
-
-# Helper: Get User ID from API Key (Mock Auth for now)
-def get_current_user_id(
-    authorization: Optional[str] = Header(None),
-    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
-    db: Session = Depends(get_db)
-) -> int:
-    """
-    Get current user ID from:
-    1. JWT Token (Authorization: Bearer ...)
-    2. API Key (X-API-Key header)
-    3. Demo/Fallback (for backward compatibility if needed)
-    """
-    from app.core.security import SECRET_KEY, ALGORITHM
-    from jose import jwt, JWTError
-
-    # 1. Check JWT
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.replace("Bearer ", "")
-        try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            user_id = payload.get("sub")
-            if user_id:
-                return int(user_id)
-        except JWTError:
-            pass # Invalid token, try other methods or fail
-            
-    # 2. Check API Key
-    api_key_str = x_api_key
-    if not api_key_str and authorization and not authorization.startswith("Bearer "):
-             # Fallback: Treat value as API Key if not Bearer
-             api_key_str = authorization
-
-    if api_key_str:
-        # Check specific demo key
-        if api_key_str == "zb_live_demo_key_123456":
-            return 1
-            
-        # Lookup API key in DB
-        api_key = db.query(ApiKey).filter(ApiKey.key == api_key_str).first()
-        if api_key and api_key.status == "active":
-             # Update usage
-             api_key.usage_count += 1
-             api_key.last_used = datetime.utcnow()
-             db.commit()
-             return api_key.user_id
-
-    # 3. Fallback/Demo (TEMPORARY - Should be removed for strict auth)
-    # For now, if no auth provided, return None or 1?
-    # Existing code returned 1 if no auth.
-    if not authorization and not x_api_key:
-        return 1
-
-    raise HTTPException(status_code=401, detail="Invalid credentials")
-
-
-
-
 @app.get("/")
 async def root():
     return {
@@ -199,17 +76,15 @@ async def root():
         "status": "operational"
     }
 
-
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
-
 @app.get("/health/detailed")
 async def detailed_health_check(db: Session = Depends(get_db)):
     """Detailed health check with component status"""
+    from sqlalchemy.orm import Session
     import redis
-    import os
     
     health = {
         "status": "healthy",
@@ -236,383 +111,10 @@ async def detailed_health_check(db: Session = Depends(get_db)):
         health["components"]["redis"] = {"status": "unhealthy", "error": str(e)}
         health["status"] = "degraded"
     
-    # Check external API (Microsoft Login API)
-    try:
-        import requests
-        resp = requests.get("https://login.microsoftonline.com/common/", timeout=5)
-        health["components"]["microsoft_api"] = {
-            "status": "healthy" if resp.status_code < 500 else "degraded"
-        }
-    except Exception as e:
-        health["components"]["microsoft_api"] = {"status": "unreachable", "error": str(e)}
-    
     return health
-
-
-@app.post("/v1/verify", response_model=EmailVerifyResponse)
-@limiter.limit(RATE_LIMITS['verify_single'])
-async def verify_email(
-    request: Request,
-    email_request: EmailVerifyRequest,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    """Verify a single email address"""
-    try:
-        # Check credits first
-        if not credit_manager.has_sufficient_credits(db, user_id, 1):
-             raise HTTPException(status_code=402, detail="Insufficient credits")
-
-        # Perform verification
-        result = await email_verifier.verify_email(email_request.email)
-        
-        # Deduct credits & Record transaction
-        credit_manager.deduct_credits(
-            db, 
-            user_id, 
-            1, 
-            "verify_email", 
-            {"email": email_request.email}
-        )
-        
-        result['timestamp'] = datetime.utcnow().isoformat()
-        result['credits_used'] = 1
-        return EmailVerifyResponse(**result)
-    
-    except InsufficientCreditsError:
-        raise HTTPException(status_code=402, detail="Insufficient credits")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# Background Task for Bulk
-def process_bulk_job_task(job_id: str, emails: List[str], user_id: int):
-    """Background task to process bulk email verification"""
-    # Need new session for background thread
-    from app.core.database import SessionLocal
-    import asyncio
-    
-    db = SessionLocal()
-    try:
-        job = db.query(BulkJob).filter(BulkJob.id == job_id).first()
-        if not job:
-            print(f"Job {job_id} not found")
-            return
-
-        results = []
-        processed = 0
-        
-        # Create new event loop for this thread
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        try:
-            for email in emails:
-                try:
-                    # Run async verification
-                    res = loop.run_until_complete(email_verifier.verify_email(email))
-                    results.append(res)
-                    print(f"Verified: {email} -> {res.get('final_status', 'unknown')}")
-                except Exception as e:
-                    print(f"Error verifying {email}: {e}")
-                    results.append({
-                        "email": email, 
-                        "error": str(e), 
-                        "final_status": "error",
-                        "safety_score": 0
-                    })
-                
-                processed += 1
-                
-                # Update progress in database (every email for better real-time feedback)
-                job.processed_count = processed
-                job.results = results.copy()  # Copy to ensure it's updated
-                db.commit()
-                db.refresh(job)  # Refresh to ensure changes are persisted
-
-            # Mark job as completed
-            job.results = results
-            job.processed_count = processed
-            job.status = 'completed'
-            job.completed_at = datetime.utcnow()
-            db.commit()
-            print(f"Job {job_id} completed! Processed {processed} emails.")
-            
-        finally:
-            loop.close()
-            
-    except Exception as e:
-        print(f"Bulk Job {job_id} Failed: {e}")
-        import traceback
-        traceback.print_exc()
-        # Mark job as failed
-        try:
-            job.status = 'failed'
-            db.commit()
-        except:
-            pass
-    finally:
-        db.close()
-
-
-@app.post("/v1/bulk", response_model=BulkJobResponse)
-async def create_bulk_job(
-    request: BulkVerifyRequest,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    """Create a bulk verification job"""
-    # check credits upfront
-    count = len(request.emails)
-    if not credit_manager.has_sufficient_credits(db, user_id, count):
-        raise HTTPException(status_code=402, detail=f"Insufficient credits. Need {count}")
-
-    # Deduct credits
-    credit_manager.deduct_credits(db, user_id, count, "bulk_verify", {"count": count})
-
-    job_id = str(uuid.uuid4())
-    new_job = BulkJob(
-        id=job_id,
-        user_id=user_id,
-        status="processing",
-        total_emails=count,
-        processed_count=0,
-        results=[],
-        created_at=datetime.utcnow()
-    )
-    db.add(new_job)
-    db.commit()
-
-    background_tasks.add_task(process_bulk_job_task, job_id, request.emails, user_id)
-    
-    return BulkJobResponse(
-        job_id=job_id,
-        status="processing",
-        total_emails=count,
-        processed=0,
-        created_at=new_job.created_at.isoformat()
-    )
-
-
-@app.get("/v1/bulk/{job_id}", response_model=BulkJobResponse)
-async def get_bulk_job_status(
-    job_id: str,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    job = db.query(BulkJob).filter(BulkJob.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
-    return BulkJobResponse(
-        job_id=job.id,
-        status=job.status,
-        total_emails=job.total_emails,
-        processed=job.processed_count,
-        created_at=job.created_at.isoformat()
-    )
-
-
-@app.get("/v1/bulk/{job_id}/results")
-async def get_bulk_job_results(
-    job_id: str,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    job = db.query(BulkJob).filter(BulkJob.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
-    # Return partial results even if job is still processing
-    results = job.results or []
-    
-    # Calculate dynamic summary based on available results
-    valid_count = len([r for r in results if r.get('final_status') == 'valid_safe'])
-    risky_count = len([r for r in results if 'risky' in r.get('final_status', '') or r.get('final_status') == 'valid_risky'])
-    catch_all_count = len([r for r in results if r.get('final_status') == 'risky'])
-    mailbox_full_count = len([r for r in results if r.get('final_status') == 'mailbox_full'])
-    role_based_count = len([r for r in results if r.get('role_based', False)])
-    invalid_count = len([r for r in results if r.get('final_status') in ['invalid', 'invalid_syntax', 'invalid_domain', 'user_not_found']])
-    disposable_count = len([r for r in results if r.get('final_status') == 'disposable'])
-    
-    return {
-        "job_id": job.id,
-        "status": job.status,
-        "results": results,
-        "summary": {
-            "total": job.total_emails,
-            "processed": job.processed_count,
-            "valid": valid_count,
-            "risky": risky_count,
-            "catch_all": catch_all_count,
-            "mailbox_full": mailbox_full_count,
-            "role_based": role_based_count,
-            "invalid": invalid_count,
-            "disposable": disposable_count,
-            "pending": job.total_emails - job.processed_count
-        }
-    }
-
-@app.get("/v1/credits")
-async def get_credits(
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    balance = credit_manager.get_balance(db, user_id)
-    return {
-        "credits_remaining": balance,
-        "user_id": user_id
-    }
-
-class AddCreditsRequest(BaseModel):
-    user_id: int
-    credits: int
-    amount: float
-    transaction_id: str
-    payment_method: str
-    pack_id: Optional[str] = None
-
-@app.post("/v1/credits/add")
-async def add_credits(
-    request: AddCreditsRequest,
-    db: Session = Depends(get_db)
-):
-    """Add credits to user account after successful payment"""
-    try:
-        result = credit_manager.add_credits(
-            db,
-            user_id=request.user_id,
-            credits=request.credits,
-            source=request.payment_method,
-            transaction_id=request.transaction_id,
-            details={
-                "amount": request.amount,
-                "pack_id": request.pack_id
-            }
-        )
-        return {
-            "success": True,
-            "credits_added": result['credits_added'],
-            "new_balance": result['new_balance']
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ============================================================
-# EMAIL FINDER ENDPOINTS
-# ============================================================
-
-from app.services.email_finder import EmailFinderService
-
-# Initialize email finder with verifier for optional verification
-email_finder_service = EmailFinderService(email_verifier=email_verifier)
-
-
-class EmailFindRequest(BaseModel):
-    name: str
-    domain: str
-    verify: bool = False
-
-
-class EmailFindBulkRequest(BaseModel):
-    entries: List[Dict]  # List of {name, domain} dicts
-    verify: bool = False
-
-
-@app.post("/v1/email-finder/find")
-async def find_email(
-    request: EmailFindRequest,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    """
-    Find email address for a person at a company.
-    
-    Generates possible email patterns based on name and domain,
-    optionally verifies using SMTP.
-    """
-    # Check credits (1 credit for find, 2 for find+verify)
-    credits_needed = 2 if request.verify else 1
-    if not credit_manager.has_sufficient_credits(db, user_id, credits_needed):
-        raise HTTPException(status_code=402, detail=f"Insufficient credits. Need {credits_needed}")
-    
-    # Find email
-    result = await email_finder_service.find_email(
-        full_name=request.name,
-        domain_or_website=request.domain,
-        verify=request.verify,
-        max_patterns=10
-    )
-    
-    # Deduct credits
-    credit_manager.deduct_credits(db, user_id, credits_needed, "email_find", {
-        "name": request.name,
-        "domain": request.domain,
-        "verified": request.verify
-    })
-    
-    result['credits_used'] = credits_needed
-    return result
-
-
-@app.post("/v1/email-finder/bulk")
-async def find_emails_bulk(
-    request: EmailFindBulkRequest,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
-):
-    """
-    Find emails for multiple people from a list of name/domain pairs.
-    
-    Request body should contain:
-    - entries: List of dicts with 'name' and 'domain' keys
-    - verify: Whether to verify emails with SMTP
-    """
-    if not request.entries:
-        raise HTTPException(status_code=400, detail="No entries provided")
-    
-    # Check credits
-    credits_per_entry = 2 if request.verify else 1
-    credits_needed = len(request.entries) * credits_per_entry
-    
-    if not credit_manager.has_sufficient_credits(db, user_id, credits_needed):
-        raise HTTPException(status_code=402, detail=f"Insufficient credits. Need {credits_needed}")
-    
-    # Deduct credits upfront
-    credit_manager.deduct_credits(db, user_id, credits_needed, "email_find_bulk", {
-        "count": len(request.entries),
-        "verified": request.verify
-    })
-    
-    # Process all entries
-    results = await email_finder_service.find_emails_bulk(
-        entries=request.entries,
-        verify=request.verify,
-        max_patterns=10
-    )
-    
-    # Calculate summary stats
-    total = len(results)
-    found = len([r for r in results if r.get('email')])
-    verified = len([r for r in results if r.get('verified')])
-    high_confidence = len([r for r in results if r.get('confidence') == 'high'])
-    
-    return {
-        "results": results,
-        "summary": {
-            "total": total,
-            "found": found,
-            "verified": verified,
-            "high_confidence": high_confidence,
-            "credits_used": credits_needed
-        }
-    }
-
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
