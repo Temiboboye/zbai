@@ -113,6 +113,32 @@ def process_bulk_job(self, job_id: str, emails: list, user_id: int) -> dict:
                        total_processed=processed,
                        user_id=user_id)
             
+            # Send completion email notification
+            try:
+                import os
+                if os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'true').lower() == 'true':
+                    from app.services.email_service import email_service
+                    from app.models.models import User
+                    
+                    # Get user email
+                    user = db.query(User).filter(User.id == user_id).first()
+                    if user:
+                        # Calculate valid/invalid counts
+                        valid_count = len([r for r in results if r.get('final_status') == 'valid_safe'])
+                        invalid_count = len([r for r in results if r.get('final_status') in ['invalid', 'invalid_syntax', 'invalid_domain', 'user_not_found']])
+                        
+                        email_service.send_bulk_job_complete(
+                            to=user.email,
+                            name=user.email.split('@')[0],
+                            job_id=job_id,
+                            total_emails=processed,
+                            valid_count=valid_count,
+                            invalid_count=invalid_count
+                        )
+                        logger.info("bulk_completion_email_sent", job_id=job_id, user_email=user.email)
+            except Exception as e:
+                logger.error("bulk_completion_email_failed", job_id=job_id, error=str(e))
+            
             return {
                 "job_id": job_id,
                 "status": "completed",

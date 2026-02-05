@@ -3,6 +3,7 @@ Credit Management Service
 Handles credit balance tracking, deduction, and transaction history using Database Persistence
 """
 
+import os
 from typing import Dict, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
@@ -65,6 +66,21 @@ class CreditManager:
         db.commit()
         db.refresh(user)
         
+        # Check if credits are low and send alert
+        low_threshold = int(os.getenv('LOW_CREDITS_THRESHOLD', '10'))
+        if user.credits <= low_threshold and old_balance > low_threshold:
+            # Credits just dropped below threshold
+            if os.getenv('ENABLE_AUTO_CREDIT_ALERTS', 'true').lower() == 'true':
+                try:
+                    from app.services.email_service import email_service
+                    email_service.send_low_credits_alert(
+                        to=user.email,
+                        name=user.email.split('@')[0],
+                        credits_remaining=user.credits
+                    )
+                except Exception as e:
+                    print(f"Failed to send low credits alert: {e}")
+        
         return {
             'success': True,
             'credits_deducted': credits,
@@ -99,6 +115,26 @@ class CreditManager:
         db.add(transaction)
         db.commit()
         db.refresh(user)
+        
+        # Send purchase confirmation email if enabled
+        if os.getenv('ENABLE_EMAIL_NOTIFICATIONS', 'true').lower() == 'true':
+            try:
+                from app.services.email_service import email_service
+                
+                # Extract payment details
+                amount = details.get('amount', 0) if details else 0
+                payment_method = source.replace('_', ' ').title()
+                
+                email_service.send_purchase_confirmation(
+                    to=user.email,
+                    name=user.email.split('@')[0],  # Use email prefix as name for now
+                    credits=credits,
+                    amount=amount,
+                    transaction_id=transaction_id or str(transaction.id),
+                    payment_method=payment_method
+                )
+            except Exception as e:
+                print(f"Failed to send purchase confirmation email: {e}")
         
         return {
             'success': True,
