@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import styles from './auth.module.css';
 
 export default function LoginPage() {
+    const { login } = useAuth();
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,28 +20,34 @@ export default function LoginPage() {
         setError('');
 
         try {
-            const result = await signIn('credentials', {
-                email,
-                password,
-                redirect: false
+            const formData = new URLSearchParams();
+            formData.append('username', email); // OAuth2PasswordRequestForm expects username
+            formData.append('password', password);
+
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData
             });
 
-            if (result?.error) {
-                setError(result.error);
-                setLoading(false);
-            } else {
-                router.push('/dashboard');
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.detail || 'Login failed');
             }
+
+            const data = await response.json();
+            login(data.access_token);
         } catch (err: any) {
-            setError('An unexpected error occurred');
+            setError(err.message || 'An unexpected error occurred');
             setLoading(false);
         }
     };
 
     const handleGoogleLogin = async () => {
-        setLoading(true);
-        setError('');
-        await signIn('google', { callbackUrl: '/dashboard' });
+        // TODO: Implement Google Login with backend
+        setError("Google login not yet implemented");
     };
 
     return (

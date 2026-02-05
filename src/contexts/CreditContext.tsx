@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 interface CreditContextType {
     balance: number;
@@ -12,16 +13,23 @@ interface CreditContextType {
 const CreditContext = createContext<CreditContextType | undefined>(undefined);
 
 export function CreditProvider({ children }: { children: ReactNode }) {
-    const [balance, setBalance] = useState<number>(142500);
+    const { token, isAuthenticated } = useAuth();
+    const [balance, setBalance] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchBalance = async () => {
+        if (!token) return;
+
         setLoading(true);
         try {
-            const response = await fetch('/api/credits/balance');
+            const response = await fetch('/api/credits/balance', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (response.ok) {
                 const data = await response.json();
-                setBalance(data.balance);
+                setBalance(data.credits_remaining || 0);
             }
         } catch (error) {
             console.error('Failed to fetch balance:', error);
@@ -39,8 +47,10 @@ export function CreditProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        fetchBalance();
-    }, []);
+        if (isAuthenticated && token) {
+            fetchBalance();
+        }
+    }, [isAuthenticated, token]);
 
     return (
         <CreditContext.Provider value={{ balance, loading, refreshBalance, deductCredits }}>

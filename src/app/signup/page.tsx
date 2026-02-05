@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { useAuth } from '@/contexts/AuthContext';
 import styles from '../login/auth.module.css';
 
 export default function SignupPage() {
+    const { login } = useAuth(); // If we want to auto-login.
     const router = useRouter();
     const [formData, setFormData] = useState({
         fullName: '',
@@ -47,46 +48,23 @@ export default function SignupPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    full_name: formData.fullName,
                     email: formData.email,
                     password: formData.password
+                    // fullName ignored by backend for now
                 })
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                // Provide specific error messages based on status code
-                if (response.status === 429) {
-                    throw new Error('Too many signup attempts. Please try again later.');
-                } else if (response.status === 400) {
-                    throw new Error(data.error || 'Invalid signup information. Please check your details.');
-                } else if (response.status === 500) {
-                    throw new Error('Server error. Please try again in a few moments.');
-                } else {
-                    throw new Error(data.error || 'Signup failed. Please try again.');
-                }
+                throw new Error(data.detail || 'Signup failed');
             }
 
-            // Check if email verification is required
-            if (data.requiresVerification) {
-                // Redirect to verification page with token
-                router.push(`/verify-email?token=${data.verificationToken}&email=${encodeURIComponent(data.email)}`);
-            } else {
-                // Direct login (fallback)
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                router.push('/dashboard');
-            }
+            // Auto login
+            login(data.access_token);
+
         } catch (err: any) {
-            // Handle network errors
-            if (err.name === 'TypeError' && err.message.includes('fetch')) {
-                setError('Network error. Please check your connection and try again.');
-            } else {
-                setError(err.message || 'An unexpected error occurred. Please try again.');
-            }
-            console.error('Signup error:', err);
-        } finally {
+            setError(err.message || 'Signup failed');
             setLoading(false);
         }
     };
@@ -94,7 +72,9 @@ export default function SignupPage() {
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError('');
-        await signIn('google', { callbackUrl: '/dashboard' });
+        // await signIn('google', { callbackUrl: '/dashboard' });
+        setError("Google signup not yet implemented with custom auth");
+        setLoading(false);
     };
 
     return (

@@ -9,16 +9,26 @@ import PaywallModal from '@/components/PaywallModal';
 // Note: Metadata must be in a separate layout.tsx for client components
 // This page uses client-side features, so metadata is in the parent layout
 
+import { useAuth } from '@/contexts/AuthContext';
+// ... imports
+
 export default function VerifyPage() {
     const [email, setEmail] = useState('');
     const [result, setResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [showPaywall, setShowPaywall] = useState(false);
     const { balance, deductCredits, refreshBalance } = useCredits();
+    const { token, isAuthenticated } = useAuth();
 
     const handleVerify = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) return;
+
+        if (!isAuthenticated || !token) {
+            // Redirect or show login prompt
+            window.location.href = '/login';
+            return;
+        }
 
         // Show paywall if no credits
         if (balance < 1) {
@@ -35,6 +45,7 @@ export default function VerifyPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ email })
             });
