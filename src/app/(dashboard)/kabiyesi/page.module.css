@@ -14,10 +14,7 @@
 .header h1 {
     font-size: 32px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--white) 0%, var(--gray-400) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--white);
     margin-bottom: 8px;
 }
 
@@ -34,15 +31,14 @@
 }
 
 .statCard {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     padding: 24px;
     border-radius: 20px;
-    backdrop-filter: blur(10px);
 }
 
 .statLabel {
-    color: var(--gray-500);
+    color: var(--gray-400);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
@@ -57,8 +53,8 @@
 }
 
 .section {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 24px;
     padding: 32px;
     overflow: hidden;
@@ -93,14 +89,14 @@
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--gray-800);
 }
 
 .table td {
     padding: 20px 16px;
     color: var(--gray-300);
     font-size: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--gray-900);
 }
 
 .userEmail {
@@ -137,8 +133,8 @@
 }
 
 .actionBtn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--gray-800);
+    border: 1px solid var(--gray-700);
     color: var(--white);
     padding: 8px 12px;
     border-radius: 8px;
@@ -149,8 +145,8 @@
 }
 
 .actionBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: var(--gray-700);
+    border-color: var(--gray-600);
 }
 
 .manageBtn {
@@ -180,8 +176,8 @@
 }
 
 .modal {
-    background: #111119;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     padding: 32px;
     border-radius: 24px;
     width: 100%;
@@ -209,12 +205,17 @@
 
 .input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--dark);
+    border: 1px solid var(--gray-700);
     padding: 12px 16px;
     border-radius: 10px;
     color: var(--white);
     font-size: 15px;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
 .modalActions {
@@ -226,12 +227,17 @@
 .cancelBtn {
     flex: 1;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--gray-700);
     color: var(--white);
     padding: 12px;
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelBtn:hover {
+    background: var(--gray-800);
 }
 
 .confirmBtn {
@@ -243,6 +249,12 @@
     border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.confirmBtn:hover {
+    background: #a3ff47;
+    transform: translateY(-1px);
 }
 
 @media (max-width: 1024px) {
