@@ -152,3 +152,182 @@
     font-weight: 600;
     color: #ff5050;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 1024px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .chartsGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .header {
+        margin-bottom: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .title h1 {
+        font-size: 24px;
+    }
+
+    .title p {
+        font-size: 14px;
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .statCard {
+        padding: 16px;
+    }
+
+    .statIcon {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .statValue {
+        font-size: 20px;
+    }
+
+    .statLabel {
+        font-size: 13px;
+    }
+
+    .chartsGrid {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .chartCard {
+        padding: 16px;
+        min-height: 320px;
+    }
+
+    .chartHeader h3 {
+        font-size: 16px;
+    }
+
+    .recentActivity {
+        padding: 16px;
+    }
+
+    .activityItem {
+        padding: 10px 0;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .activityIcon {
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    .activityDetails h4 {
+        font-size: 13px;
+    }
+
+    .activityDetails span {
+        font-size: 11px;
+    }
+
+    .activityCredits {
+        font-size: 13px;
+        width: 100%;
+        text-align: right;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 12px;
+    }
+
+    .header {
+        margin-bottom: 16px;
+    }
+
+    .title h1 {
+        font-size: 20px;
+    }
+
+    .title p {
+        font-size: 13px;
+    }
+
+    .statsGrid {
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .statCard {
+        padding: 14px;
+    }
+
+    .statIcon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .statValue {
+        font-size: 18px;
+    }
+
+    .statLabel {
+        font-size: 12px;
+    }
+
+    .chartCard {
+        padding: 14px;
+        min-height: 280px;
+    }
+
+    .chartHeader {
+        margin-bottom: 16px;
+    }
+
+    .chartHeader h3 {
+        font-size: 15px;
+    }
+
+    .recentActivity {
+        padding: 14px;
+    }
+
+    .activityIcon {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .activityDetails h4 {
+        font-size: 12px;
+    }
+
+    .activityDetails span {
+        font-size: 10px;
+    }
+
+    .activityCredits {
+        font-size: 12px;
+    }
+}

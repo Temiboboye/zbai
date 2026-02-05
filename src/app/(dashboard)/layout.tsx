@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './layout.module.css';
@@ -16,6 +17,7 @@ function DashboardInner({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const navItems = [
         { href: '/dashboard', icon: '📊', label: 'Dashboard' },
@@ -28,11 +30,19 @@ function DashboardInner({
         { href: '/billing', icon: '💳', label: 'Billing' },
     ];
 
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const closeMobileMenu = () => {
+        setMobileMenuOpen(false);
+    };
+
     return (
         <div className={styles.layout}>
-            <aside className={styles.sidebar}>
+            <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.open : ''}`}>
                 <div className={styles.sidebarHeader}>
-                    <Link href="/" className={styles.logo}>
+                    <Link href="/" className={styles.logo} onClick={closeMobileMenu}>
                         <span className="greenhead">ZB</span>
                         ZeroBounce
                     </Link>
@@ -44,6 +54,7 @@ function DashboardInner({
                             key={item.href}
                             href={item.href}
                             className={`${styles.navLink} ${pathname === item.href ? styles.navLinkActive : ''}`}
+                            onClick={closeMobileMenu}
                         >
                             <span>{item.icon}</span> {item.label}
                         </Link>
@@ -65,8 +76,27 @@ function DashboardInner({
                 </div>
             </aside>
 
+            {/* Mobile Menu Overlay */}
+            {mobileMenuOpen && (
+                <div
+                    className={styles.overlay}
+                    onClick={closeMobileMenu}
+                />
+            )}
+
             <main className={styles.content}>
                 <header className={styles.topHeader}>
+                    {/* Mobile Menu Button */}
+                    <button
+                        className={styles.mobileMenuBtn}
+                        onClick={toggleMobileMenu}
+                        aria-label="Toggle menu"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
                     <h2>Welcome back, John</h2>
                     <div className={styles.headerActions}>
                         <button className={styles.iconBtn} title="Notifications">🔔</button>

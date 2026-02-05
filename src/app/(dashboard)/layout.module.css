@@ -270,57 +270,165 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
+/* Mobile Menu Button */
+.mobileMenuBtn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 28px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 12px;
+}
+
+.mobileMenuBtn span {
+    width: 100%;
+    height: 3px;
+    background: var(--black);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+/* Overlay for mobile menu */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 /* Mobile responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .sidebar {
-        width: 70px;
+        width: 220px;
     }
 
-    .sidebarHeader {
-        padding: 16px;
+    .scrollArea {
+        padding: 24px;
     }
 
-    .logo {
-        justify-content: center;
-        font-size: 0;
+    .topHeader {
+        padding: 0 24px;
     }
 
-    .logo span {
-        font-size: 1.5rem;
+    .topHeader h2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
     }
 
-    .navLink {
-        padding: 12px;
-        justify-content: center;
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 260px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
     }
 
-    .navLink span {
-        font-size: 1.3rem;
+    .sidebar.open {
+        left: 0;
     }
 
-    /* Hide text on mobile */
-    .navLink::after {
-        display: none;
+    .content {
+        width: 100%;
+        margin-left: 0;
     }
 
-    .creditCard p {
-        display: none;
+    .mobileMenuBtn {
+        display: flex;
     }
 
-    .creditCard h3 {
+    .overlay {
+        display: block;
+    }
+
+    .topHeader {
+        padding: 0 16px;
+        height: 60px;
+    }
+
+    .topHeader h2 {
         font-size: 16px;
-        text-align: center;
     }
 
-    .userInfo {
-        display: none;
+    .headerActions {
+        gap: 6px;
+    }
+
+    .iconBtn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .logoutBtn {
+        padding: 8px 12px;
+        font-size: 12px;
     }
 
     .scrollArea {
         padding: 16px;
     }
+}
 
+@media (max-width: 480px) {
     .topHeader {
-        padding: 0 16px;
+        padding: 0 12px;
+        height: 56px;
+    }
+
+    .topHeader h2 {
+        font-size: 14px;
+    }
+
+    .iconBtn {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .logoutBtn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .scrollArea {
+        padding: 12px;
+    }
+
+    .creditCard {
+        padding: 14px 16px;
+    }
+
+    .creditCard h3 {
+        font-size: 24px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    .userName {
+        font-size: 13px;
+    }
+
+    .userEmail {
+        font-size: 11px;
     }
 }
