@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useCredits } from '@/contexts/CreditContext';
 import styles from './page.module.css';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface BlacklistResult {
     rbl: string;
@@ -25,6 +26,7 @@ export default function BlacklistPage() {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<CheckResponse | null>(null);
     const { balance, deductCredits } = useCredits();
+    const { token } = useAuth();
 
     const handleCheck = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,7 +43,10 @@ export default function BlacklistPage() {
         try {
             const response = await fetch('/api/blacklist/check', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ target })
             });
 

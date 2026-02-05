@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ApiKey {
     id: string;
@@ -20,10 +21,13 @@ export default function ApiKeysPage() {
     const [newKeyName, setNewKeyName] = useState('');
     const [newKeyLimit, setNewKeyLimit] = useState(1000);
     const [creating, setCreating] = useState(false);
+    const { token } = useAuth();
 
     const fetchKeys = async () => {
         try {
-            const res = await fetch('/api/keys/list');
+            const res = await fetch('/api/keys/list', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (res.ok) {
                 const data = await res.json();
                 setKeys(data);
@@ -46,7 +50,10 @@ export default function ApiKeysPage() {
         try {
             const res = await fetch('/api/keys/create', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     name: newKeyName,
                     limit: newKeyLimit
@@ -75,7 +82,10 @@ export default function ApiKeysPage() {
         try {
             const res = await fetch('/api/keys/revoke', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ key: keyString })
             });
 

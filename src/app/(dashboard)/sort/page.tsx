@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 import { useCredits } from '@/contexts/CreditContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EmailSortResult {
     email: string;
@@ -28,6 +29,7 @@ export default function SortPage() {
     const [results, setResults] = useState<SortedResults | null>(null);
     const [activeTab, setActiveTab] = useState<'office365' | 'gsuite' | 'titan' | 'other'>('office365');
     const { balance, deductCredits } = useCredits();
+    const { token } = useAuth();
 
     const handleSort = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,7 +53,10 @@ export default function SortPage() {
         try {
             const response = await fetch('/api/sort', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ emails: emailList })
             });
 

@@ -63,7 +63,10 @@ export default function BillingPage() {
             if (paymentMethod === 'stripe') {
                 const response = await fetch('/api/payment/stripe/create-checkout', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: JSON.stringify({
                         pack_id: pack.id,
                         credits: pack.credits,
@@ -79,7 +82,10 @@ export default function BillingPage() {
             } else {
                 const response = await fetch('/api/payment/crypto/create-invoice', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: JSON.stringify({
                         pack_id: pack.id,
                         credits: pack.credits,

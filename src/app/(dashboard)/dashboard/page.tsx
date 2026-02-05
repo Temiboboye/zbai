@@ -6,6 +6,7 @@ import {
     PieChart, Pie, Cell, BarChart, Bar, Legend
 } from 'recharts';
 import { useCredits } from '@/contexts/CreditContext';
+import { useAuth } from '@/contexts/AuthContext';
 import styles from './page.module.css';
 
 // Custom Tooltip for Charts
@@ -34,13 +35,16 @@ const COLORS = ['#b9ff66', '#ff5050', '#ffaa00', '#00ccff', '#cc00ff'];
 
 export default function DashboardPage() {
     const { balance } = useCredits();
+    const { token } = useAuth();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('/api/analytics/stats');
+                const res = await fetch('/api/analytics/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (res.ok) {
                     const stats = await res.json();
                     setData(stats);

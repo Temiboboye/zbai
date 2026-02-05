@@ -21,6 +21,8 @@ interface VerificationResult {
     safety_score: number;
 }
 
+import { useAuth } from '@/contexts/AuthContext';
+
 export default function BulkPage() {
     // State
     const [mode, setMode] = useState<'paste' | 'upload'>('upload');
@@ -36,6 +38,7 @@ export default function BulkPage() {
 
     // Hooks
     const { balance, deductCredits, refreshBalance } = useCredits();
+    const { token } = useAuth();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // -- File Handling --
@@ -136,7 +139,10 @@ export default function BulkPage() {
         try {
             const res = await fetch('/api/verify/bulk', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ emails: emailList })
             });
 
@@ -165,14 +171,18 @@ export default function BulkPage() {
         const interval = setInterval(async () => {
             try {
                 // Get job status
-                const res = await fetch(`/api/verify/bulk/${jobId}`);
+                const res = await fetch(`/api/verify/bulk/${jobId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (!res.ok) return;
                 const jobStatus = await res.json();
                 setActiveJob(jobStatus);
 
                 // Try to fetch partial results even while processing
                 try {
-                    const resultsRes = await fetch(`/api/verify/bulk/${jobId}/results`);
+                    const resultsRes = await fetch(`/api/verify/bulk/${jobId}/results`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
                     if (resultsRes.ok) {
                         const data = await resultsRes.json();
                         // Update results even if job isn't complete yet
@@ -195,7 +205,9 @@ export default function BulkPage() {
 
     const fetchResults = async (jobId: string) => {
         try {
-            const res = await fetch(`/api/verify/bulk/${jobId}/results`);
+            const res = await fetch(`/api/verify/bulk/${jobId}/results`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (!res.ok) {
                 // If 400 (not completed), keep current partial results
                 if (res.status === 400) return;
