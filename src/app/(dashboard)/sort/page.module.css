@@ -17,8 +17,8 @@
 }
 
 .inputSection {
-    background: var(--gray);
-    border: 1px solid var(--surface-border);
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 45px;
     padding: 50px;
     margin-bottom: 40px;
@@ -26,13 +26,18 @@
 
 .inputSection h2 {
     font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--black);
+    background: var(--green);
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 6px;
 }
 
 .subtitle {
     font-size: 16px;
-    color: var(--text-muted);
+    color: var(--gray-400);
     margin-bottom: 30px;
 }
 
@@ -45,10 +50,12 @@
 .textarea {
     width: 100%;
     padding: 20px;
-    border: 1px solid var(--surface-border);
+    background: var(--dark);
+    border: 1px solid var(--gray-700);
     border-radius: 14px;
     font-family: 'Space Grotesk', monospace;
     font-size: 14px;
+    color: var(--white);
     resize: vertical;
     min-height: 200px;
 }

@@ -12,7 +12,11 @@
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: var(--white);
+    color: var(--black);
+    background: var(--green);
+    display: inline-block;
+    padding: 0 10px;
+    border-radius: 4px;
 }
 
 .header p {

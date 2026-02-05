@@ -10,6 +10,7 @@ from app.core.security import get_password_hash, verify_password, create_access_
 from app.models.models import User
 from app.services.email_service import email_service
 from app.core.database import get_db
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -52,7 +53,7 @@ async def signup(
         is_active=True,
         is_verified=False,
         verification_token=verification_token,
-        credits=100  # Free credits on signup
+        credits=settings.FREE_TRIAL_CREDITS  # Free credits on signup
     )
     db.add(user)
     db.commit()
@@ -156,7 +157,7 @@ async def google_login(
                 hashed_password=get_password_hash(secrets.token_urlsafe(24)), # Random password
                 is_active=True,
                 is_verified=True, # Google already verified the email
-                credits=100  # Give free credits on signup
+                credits=settings.FREE_TRIAL_CREDITS  # Use configured trial credits
             )
             db.add(user)
             db.commit()

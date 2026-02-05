@@ -14,7 +14,11 @@
 .header h1 {
     font-size: 32px;
     font-weight: 800;
-    color: var(--white);
+    color: var(--black);
+    background: var(--green);
+    display: inline-block;
+    padding: 0 12px;
+    border-radius: 6px;
     margin-bottom: 8px;
 }
 

@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     
     # Credits & Pricing
     CREDIT_COST_USD: float = 0.0003
-    FREE_TRIAL_CREDITS: int = 100
+    FREE_TRIAL_CREDITS: int = 20
     
     # CORS
     CORS_ORIGINS: list = [

@@ -13,28 +13,31 @@
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #000;
+    color: var(--black);
+    background: var(--green);
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 6px;
 }
 
 .header p {
-    color: #666;
+    color: var(--gray-400);
     font-size: 16px;
 }
 
 /* Input Card */
 .inputCard {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 16px;
     overflow: hidden;
     margin-bottom: 30px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .tabHeader {
     display: flex;
-    border-bottom: 1px solid #eee;
-    background: #fafafa;
+    border-bottom: 1px solid var(--gray-800);
+    background: var(--dark);
 }
 
 .modeTab {
@@ -50,14 +53,13 @@
 }
 
 .modeTab:hover {
-    color: #000;
-    background: #f0f0f0;
+    color: var(--white);
+    background: var(--gray-800);
 }
 
 .activeMode {
-    color: #000;
-    background: #fff;
-    border-bottom: 2px solid var(--green);
+    color: var(--black);
+    background: var(--green);
 }
 
 .inputBody {
@@ -68,11 +70,11 @@
 .textarea {
     width: 100%;
     min-height: 200px;
-    background: #fff;
-    border: 2px solid #ddd;
+    background: var(--dark);
+    border: 1px solid var(--gray-700);
     border-radius: 8px;
     padding: 16px;
-    color: #000;
+    color: var(--white);
     font-family: monospace;
     font-size: 14px;
     resize: vertical;
@@ -103,12 +105,12 @@
 
 /* File Upload Mode */
 .dropzone {
-    border: 2px dashed #ccc;
+    border: 2px dashed var(--gray-700);
     border-radius: 12px;
     padding: 40px;
     text-align: center;
     transition: all 0.2s;
-    background: #fafafa;
+    background: var(--dark);
     cursor: pointer;
 }
 
@@ -163,7 +165,7 @@
 .fileInfo h3 {
     font-size: 16px;
     margin-bottom: 4px;
-    color: #000;
+    color: var(--white);
 }
 
 .fileInfo p {
@@ -200,18 +202,17 @@
 }
 
 .costEstimate span {
-    color: #000;
+    color: var(--green);
     font-weight: 600;
 }
 
 /* Progress Card */
 .progressCard {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .progressHeader {
@@ -247,12 +248,11 @@
 
 /* Summary Card */
 .summaryCard {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .summaryGrid {
@@ -272,7 +272,7 @@
 .summaryValue {
     font-size: 28px;
     font-weight: 700;
-    color: #000;
+    color: var(--white);
     margin-bottom: 4px;
 }
 
