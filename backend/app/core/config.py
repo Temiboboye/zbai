@@ -60,6 +60,7 @@ class Settings(BaseSettings):
     NOWPAYMENTS_API_KEY: Optional[str] = None
     NOWPAYMENTS_IPN_SECRET: Optional[str] = None
     GOOGLE_CLIENT_ID: Optional[str] = None
+    GOOGLE_CLIENT_SECRET: Optional[str] = None
     
     # Validation
     LOW_CREDITS_THRESHOLD: int = 1000
