@@ -102,6 +102,84 @@ async def login(
     }
 
 
+class GoogleLoginRequest(BaseModel):
+    id_token: str
+
+@router.post("/google", response_model=Token)
+async def google_login(
+    data: GoogleLoginRequest,
+    db: Session = Depends(get_db)
+) -> Any:
+    """
+    Login or Signup with Google id_token
+    """
+    import httpx
+    from app.core.config import settings
+    import secrets
+    
+    # Verify token with Google
+    async with httpx.AsyncClient() as client:
+        # We can use Google's tokeninfo endpoint for verification
+        response = await client.get(
+            f"https://oauth2.googleapis.com/tokeninfo?id_token={data.id_token}"
+        )
+        
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Google token"
+            )
+            
+        token_info = response.json()
+        
+        # Security check: verify audience is our client_id
+        if settings.GOOGLE_CLIENT_ID and token_info.get("aud") != settings.GOOGLE_CLIENT_ID:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token was not issued for this application"
+            )
+            
+        email = token_info.get("email")
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Email not found in Google token"
+            )
+            
+        # Check if user exists
+        user = db.query(User).filter(User.email == email).first()
+        
+        if not user:
+            # Create a new user if they don't exist
+            user = User(
+                email=email,
+                hashed_password=get_password_hash(secrets.token_urlsafe(24)), # Random password
+                is_active=True,
+                is_verified=True, # Google already verified the email
+                credits=100  # Give free credits on signup
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            
+            # Send welcome email
+            try:
+                email_service.send_welcome_email(user.email, user.email.split('@')[0])
+            except Exception as e:
+                print(f"Failed to send welcome email: {e}")
+        
+        # Generate our own internal access token
+        access_token_expires = timedelta(minutes=security.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            subject=user.id, expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+        }
+
+
 @router.get("/verify-email")
 def verify_email(
     token: str,

@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
     NOWPAYMENTS_API_KEY: Optional[str] = None
     NOWPAYMENTS_IPN_SECRET: Optional[str] = None
+    GOOGLE_CLIENT_ID: Optional[str] = None
     
     # Validation
     LOW_CREDITS_THRESHOLD: int = 1000
