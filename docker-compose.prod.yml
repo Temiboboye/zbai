@@ -56,6 +56,12 @@ services:
       - SECRET_KEY=${SECRET_KEY:-change_this_in_production}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://yourdomain.com}
       - SENTRY_DSN=${SENTRY_DSN:-}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - FROM_EMAIL=${FROM_EMAIL:-noreply@zerobounceai.com}
+      - NOWPAYMENTS_API_KEY=${NOWPAYMENTS_API_KEY}
+      - NOWPAYMENTS_IPN_SECRET=${NOWPAYMENTS_IPN_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
