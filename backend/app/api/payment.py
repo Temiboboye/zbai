@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional
 from app.core.deps import get_db, get_current_user
-from app.models.models import User
+from app.models.models import User, Transaction
 from app.services.payment_service import payment_service
 import logging
 
@@ -14,6 +14,14 @@ class PurchaseRequest(BaseModel):
     pack_id: str
     credits: Optional[int] = None # Ignored, used for frontend validation
     amount: Optional[float] = None # Ignored
+
+@router.get("/history")
+async def get_payment_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    transactions = db.query(Transaction).filter(Transaction.user_id == current_user.id).order_by(Transaction.timestamp.desc()).all()
+    return transactions
 
 @router.post("/stripe/create-checkout")
 async def stripe_checkout(

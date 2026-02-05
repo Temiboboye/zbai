@@ -190,3 +190,23 @@ def read_users_me(
         "is_verified": current_user.is_verified,
         "credits": current_user.credits
     }
+
+class PasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
+
+@router.post("/update-password")
+async def update_password(
+    data: PasswordUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(deps.get_current_active_user)
+):
+    """
+    Update password for logged in user
+    """
+    if not verify_password(data.current_password, current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="Incorrect current password")
+        
+    current_user.hashed_password = get_password_hash(data.new_password)
+    db.commit()
+    return {"message": "Password updated successfully"}
