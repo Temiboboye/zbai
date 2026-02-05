@@ -10,7 +10,11 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    credits = Column(Integer, default=49)  # Sign up bonus
+    is_verified = Column(Boolean, default=False)
+    verification_token = Column(String, nullable=True)
+    reset_token = Column(String, nullable=True)
+    reset_token_expires = Column(DateTime, nullable=True)
+    credits = Column(Integer, default=100)  # Sign up bonus (updated to 100 as per EXPECTED.md)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     api_keys = relationship("ApiKey", back_populates="owner")

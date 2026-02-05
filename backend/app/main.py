@@ -66,6 +66,8 @@ app.include_router(blacklist.router, prefix="/v1/blacklist", tags=["blacklist"])
 app.include_router(sort.router, prefix="/v1/sort", tags=["sort"])
 app.include_router(analytics.router, prefix="/v1/analytics", tags=["analytics"])
 app.include_router(keys.router, prefix="/v1/keys", tags=["keys"])
+from app.api import auth
+app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
 
 # CORS middleware - Production ready with environment configuration
 ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
@@ -133,24 +135,58 @@ class BulkJobResponse(BaseModel):
 # Helper: Get User ID from API Key (Mock Auth for now)
 def get_current_user_id(
     authorization: Optional[str] = Header(None),
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
     db: Session = Depends(get_db)
 ) -> int:
-    # For demo purposes, we treat the hardcoded key as User 1
-    # In production, look up the API key in the DB
-    if not authorization:
-         # Default demo user for frontend ease
-         return 1
-    
-    token = authorization.replace("Bearer ", "")
-    if token == "zb_live_demo_key_123456":
-         return 1
-         
-    # Check DB for key
-    key_record = db.query(ApiKey).filter(ApiKey.key == token).first()
-    if key_record:
-        return key_record.user_id # type: ignore
-        
-    return 1 # Fallback to demo user
+    """
+    Get current user ID from:
+    1. JWT Token (Authorization: Bearer ...)
+    2. API Key (X-API-Key header)
+    3. Demo/Fallback (for backward compatibility if needed)
+    """
+    from app.core.security import SECRET_KEY, ALGORITHM
+    from jose import jwt, JWTError
+
+    # 1. Check JWT
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.replace("Bearer ", "")
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            user_id = payload.get("sub")
+            if user_id:
+                return int(user_id)
+        except JWTError:
+            pass # Invalid token, try other methods or fail
+            
+    # 2. Check API Key
+    api_key_str = x_api_key
+    if not api_key_str and authorization and not authorization.startswith("Bearer "):
+             # Fallback: Treat value as API Key if not Bearer
+             api_key_str = authorization
+
+    if api_key_str:
+        # Check specific demo key
+        if api_key_str == "zb_live_demo_key_123456":
+            return 1
+            
+        # Lookup API key in DB
+        api_key = db.query(ApiKey).filter(ApiKey.key == api_key_str).first()
+        if api_key and api_key.status == "active":
+             # Update usage
+             api_key.usage_count += 1
+             api_key.last_used = datetime.utcnow()
+             db.commit()
+             return api_key.user_id
+
+    # 3. Fallback/Demo (TEMPORARY - Should be removed for strict auth)
+    # For now, if no auth provided, return None or 1?
+    # Existing code returned 1 if no auth.
+    if not authorization and not x_api_key:
+        return 1
+
+    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
 
 
 @app.get("/")
