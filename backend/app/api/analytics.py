@@ -101,15 +101,15 @@ async def get_analytics_stats(
         .scalar() or 0
 
     return {
-        "daily_stats": daily_stats,
+        "daily_stats": daily_stats if total_credits_used > 0 else [],
         "quality_distribution": {
-            "Valid": int(total_credits_used * 0.7) if total_credits_used > 0 else total_valid_est,
-            "Invalid": int(total_credits_used * 0.2) if total_credits_used > 0 else total_invalid_est,
-            "Catch-all": int(total_credits_used * 0.06) if total_credits_used > 0 else int(total_risky_est * 0.6),
-            "Disposable": int(total_credits_used * 0.02) if total_credits_used > 0 else int(total_risky_est * 0.2),
-            "Spambot": int(total_credits_used * 0.02) if total_credits_used > 0 else int(total_risky_est * 0.2)
+            "Valid": int(total_credits_used * 0.7) if total_credits_used > 0 else 0,
+            "Invalid": int(total_credits_used * 0.2) if total_credits_used > 0 else 0,
+            "Catch-all": int(total_credits_used * 0.06) if total_credits_used > 0 else 0,
+            "Disposable": int(total_credits_used * 0.02) if total_credits_used > 0 else 0,
+            "Spambot": int(total_credits_used * 0.02) if total_credits_used > 0 else 0
         },
         "recent_usage": recent_usage,
-        "total_verified": total_credits_used if total_credits_used > 0 else (total_valid_est + total_invalid_est),
-        "avg_safety_score": 92
+        "total_verified": total_credits_used,
+        "avg_safety_score": 92 if total_credits_used > 0 else 100
     }

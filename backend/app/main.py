@@ -60,6 +60,18 @@ app.include_router(keys.router, prefix="/v1/keys", tags=["keys"])
 app.include_router(payment.router, prefix="/v1/payment", tags=["payment"])
 app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
 
+@app.get("/v1/credits")
+async def get_user_credits(
+    db: Session = Depends(get_db),
+    user_id: int = Depends(deps.get_current_user_id)
+):
+    """Get current user credit balance"""
+    from app.models.models import User
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"credits_remaining": user.credits}
+
 # CORS middleware
 ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
 app.add_middleware(
