@@ -213,6 +213,37 @@
   font-size: 0.875rem;
 }
 
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footerLinks a {
+  color: var(--gray-400);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+  color: var(--green);
+}
+
+.footer p {
+  margin: 0;
+  color: var(--gray-500);
+}
+
+
 @media (max-width: 1024px) {
   .hero .container {
     flex-direction: column;

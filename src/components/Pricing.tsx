@@ -37,6 +37,9 @@ export default function Pricing() {
                 <div className={styles.header}>
                     <h2><span className="greenhead">Pricing</span></h2>
                     <p>Premium deliverability intelligence starting at just $0.0003 per credit. No hidden fees.</p>
+                    <a href="/comparison" className={styles.compareLink}>
+                        See how we compare to competitors →
+                    </a>
                 </div>
 
                 <div className={styles.grid}>

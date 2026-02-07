@@ -26,6 +26,22 @@
     line-height: 1.5;
 }
 
+.compareLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: transform 0.2s;
+}
+
+.compareLink:hover {
+    transform: translateX(4px);
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

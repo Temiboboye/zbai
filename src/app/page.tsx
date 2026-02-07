@@ -23,7 +23,7 @@ export default function Home() {
             </p>
             <div className={styles.heroActions}>
               <a href="/signup" className="btn btn-primary">Start Free Trial - 49 Credits</a>
-              <a href="#features" className="btn btn-secondary">See How It Works</a>
+              <a href="/comparison" className="btn btn-secondary">Compare Features</a>
             </div>
           </div>
 
@@ -170,7 +170,16 @@ export default function Home() {
 
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <p>© 2026 ZeroBounce. All rights reserved. GDPR Compliant.</p>
+          <div className={styles.footerContent}>
+            <div className={styles.footerLinks}>
+              <a href="#features">Features</a>
+              <a href="/comparison">Compare</a>
+              <a href="#pricing">Pricing</a>
+              <a href="/login">Login</a>
+              <a href="/signup">Sign Up</a>
+            </div>
+            <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>
+          </div>
         </div>
       </footer>
     </main>
