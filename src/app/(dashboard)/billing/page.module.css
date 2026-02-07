@@ -108,6 +108,69 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Founding Member Banner */
+.foundingBanner {
+    background: linear-gradient(135deg, var(--green) 0%, #8BC34A 100%);
+    color: var(--black);
+    padding: 16px 24px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(185, 255, 102, 0.3);
+}
+
+.foundingIcon {
+    font-size: 24px;
+}
+
+.foundingText {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.foundingText strong {
+    font-weight: 700;
+}
+
+/* Tier Name */
+.tierName {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    text-align: center;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Original Price & Discount */
+.originalPrice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+    color: var(--gray-500);
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.discountBadge {
+    background: #ef4444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
 /* Pricing Table */
 .pricingTable {
     display: grid;

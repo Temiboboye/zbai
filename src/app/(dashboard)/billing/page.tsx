@@ -9,21 +9,120 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 
 interface CreditPack {
     id: string;
+    name: string;
     credits: number;
     price: number;
+    originalPrice?: number;
     per_credit: number;
     popular?: boolean;
+    features: string[];
+    finderSearches?: number;
+    apiLimit?: string;
+    support?: string;
+    validity?: string;
 }
 
+const FOUNDING_MEMBER_DISCOUNT = 0.30; // 30% off
+
 const creditPacks: CreditPack[] = [
-    { id: 'pack_5k', credits: 5000, price: 8, per_credit: 0.0016 },
-    { id: 'pack_10k', credits: 10000, price: 12, per_credit: 0.0012 },
-    { id: 'pack_25k', credits: 25000, price: 25, per_credit: 0.0010 },
-    { id: 'pack_50k', credits: 50000, price: 40, per_credit: 0.0008, popular: true },
-    { id: 'pack_100k', credits: 100000, price: 70, per_credit: 0.0007 },
-    { id: 'pack_200k', credits: 200000, price: 120, per_credit: 0.0006 },
-    { id: 'pack_500k', credits: 500000, price: 260, per_credit: 0.00052 },
-    { id: 'pack_1m', credits: 1000000, price: 380, per_credit: 0.00038 },
+    {
+        id: 'pack_1k',
+        name: 'Starter',
+        credits: 1000,
+        price: 8.40,
+        originalPrice: 12,
+        per_credit: 0.0084,
+        features: [
+            'Full verification suite',
+            'API access (500 req/day)',
+            'Basic reporting',
+            'Email support'
+        ],
+        apiLimit: '500 requests/day',
+        support: 'Email support',
+        validity: '6 months'
+    },
+    {
+        id: 'pack_10k',
+        name: 'Professional',
+        credits: 10000,
+        price: 55.30,
+        originalPrice: 79,
+        per_credit: 0.00553,
+        popular: true,
+        features: [
+            'Everything in Starter',
+            'Email Finder (500 searches)',
+            'Advanced reporting & analytics',
+            'Catch-all confidence scoring',
+            'Priority email support'
+        ],
+        finderSearches: 500,
+        apiLimit: '5,000 requests/day',
+        support: 'Priority email',
+        validity: '12 months'
+    },
+    {
+        id: 'pack_50k',
+        name: 'Business',
+        credits: 50000,
+        price: 209.30,
+        originalPrice: 299,
+        per_credit: 0.00419,
+        features: [
+            'Everything in Professional',
+            'Email Finder (2,500 searches)',
+            'Bulk verification (unlimited)',
+            'Email pattern suggestions',
+            'Domain reputation scoring',
+            'Dedicated account manager'
+        ],
+        finderSearches: 2500,
+        apiLimit: '25,000 requests/day',
+        support: 'Dedicated manager',
+        validity: '12 months'
+    },
+    {
+        id: 'pack_250k',
+        name: 'Enterprise',
+        credits: 250000,
+        price: 839.30,
+        originalPrice: 1199,
+        per_credit: 0.00336,
+        features: [
+            'Everything in Business',
+            'Email Finder (15,000 searches)',
+            'Custom integrations',
+            'White-label options',
+            'Unlimited API requests',
+            '99.9% SLA',
+            'Phone + email support'
+        ],
+        finderSearches: 15000,
+        apiLimit: 'Unlimited',
+        support: 'Phone + email',
+        validity: '24 months'
+    },
+    {
+        id: 'pack_1m',
+        name: 'Volume',
+        credits: 1000000,
+        price: 2799.30,
+        originalPrice: 3999,
+        per_credit: 0.0028,
+        features: [
+            'Everything in Enterprise',
+            'Email Finder (75,000 searches)',
+            'Dedicated infrastructure',
+            'Custom contract terms',
+            'Credits never expire',
+            'White-glove onboarding'
+        ],
+        finderSearches: 75000,
+        apiLimit: 'Unlimited',
+        support: 'Dedicated team',
+        validity: 'Never expires'
+    },
 ];
 
 interface Transaction {
@@ -107,23 +206,33 @@ export default function BillingPage() {
 
     return (
         <div className={styles.container}>
+            {/* Founding Member Banner */}
+            <div className={styles.foundingBanner}>
+                <span className={styles.foundingIcon}>🎉</span>
+                <div className={styles.foundingText}>
+                    <strong>Founding Member Pricing:</strong> Lock in 30% off forever! Limited time offer.
+                </div>
+            </div>
+
             {/* Header Strategy */}
             <div className={styles.header}>
-                <h1>Simple, Honest Email Verification Pricing</h1>
-                <p>Enterprise-grade accuracy without inflated tiers, hidden rules, or forced overpaying.</p>
+                <h1>AI-Powered Email Intelligence</h1>
+                <p>Enterprise-grade verification with catch-all confidence scoring, email pattern recognition, and domain reputation intelligence. More accurate than basic SMTP checks.</p>
                 <div className={styles.trustBadge}>
-                    <span>🛡️ Fair pricing from day one</span>
+                    <span>🤖 AI-Enhanced Verification</span>
                     <span>•</span>
-                    <span>📈 Rewards as you grow</span>
+                    <span>📊 98%+ Accuracy</span>
+                    <span>•</span>
+                    <span>🔍 Email Finder Included</span>
                 </div>
             </div>
 
             {/* Core Value Props */}
             <div className={styles.valueProps}>
-                <div className={styles.valueItem}>✓ No "starter tax" for small lists</div>
-                <div className={styles.valueItem}>✓ Same verification quality on every plan</div>
-                <div className={styles.valueItem}>✓ Credits work for bulk & API</div>
-                <div className={styles.valueItem}>✓ Pay only for what you verify</div>
+                <div className={styles.valueItem}>✓ Catch-all confidence scoring (0-100)</div>
+                <div className={styles.valueItem}>✓ AI email pattern recognition</div>
+                <div className={styles.valueItem}>✓ Domain reputation intelligence</div>
+                <div className={styles.valueItem}>✓ Real-time email finder</div>
             </div>
 
             {/* Payment Method Selector */}
@@ -141,7 +250,7 @@ export default function BillingPage() {
                     ₿ Crypto
                 </button>
                 <div className={styles.bonusBanner}>
-                    🚀 <strong>Launch Special:</strong> Get 20% Bonus Credits on all packs today!
+                    ⏰ <strong>Limited Time:</strong> Founding Member pricing ends soon. Lock in 30% off forever!
                 </div>
             </div>
 
@@ -149,7 +258,9 @@ export default function BillingPage() {
             <div className={styles.pricingTable}>
                 {creditPacks.map((pack) => (
                     <div key={pack.id} className={`${styles.pricingCard} ${pack.popular ? styles.popularCard : ''}`}>
-                        {pack.popular && <div className={styles.bestValue}>Best Value</div>}
+                        {pack.popular && <div className={styles.bestValue}>Most Popular</div>}
+
+                        <div className={styles.tierName}>{pack.name}</div>
 
                         <div className={styles.cardHeader}>
                             <h3 className={styles.creditsAmount}>{pack.credits.toLocaleString()}</h3>
@@ -157,8 +268,16 @@ export default function BillingPage() {
                         </div>
 
                         <div className={styles.cardPrice}>
-                            <span className={styles.currency}>$</span>
-                            <span className={styles.amount}>{pack.price}</span>
+                            {pack.originalPrice && (
+                                <div className={styles.originalPrice}>
+                                    <span className={styles.strikethrough}>${pack.originalPrice}</span>
+                                    <span className={styles.discountBadge}>-30%</span>
+                                </div>
+                            )}
+                            <div>
+                                <span className={styles.currency}>$</span>
+                                <span className={styles.amount}>{pack.price}</span>
+                            </div>
                         </div>
 
                         <div className={styles.perVerify}>
@@ -166,9 +285,10 @@ export default function BillingPage() {
                         </div>
 
                         <ul className={styles.featureList}>
-                            <li>Includes <strong>{(pack.credits * 0.2).toLocaleString()}</strong> bonus credits</li>
-                            <li>Never expire</li>
-                            <li>Full report access</li>
+                            {pack.features.map((feature, idx) => (
+                                <li key={idx}>{feature}</li>
+                            ))}
+                            <li>Credits valid: {pack.validity}</li>
                         </ul>
 
                         <button
@@ -177,7 +297,7 @@ export default function BillingPage() {
                             onClick={() => handlePurchase(pack)}
                             disabled={!!loading}
                         >
-                            {loading === pack.id ? 'Loading...' : 'Buy Now'}
+                            {loading === pack.id ? 'Loading...' : 'Get Started'}
                         </button>
                     </div>
                 ))}
