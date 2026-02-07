@@ -12,18 +12,17 @@ export default function Home() {
         <div className={styles.container}>
           <div className={`${styles.heroContent} animate-fade-in`}>
             <h1>
-              Navigating email <br />
-              <span className="greenhead">deliverability</span> <br />
-              for success
+              Email verification <br />
+              <span className="greenhead">that actually thinks</span>
             </h1>
             <p>
-              Our email verification platform helps businesses protect sender reputation
-              and maximize deliverability through real-time validation, catch-all detection,
-              and spam trap identification.
+              Go beyond basic SMTP checks. Our AI-powered platform delivers 98%+ accuracy
+              with catch-all confidence scoring, email pattern recognition, and domain
+              reputation intelligence. Know exactly which emails to trust.
             </p>
             <div className={styles.heroActions}>
-              <a href="/signup" className="btn btn-primary">Get 49 Free Credits</a>
-              <a href="/login" className="btn btn-secondary">Login</a>
+              <a href="/signup" className="btn btn-primary">Start Free Trial - 49 Credits</a>
+              <a href="#features" className="btn btn-secondary">See How It Works</a>
             </div>
           </div>
 
@@ -59,9 +58,10 @@ export default function Home() {
       <section id="features" className={styles.features}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Services</h2>
+            <h2 className={styles.sectionTitle}>AI-Powered Features</h2>
             <p className={styles.sectionDesc}>
-              At ZeroBounce, we offer a range of email verification services to keep your lists clean and your sender reputation protected.
+              Advanced email intelligence that goes beyond basic verification. Our AI analyzes patterns,
+              scores confidence, and provides actionable insights you won't find anywhere else.
             </p>
           </div>
 
@@ -69,8 +69,8 @@ export default function Home() {
             <div className={`${styles.featureCard} ${styles.featureCardGray}`}>
               <div className={styles.featureCardTitle}>
                 <h3>
-                  <span className="greenhead">Syntax & MX</span><br />
-                  Validation
+                  <span className="greenhead">Confidence</span><br />
+                  Scoring (0-100)
                 </h3>
                 <a href="#" className={styles.learnMore}>
                   <svg viewBox="0 0 41 41" fill="none">
@@ -85,8 +85,8 @@ export default function Home() {
             <div className={`${styles.featureCard} ${styles.featureCardGreen}`}>
               <div className={styles.featureCardTitle}>
                 <h3>
-                  <span className="whitehead">SMTP</span><br />
-                  Verification
+                  <span className="whitehead">Email Pattern</span><br />
+                  Recognition
                 </h3>
                 <a href="#" className={styles.learnMore}>
                   <svg viewBox="0 0 41 41" fill="none">
@@ -101,8 +101,8 @@ export default function Home() {
             <div className={`${styles.featureCard} ${styles.featureCardDark}`}>
               <div className={styles.featureCardTitle}>
                 <h3>
-                  <span className="whitehead">Catch-All</span><br />
-                  Detection
+                  <span className="whitehead">Domain</span><br />
+                  Reputation
                 </h3>
                 <a href="#" className={styles.learnMore} style={{ color: 'white' }}>
                   <svg viewBox="0 0 41 41" fill="none">
@@ -117,8 +117,8 @@ export default function Home() {
             <div className={`${styles.featureCard} ${styles.featureCardGray}`}>
               <div className={styles.featureCardTitle}>
                 <h3>
-                  <span className="greenhead">Disposable</span><br />
-                  Detection
+                  <span className="greenhead">Email</span><br />
+                  Finder
                 </h3>
                 <a href="#" className={styles.learnMore}>
                   <svg viewBox="0 0 41 41" fill="none">
@@ -133,8 +133,8 @@ export default function Home() {
             <div className={`${styles.featureCard} ${styles.featureCardGreen}`}>
               <div className={styles.featureCardTitle}>
                 <h3>
-                  <span className="whitehead">Spam Trap</span><br />
-                  Identification
+                  <span className="whitehead">Real-Time</span><br />
+                  API
                 </h3>
                 <a href="#" className={styles.learnMore}>
                   <svg viewBox="0 0 41 41" fill="none">
@@ -150,7 +150,7 @@ export default function Home() {
               <div className={styles.featureCardTitle}>
                 <h3>
                   <span className="greenhead">Bulk</span><br />
-                  Verification
+                  Processing
                 </h3>
                 <a href="#" className={styles.learnMore} style={{ color: 'white' }}>
                   <svg viewBox="0 0 41 41" fill="none">
