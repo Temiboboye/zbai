@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Pricing from "@/components/Pricing";
+import ComparisonTable from "@/components/ComparisonTable";
 import styles from "./page.module.css";
 
 export default function Home() {

@@ -1,0 +1,271 @@
+.comparisonWrapper {
+    max-width: 1400px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.header h2 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.header p {
+    font-size: 18px;
+    color: var(--gray-400);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Category Tabs */
+.categoryTabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.categoryTab {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    color: var(--gray-300);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.categoryTab:hover {
+    border-color: var(--green);
+    color: var(--white);
+}
+
+.categoryTab.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--black);
+}
+
+/* Table Wrapper */
+.tableWrapper {
+    overflow-x: auto;
+    background: var(--gray-900);
+    border-radius: 16px;
+    border: 1px solid var(--gray-800);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Comparison Table */
+.comparisonTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.comparisonTable thead {
+    background: var(--gray-800);
+    border-bottom: 2px solid var(--gray-700);
+}
+
+.comparisonTable th {
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-300);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.featureColumn {
+    text-align: left !important;
+    width: 30%;
+    min-width: 200px;
+}
+
+.ourColumn {
+    background: linear-gradient(135deg, rgba(185, 255, 102, 0.1), rgba(185, 255, 102, 0.05));
+    border-left: 2px solid var(--green);
+    border-right: 2px solid var(--green);
+}
+
+.ourBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--green);
+    font-size: 16px;
+}
+
+.crown {
+    font-size: 20px;
+}
+
+.comparisonTable tbody tr {
+    border-bottom: 1px solid var(--gray-800);
+    transition: background 0.2s;
+}
+
+.comparisonTable tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.comparisonTable tbody tr:last-child {
+    border-bottom: none;
+}
+
+.comparisonTable td {
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--gray-300);
+}
+
+.featureName {
+    text-align: left !important;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.ourValue {
+    background: linear-gradient(135deg, rgba(185, 255, 102, 0.08), rgba(185, 255, 102, 0.03));
+    border-left: 2px solid var(--green);
+    border-right: 2px solid var(--green);
+    font-weight: 600;
+}
+
+/* Value Styles */
+.checkmark {
+    color: var(--green);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.cross {
+    color: var(--gray-600);
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+.textValue {
+    color: var(--gray-400);
+    font-size: 13px;
+}
+
+.ourValue .checkmark {
+    font-size: 24px;
+}
+
+.ourValue .textValue {
+    color: var(--green);
+    font-weight: 600;
+}
+
+/* CTA Section */
+.ctaSection {
+    text-align: center;
+    margin-top: 64px;
+    padding: 48px 32px;
+    background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+    border-radius: 16px;
+    border: 1px solid var(--gray-700);
+}
+
+.ctaSection h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--white);
+}
+
+.ctaSection p {
+    font-size: 16px;
+    color: var(--gray-400);
+    margin-bottom: 32px;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Disclaimer */
+.disclaimer {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.disclaimer p {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header h2 {
+        font-size: 32px;
+    }
+
+    .categoryTabs {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    .comparisonTable {
+        font-size: 12px;
+    }
+
+    .comparisonTable th,
+    .comparisonTable td {
+        padding: 12px 8px;
+    }
+
+    .featureName {
+        font-size: 13px;
+    }
+
+    .ctaSection h3 {
+        font-size: 24px;
+    }
+
+    .ctaButtons {
+        flex-direction: column;
+    }
+
+    .ctaButtons a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .comparisonWrapper {
+        margin: 40px auto;
+    }
+
+    .header h2 {
+        font-size: 28px;
+    }
+
+    .header p {
+        font-size: 16px;
+    }
+
+    .categoryTab {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+}
