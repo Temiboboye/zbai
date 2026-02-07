@@ -29,6 +29,7 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <div className={styles.links}>
           <Link href="#features">Features</Link>
+          <Link href="/comparison">Compare</Link>
           <Link href="#pricing">Pricing</Link>
           <Link href="#api">API</Link>
         </div>
@@ -54,6 +55,7 @@ export default function Navbar() {
       <div className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileLinks}>
           <Link href="#features" onClick={closeMobileMenu}>Features</Link>
+          <Link href="/comparison" onClick={closeMobileMenu}>Compare</Link>
           <Link href="#pricing" onClick={closeMobileMenu}>Pricing</Link>
           <Link href="#api" onClick={closeMobileMenu}>API</Link>
         </div>
