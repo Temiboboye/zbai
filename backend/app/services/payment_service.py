@@ -15,14 +15,11 @@ from app.services.credit_manager import CreditManager
 from app.services.email_service import email_service # Optional: send confirmation email
 
 CREDIT_PACKS = {
-    'pack_5k': {'credits': 5000, 'price': 8},
-    'pack_10k': {'credits': 10000, 'price': 12},
-    'pack_25k': {'credits': 25000, 'price': 25},
-    'pack_50k': {'credits': 50000, 'price': 40},
-    'pack_100k': {'credits': 100000, 'price': 70},
-    'pack_200k': {'credits': 200000, 'price': 120},
-    'pack_500k': {'credits': 500000, 'price': 260},
-    'pack_1m': {'credits': 1000000, 'price': 380},
+    'pack_1k': {'credits': 1000, 'price': 8.40, 'name': 'Starter'},
+    'pack_10k': {'credits': 10000, 'price': 55.30, 'name': 'Professional'},
+    'pack_50k': {'credits': 50000, 'price': 209.30, 'name': 'Business'},
+    'pack_250k': {'credits': 250000, 'price': 839.30, 'name': 'Enterprise'},
+    'pack_1m': {'credits': 1000000, 'price': 2799.30, 'name': 'Volume'},
 }
 
 class PaymentService:
