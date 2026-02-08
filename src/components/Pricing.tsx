@@ -3,30 +3,34 @@ import styles from './Pricing.module.css';
 const plans = [
     {
         name: 'Starter',
-        price: '$3',
+        price: '$8.40',
+        credits: '1,000',
+        costPerCredit: '$0.0084',
+        features: ['30-Day Rollover', 'Email Support', 'AI Verification', 'Bulk Upload & API'],
+        buttonText: 'Get Started',
+        variant: 'gray',
+        packId: 'pack_1k'
+    },
+    {
+        name: 'Professional',
+        price: '$55.30',
         credits: '10,000',
-        costPerCredit: '$0.0003',
-        features: ['30-Day Rollover', 'Email Support', 'Syntax & MX Checks', 'Bulk Upload & API'],
+        costPerCredit: '$0.0055',
+        features: ['60-Day Rollover', 'Priority Email', 'Confidence Scoring', 'Pattern Recognition'],
         buttonText: 'Get Started',
-        variant: 'gray'
+        variant: 'dark',
+        packId: 'pack_10k',
+        popular: true
     },
     {
-        name: 'Growth',
-        price: '$30',
-        credits: '100,000',
-        costPerCredit: '$0.0003',
-        features: ['60-Day Rollover', 'Priority Email', 'Catch-All Detection', 'Disposable Detection'],
+        name: 'Business',
+        price: '$209.30',
+        credits: '50,000',
+        costPerCredit: '$0.0042',
+        features: ['90-Day Rollover', 'Priority Support', 'Domain Intelligence', 'Dedicated Account Manager'],
         buttonText: 'Get Started',
-        variant: 'dark'
-    },
-    {
-        name: 'Scale',
-        price: '$150',
-        credits: '500,000',
-        costPerCredit: '$0.0003',
-        features: ['90-Day Rollover', 'Priority Support', 'Priority Queue', 'Role-Based Detection'],
-        buttonText: 'Get Started',
-        variant: 'gray'
+        variant: 'gray',
+        packId: 'pack_50k'
     }
 ];
 
@@ -36,7 +40,7 @@ export default function Pricing() {
             <div className={styles.container}>
                 <div className={styles.header}>
                     <h2><span className="greenhead">Pricing</span></h2>
-                    <p>Premium deliverability intelligence starting at just $0.0003 per credit. No hidden fees.</p>
+                    <p>AI-powered email verification starting at just $8.40 for 1,000 credits. No hidden fees.</p>
                     <a href="/comparison" className={styles.compareLink}>
                         See how we compare to competitors →
                     </a>
