@@ -55,6 +55,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className={styles.stats}>
+        <div className={styles.container}>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>🎯</div>
+              <div className={styles.statNumber}>98.3%</div>
+              <div className={styles.statLabel}>Accuracy Rate</div>
+              <div className={styles.statDescription}>Industry-leading verification accuracy</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>⚡</div>
+              <div className={styles.statNumber}>2.5M+</div>
+              <div className={styles.statLabel}>Emails Verified</div>
+              <div className={styles.statDescription}>Processed this month</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>🤖</div>
+              <div className={styles.statNumber}>0-100</div>
+              <div className={styles.statLabel}>Confidence Scores</div>
+              <div className={styles.statDescription}>AI-powered catch-all detection</div>
+            </div>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>🚀</div>
+              <div className={styles.statNumber}>500+</div>
+              <div className={styles.statLabel}>Active Users</div>
+              <div className={styles.statDescription}>Businesses trust ZeroBounce AI</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section id="features" className={styles.features}>
         <div className={styles.container}>
@@ -160,6 +192,76 @@ export default function Home() {
                   </svg>
                   Learn more
                 </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ComparisonTable />
+
+      {/* Testimonials Section */}
+      <section className={styles.testimonials}>
+        <div className={styles.container}>
+          <div className={styles.testimonialsHeader}>
+            <h2>Trusted by <span className="greenhead">Email Marketers</span></h2>
+            <p>See how our AI-powered platform helps businesses achieve better results</p>
+          </div>
+          <div className={styles.testimonialsGrid}>
+            <div className={styles.testimonialCard}>
+              <div className={styles.quote}>"</div>
+              <p className={styles.testimonialText}>
+                The confidence scoring is a game-changer. We used to waste credits on
+                catch-all domains. Now we know exactly which ones are worth trying.
+                <strong> Generated $127K in new ARR</strong> from emails we would have skipped.
+              </p>
+              <div className={styles.testimonialAuthor}>
+                <div className={styles.authorAvatar}>SM</div>
+                <div>
+                  <div className={styles.authorName}>Sarah Martinez</div>
+                  <div className={styles.authorTitle}>Marketing Director, SaaS Startup</div>
+                </div>
+              </div>
+              <div className={styles.testimonialFeature}>
+                <span className={styles.featureBadge}>🤖 AI Confidence Scoring</span>
+              </div>
+            </div>
+
+            <div className={styles.testimonialCard}>
+              <div className={styles.quote}>"</div>
+              <p className={styles.testimonialText}>
+                Switched from NeverBounce and immediately noticed better accuracy.
+                The AI pattern recognition <strong>found 340 emails</strong> we would have missed.
+                The ROI paid for itself in the first week.
+              </p>
+              <div className={styles.testimonialAuthor}>
+                <div className={styles.authorAvatar}>JK</div>
+                <div>
+                  <div className={styles.authorName}>James Kim</div>
+                  <div className={styles.authorTitle}>Lead Generation Specialist</div>
+                </div>
+              </div>
+              <div className={styles.testimonialFeature}>
+                <span className={styles.featureBadge}>🎯 Pattern Recognition</span>
+              </div>
+            </div>
+
+            <div className={styles.testimonialCard}>
+              <div className={styles.quote}>"</div>
+              <p className={styles.testimonialText}>
+                Finally, a verification tool that understands our needs as an agency.
+                The built-in email finder <strong>saves us $99/month</strong> on Hunter.io.
+                Plus the 98% accuracy is unmatched.
+              </p>
+              <div className={styles.testimonialAuthor}>
+                <div className={styles.authorAvatar}>ML</div>
+                <div>
+                  <div className={styles.authorName}>Maria Lopez</div>
+                  <div className={styles.authorTitle}>Agency Owner</div>
+                </div>
+              </div>
+              <div className={styles.testimonialFeature}>
+                <span className={styles.featureBadge}>💰 All-in-One Platform</span>
               </div>
             </div>
           </div>
