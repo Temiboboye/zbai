@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './page.module.css';
 import { Metadata } from 'next';
 
@@ -25,6 +27,15 @@ export default function BlogPost() {
                             <span className={styles.logoText}>ZeroBounce</span>
                             <span className={styles.logoAI}>AI</span>
                         </a>
+
+                        {/* Mobile Menu Toggle (CSS-only) */}
+                        <input type="checkbox" id="mobile-menu-toggle" className={styles.mobileMenuToggle} />
+                        <label htmlFor="mobile-menu-toggle" className={styles.mobileMenuButton}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </label>
+
                         <nav className={styles.navLinks}>
                             <a href="/#features">Features</a>
                             <a href="/comparison">Compare</a>
@@ -468,6 +479,27 @@ export default function BlogPost() {
                                 AI-powered email verification with 98%+ accuracy.
                                 The only platform with confidence scoring and pattern recognition.
                             </p>
+
+                            {/* Newsletter Signup */}
+                            <div className={styles.newsletter}>
+                                <h4>Stay Updated</h4>
+                                <p>Get email verification tips and product updates.</p>
+                                <form className={styles.newsletterForm} action="/api/newsletter" method="POST">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        required
+                                        className={styles.newsletterInput}
+                                    />
+                                    <button type="submit" className={styles.newsletterButton}>
+                                        Subscribe
+                                    </button>
+                                </form>
+                                <p className={styles.newsletterDisclaimer}>
+                                    No spam. Unsubscribe anytime.
+                                </p>
+                            </div>
                         </div>
 
                         <div className={styles.footerLinks}>
