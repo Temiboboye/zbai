@@ -574,5 +574,130 @@ class EmailService:
         return self._send_email(to, subject, html, text)
 
 
+    def send_service_receipt(
+        self,
+        to: str,
+        service_name: str,
+        amount: float,
+        transaction_id: str
+    ) -> Dict:
+        """Send receipt for service purchase (e.g. YC Lead Gen)"""
+        subject = f"Receipt: {service_name}"
+        
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: #191A23; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+                .header h1 {{ color: #B9FF66; margin: 0; }}
+                .content {{ background: #f9f9f9; padding: 30px; }}
+                .invoice {{ background: white; padding: 20px; border-radius: 5px; margin: 20px 0; }}
+                .invoice-row {{ display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }}
+                .total {{ font-size: 1.2em; font-weight: bold; color: #191A23; }}
+                .footer {{ background: #191A23; color: #fff; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Order Confirmed</h1>
+                </div>
+                <div class="content">
+                    <h2>Thank you for your order!</h2>
+                    <p>We've received your payment regarding <strong>{service_name}</strong>. Our team will be in touch shortly to kick off the process.</p>
+                    
+                    <div class="invoice">
+                        <h3>Order Details</h3>
+                        <div class="invoice-row">
+                            <span>Order ID:</span>
+                            <span><strong>{transaction_id}</strong></span>
+                        </div>
+                        <div class="invoice-row">
+                            <span>Date:</span>
+                            <span>{datetime.utcnow().strftime('%B %d, %Y')}</span>
+                        </div>
+                        <div class="invoice-row">
+                            <span>Service:</span>
+                            <span>{service_name}</span>
+                        </div>
+                        <div class="invoice-row total">
+                            <span>Total Paid:</span>
+                            <span>${amount:.2f}</span>
+                        </div>
+                    </div>
+                    
+                    <p>Next Steps: Look out for an email from our onboarding team within 24 hours.</p>
+                </div>
+                <div class="footer">
+                    <p>&copy; 2026 ZeroBounce AI. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        text = f"""
+        Order Confirmed: {service_name}
+        
+        Thank you for your order!
+        
+        Order Details:
+        - Order ID: {transaction_id}
+        - Date: {datetime.utcnow().strftime('%B %d, %Y')}
+        - Service: {service_name}
+        - Total Paid: ${amount:.2f}
+        
+        We will be in touch shortly to kick off the process.
+        
+        - ZeroBounce AI Team
+        """
+        
+        return self._send_email(to, subject, html, text)
+
+    def send_new_service_order_alert(
+        self,
+        admin_email: str,
+        customer_email: str,
+        service_name: str,
+        amount: float,
+        transaction_id: str
+    ) -> Dict:
+        """Alert admin of new service order"""
+        subject = f"🔔 New Order: {service_name} (${amount:.0f})"
+        
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <body>
+            <h2>New Service Order Received!</h2>
+            <ul>
+                <li><strong>Service:</strong> {service_name}</li>
+                <li><strong>Customer:</strong> {customer_email}</li>
+                <li><strong>Amount:</strong> ${amount:.2f}</li>
+                <li><strong>Transaction ID:</strong> {transaction_id}</li>
+                <li><strong>Date:</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}</li>
+            </ul>
+            <p>Action Required: Contact the customer to begin onboarding.</p>
+        </body>
+        </html>
+        """
+        
+        text = f"""
+        New Service Order Received!
+        
+        Service: {service_name}
+        Customer: {customer_email}
+        Amount: ${amount:.2f}
+        Transaction ID: {transaction_id}
+        
+        Action Required: Contact the customer to begin onboarding.
+        """
+        
+        return self._send_email(admin_email, subject, html, text)
+
+
 # Create singleton instance
 email_service = EmailService()

@@ -275,4 +275,66 @@ class PaymentService:
                     
                     db.commit()
 
+            # Handle YC Lead Gen Service (Direct Checkout without pre-transaction)
+            elif metadata.get('service_type') == 'yc_lead_gen':
+                # Check if we already processed this session to prevent duplicates
+                existing_txn = db.query(Transaction).filter(Transaction.reference_id == session['id']).first()
+                if not existing_txn:
+                    # Create Transaction Record
+                    # Note: We might not have a user_id if they haven't logged in/signed up?
+                    # The current Next.js route doesn't force login? 
+                    # Assuming we get email from Stripe customer_details
+                    
+                    customer_email = session.get('customer_details', {}).get('email')
+                    customer_name = session.get('customer_details', {}).get('name', 'Customer')
+                    amount_paid = float(session['amount_total']) / 100.0
+                    
+                    # Find or create user? Or just log transaction with null user for now?
+                    # For this specific service, we just want to alert admin.
+                    
+                    user = db.query(User).filter(User.email == customer_email).first()
+                    user_id = user.id if user else None
+                    
+                    transaction = Transaction(
+                        user_id=user_id, # Can be null if model allows, checking model...
+                        # Model user_id is ForeignKey("users.id")... might fail if null.
+                        # For now, let's assume we alert admin regardless.
+                        type="service",
+                        amount=0, # No credits
+                        currency_amount=amount_paid,
+                        description="YC Lead Gen Service",
+                        source="stripe",
+                        status="completed",
+                        reference_id=session['id']
+                    )
+                    
+                    # Only add transaction if we have a user, otherwise we might error on FK
+                    if user_id:
+                        db.add(transaction)
+                        db.commit()
+                        txn_db_id = str(transaction.id)
+                    else:
+                        txn_db_id = f"EXT-{session['id'][-8:]}"
+
+                    # Send Fulfillment Emails
+                    try:
+                        # 1. Receipt to Customer
+                        email_service.send_service_receipt(
+                            customer_email,
+                            "YC Outbound Growth Package",
+                            amount_paid,
+                            txn_db_id
+                        )
+                        
+                        # 2. Alert to Admin (Temiboboye/workwithtems@gmail.com)
+                        email_service.send_new_service_order_alert(
+                            "workwithtems@gmail.com", # Hardcoded admin for now or env var
+                            customer_email,
+                            "YC Outbound Growth Package",
+                            amount_paid,
+                            txn_db_id
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to send service emails: {e}")
+
 payment_service = PaymentService()

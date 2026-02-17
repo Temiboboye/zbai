@@ -11,8 +11,10 @@ export default function YCLeadGenPage() {
     const [loading, setLoading] = useState(false);
 
     const handleCheckout = async () => {
+        console.log("Starting checkout process...");
         setLoading(true);
         try {
+            console.log("Fetching checkout session...");
             const response = await fetch('/api/payment/stripe/create-service-checkout', {
                 method: 'POST',
                 headers: {
@@ -20,19 +22,30 @@ export default function YCLeadGenPage() {
                 },
             });
 
-            const { sessionId } = await response.json();
-            const stripe = await stripePromise;
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Checkout API error:", errorData);
+                throw new Error(errorData.error || 'Failed to create checkout session');
+            }
 
-            if (stripe) {
-                const { error } = await (stripe as any).redirectToCheckout({ sessionId });
-                if (error) {
-                    console.error('Stripe error:', error);
-                    alert('Payment failed. Please try again.');
-                }
+            const { sessionId } = await response.json();
+            console.log("Session ID received:", sessionId);
+
+            const stripe = await stripePromise;
+            if (!stripe) {
+                console.error("Stripe failed to load.");
+                throw new Error("Stripe failed to load");
+            }
+
+            console.log("Redirecting to checkout...");
+            const { error } = await (stripe as any).redirectToCheckout({ sessionId });
+            if (error) {
+                console.error('Stripe redirect error:', error);
+                alert('Payment failed. Please try again.');
             }
         } catch (error) {
-            console.error('Checkout error:', error);
-            alert('Something went wrong. Please try again later.');
+            console.error('Checkout flow error:', error);
+            alert('Something went wrong. Please check console for details.');
         } finally {
             setLoading(false);
         }
@@ -42,7 +55,7 @@ export default function YCLeadGenPage() {
         <div className={styles.container}>
             {/* Hero Section */}
             <section className={styles.heroSection}>
-                <div className="greenhead" style={{ marginBottom: '1.5rem' }}>For Post-Seed & Series A YC Companies</div>
+                <div className="greenhead" style={{ marginBottom: '1.5rem' }}>For High-Ticket / funded YC Startups</div>
                 <h1 className={styles.heroTitle}>
                     Turn Capital Into <span className="text-gradient">Revenue</span><br />
                     Predictably
@@ -50,6 +63,12 @@ export default function YCLeadGenPage() {
                 <p className={styles.heroSubtitle}>
                     You've raised the round. Now hit the aggressive growth targets. We build the outbound engine that fills your sales team's calendar with qualified enterprise leads.
                 </p>
+
+                <div style={{ margin: '2rem 0', textAlign: 'center' }}>
+                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#191A23' }}>$997 <span style={{ fontSize: '1rem', fontWeight: 'normal', color: '#666' }}>/ one-time setup</span></div>
+                    <p style={{ color: '#666', marginTop: '0.5rem' }}>Complete Cold Email Infrastructure + 1-Month Management</p>
+                </div>
+
                 <div className={styles.ctaContainer}>
                     <button
                         onClick={handleCheckout}
@@ -137,12 +156,15 @@ export default function YCLeadGenPage() {
                     <p className={styles.ctaText} style={{ color: 'var(--black)' }}>
                         Join other funded YC companies who are automating their top-of-funnel to hit revenue milestones faster.
                     </p>
+                    <div style={{ margin: '1.5rem 0', textAlign: 'center' }}>
+                        <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#191A23' }}>$997</div>
+                    </div>
                     <button
                         onClick={handleCheckout}
                         disabled={loading}
                         className="btn btn-primary"
                     >
-                        {loading ? 'Processing...' : 'Book a Strategy Call / Pay Now'}
+                        {loading ? 'Processing...' : 'Book Strategy Call / Pay Now'}
                     </button>
                 </div>
             </section>
