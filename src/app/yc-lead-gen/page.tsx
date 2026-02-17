@@ -42,13 +42,13 @@ export default function YCLeadGenPage() {
         <div className={styles.container}>
             {/* Hero Section */}
             <section className={styles.heroSection}>
-                <div className="greenhead" style={{ marginBottom: '1.5rem' }}>For YC Batches & Alumni</div>
+                <div className="greenhead" style={{ marginBottom: '1.5rem' }}>For Post-Seed & Series A YC Companies</div>
                 <h1 className={styles.heroTitle}>
-                    Scale Your <span className="text-gradient">Outbound</span><br />
-                    Before Demo Day
+                    Turn Capital Into <span className="text-gradient">Revenue</span><br />
+                    Predictably
                 </h1>
                 <p className={styles.heroSubtitle}>
-                    Stop wasting hours on manual prospecting. We help YC startups identify high-intent leads and automate outreach that actually converts.
+                    You've raised the round. Now hit the aggressive growth targets. We build the outbound engine that fills your sales team's calendar with qualified enterprise leads.
                 </p>
                 <div className={styles.ctaContainer}>
                     <button
@@ -70,23 +70,23 @@ export default function YCLeadGenPage() {
                 <div className={styles.grid}>
                     <div className={styles.featureCard}>
                         <div className={styles.featureIcon}>🎯</div>
-                        <h3 className={styles.featureTitle}>Precision Targeting</h3>
+                        <h3 className={styles.featureTitle}>Enterprise-Grade Targeting</h3>
                         <p className={styles.featureText}>
-                            We don't just scrape lists. We identify decision-makers who are actively looking for solutions like yours right now.
+                            Don't waste expensive rep time on bad data. We enrich and verify leads to ensure your team only speaks to decision-makers with budget.
                         </p>
                     </div>
                     <div className={styles.featureCard}>
-                        <div className={styles.featureIcon}>⚡</div>
-                        <h3 className={styles.featureTitle}>Instant Traction</h3>
+                        <div className={styles.featureIcon}>📈</div>
+                        <h3 className={styles.featureTitle}>Predictable Pipeline</h3>
                         <p className={styles.featureText}>
-                            Ideal for hitting those weekly growth targets. Start seeing meetings booked within your first week of engagement.
+                            Investors demand forecastable growth. Our system delivers a steady stream of qualified meetings to support your Series A/B metrics.
                         </p>
                     </div>
                     <div className={styles.featureCard}>
                         <div className={styles.featureIcon}>🛡️</div>
-                        <h3 className={styles.featureTitle}>Deliverability Guard</h3>
+                        <h3 className={styles.featureTitle}>Volume Without Risk</h3>
                         <p className={styles.featureText}>
-                            We handle the domains, warming, and technical setup so your main domain never risks getting blacklisted.
+                            Scale your outreach to thousands of prospects while protecting your primary domain's reputation. We handle the technical infrastructure.
                         </p>
                     </div>
                 </div>
@@ -132,10 +132,10 @@ export default function YCLeadGenPage() {
             <section className={styles.ctaSection}>
                 <div className={styles.ctaCard}>
                     <h2 className={styles.ctaTitle} style={{ color: 'var(--black)' }}>
-                        Ready to Accelerate?
+                        Ready to Deploy Capital Efficiently?
                     </h2>
                     <p className={styles.ctaText} style={{ color: 'var(--black)' }}>
-                        Join other fast-growing YC startups who are automating their outbound sales with us.
+                        Join other funded YC companies who are automating their top-of-funnel to hit revenue milestones faster.
                     </p>
                     <button
                         onClick={handleCheckout}
