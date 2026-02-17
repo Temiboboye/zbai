@@ -28,20 +28,14 @@ export default function YCLeadGenPage() {
                 throw new Error(errorData.error || 'Failed to create checkout session');
             }
 
-            const { sessionId } = await response.json();
+            const { sessionId, url } = await response.json();
             console.log("Session ID received:", sessionId);
 
-            const stripe = await stripePromise;
-            if (!stripe) {
-                console.error("Stripe failed to load.");
-                throw new Error("Stripe failed to load");
-            }
-
-            console.log("Redirecting to checkout...");
-            const { error } = await (stripe as any).redirectToCheckout({ sessionId });
-            if (error) {
-                console.error('Stripe redirect error:', error);
-                alert('Payment failed. Please try again.');
+            if (url) {
+                console.log("Redirecting to checkout URL:", url);
+                window.location.href = url;
+            } else {
+                throw new Error("No checkout URL returned");
             }
         } catch (error) {
             console.error('Checkout flow error:', error);
