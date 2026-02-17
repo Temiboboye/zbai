@@ -37,6 +37,17 @@ async def stripe_checkout(
         logger.error(f"Stripe error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/stripe/create-service-checkout")
+async def stripe_service_checkout(
+    db: Session = Depends(get_db)
+):
+    try:
+        # We hardcode 'yc_lead_gen' for now as it's the only service
+        return await payment_service.create_service_checkout_session(db, 'yc_lead_gen')
+    except Exception as e:
+        logger.error(f"Service checkout error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/crypto/create-invoice")
 async def crypto_invoice(
     req: PurchaseRequest,

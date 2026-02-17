@@ -233,6 +233,52 @@ class PaymentService:
             db.commit()
             raise e
 
+    async def create_service_checkout_session(self, db: Session, service_type: str) -> Dict:
+        """Create Stripe Checkout Session for Service (No Auth Required)"""
+        
+        if service_type != 'yc_lead_gen':
+             raise ValueError("Invalid service type")
+
+        # Service Details
+        PRICE_AMOUNT = 99700 # cents
+        PRODUCT_NAME = "YC Cold Email Growth Package"
+        DESCRIPTION = "Complete cold email setup, leads, and execution for YC startups."
+            
+        if not settings.STRIPE_SECRET_KEY:
+             raise ValueError("Stripe not configured")
+
+        try:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': PRODUCT_NAME,
+                            'description': DESCRIPTION,
+                            'images': ['https://zerobounceai.com/assets/yc-lead-gen-thumb.png'],
+                        },
+                        'unit_amount': PRICE_AMOUNT,
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=f"{self.app_url}/yc-lead-gen?payment=success&session_id={{CHECKOUT_SESSION_ID}}",
+                cancel_url=f"{self.app_url}/yc-lead-gen?payment=cancelled",
+                metadata={
+                    "service_type": service_type,
+                }
+            )
+            
+            # We don't create a transaction record here because we don't have a user yet.
+            # We rely on the webhook to create the transaction upon successful payment using the email provided in checkout.
+            
+            return {"sessionId": session.id, "url": session.url}
+            
+        except Exception as e:
+            logger.error(f"Stripe service checkout error: {e}")
+            raise e
+
     async def handle_stripe_webhook(self, db: Session, payload: bytes, sig_header: str):
         """Handle Stripe Webhook"""
         event = None
