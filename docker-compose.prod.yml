@@ -86,7 +86,7 @@ services:
       dockerfile: Dockerfile
     container_name: zerobounce_celery_worker
     restart: unless-stopped
-    command: celery -A app.core.celery_app worker --loglevel=info --concurrency=4
+    command: celery -A app.core.celery_app worker --loglevel=info --concurrency=4 -Q celery,verification,bulk
     environment:
       - DATABASE_URL=postgresql://zerobounce:${DB_PASSWORD:-zerobounce_secure_password}@postgres:5432/zerobounce_db
       - REDIS_URL=redis://redis:6379/0
