@@ -53,12 +53,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 const userData = await response.json();
                 setUser(userData);
             } else {
-                // Token invalid
-                logout();
+                // Token invalid - clear state but don't redirect (could be on public page)
+                localStorage.removeItem('token');
+                setToken(null);
+                setUser(null);
             }
         } catch (error) {
             console.error('Failed to fetch user:', error);
-            logout();
+            // Error occurred - clear state but don't redirect
+            localStorage.removeItem('token');
+            setToken(null);
+            setUser(null);
         } finally {
             setIsLoading(false);
         }
