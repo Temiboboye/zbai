@@ -380,6 +380,12 @@ class PaymentService:
                             amount_paid,
                             txn_db_id
                         )
+                        
+                        # 3. Welcome / Next Steps to Customer
+                        email_service.send_onboarding_welcome(
+                             customer_email,
+                             customer_name
+                        )
                     except Exception as e:
                         logger.error(f"Failed to send service emails: {e}")
 

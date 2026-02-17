@@ -699,5 +699,89 @@ class EmailService:
         return self._send_email(admin_email, subject, html, text)
 
 
+    def send_onboarding_welcome(
+        self,
+        to: str,
+        name: str
+    ) -> Dict:
+        """Send onboarding welcome email with next steps"""
+        subject = "Welcome to the YC Growth Program! 🚀"
+        
+        # Placeholder links - User should update these
+        calendly_url = "https://calendly.com/zerobounce-ai/strategy" 
+        welcome_packet_url = "https://zerobounceai.com/onboarding/welcome-packet.pdf"
+        
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: #191A23; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+                .header h1 {{ color: #B9FF66; margin: 0; }}
+                .content {{ background: #f9f9f9; padding: 30px; }}
+                .button {{ display: inline-block; background: #B9FF66; color: #191A23; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }}
+                .action-box {{ background: white; padding: 20px; border-left: 4px solid #B9FF66; margin: 20px 0; }}
+                .footer {{ background: #191A23; color: #fff; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Welcome Aboard! 🚀</h1>
+                </div>
+                <div class="content">
+                    <h2>Hi {name},</h2>
+                    <p>Thrilled to have you in the YC Outbound Growth Program. We're ready to start building your predictable revenue engine.</p>
+                    
+                    <div class="action-box">
+                        <h3>Step 1: Book Your Strategy Call</h3>
+                        <p>Let's align on your ICP and growth targets. Please pick a time that works for you:</p>
+                        <center>
+                            <a href="{calendly_url}" class="button">Book Kickoff Call</a>
+                        </center>
+                    </div>
+
+                    <div class="action-box">
+                        <h3>Step 2: Review Welcome Packet</h3>
+                        <p>We've prepared a brief guide on what to expect over the next 4 weeks.</p>
+                        <p><a href="{welcome_packet_url}" style="color: #191A23; font-weight: bold;">Download Welcome Packet &rarr;</a></p>
+                    </div>
+                    
+                    <p>If you have any immediate questions before our call, just reply to this email.</p>
+                    
+                    <p>Let's grow!<br>
+                    The ZeroBounce AI Team</p>
+                </div>
+                <div class="footer">
+                    <p>&copy; 2026 ZeroBounce AI. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        text = f"""
+        Welcome to the YC Growth Program! 🚀
+        
+        Hi {name},
+        
+        Thrilled to have you in the YC Outbound Growth Program.
+        
+        Step 1: Book Your Strategy Call
+        {calendly_url}
+        
+        Step 2: Review Welcome Packet
+        {welcome_packet_url}
+        
+        If you have any immediate questions before our call, just reply to this email.
+        
+        Let's grow!
+        The ZeroBounce AI Team
+        """
+        
+        return self._send_email(to, subject, html, text)
+
 # Create singleton instance
 email_service = EmailService()
