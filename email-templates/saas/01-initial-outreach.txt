@@ -1,0 +1,37 @@
+Subject: Quick question about {{company}}'s email deliverability
+
+Hi {{first_name}},
+
+I noticed {{company}} recently {{trigger_event}} - congrats!
+
+Quick question: are you seeing bounce rates above 3-5% on your email campaigns?
+
+Most SaaS companies we work with lose 5-8% of their emails to bounces, which damages sender reputation and costs real revenue.
+
+We built ZeroBounce AI to solve this - our AI-powered verification hits 98%+ accuracy (vs. 92-95% for traditional tools) and includes confidence scoring for catch-all domains.
+
+Try it free → {{signup_link}}
+
+49 free credits. No credit card required. See results in 2 minutes.
+
+Best,
+{{your_name}}
+
+P.S. Most customers see the difference in their first 10 verifications.
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{company}} - Company name
+- {{trigger_event}} - Recent event (funding, hiring, product launch, etc.)
+- {{your_name}} - Your name
+
+TRIGGER EVENT EXAMPLES:
+- "raised Series A funding"
+- "hired a new Head of Marketing"
+- "launched your new product"
+- "expanded to the European market"
+- "reached 10K customers"
+
+WHEN TO SEND: Day 0 (initial outreach)
+EXPECTED REPLY RATE: 15-20%

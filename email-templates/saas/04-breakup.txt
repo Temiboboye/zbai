@@ -1,0 +1,36 @@
+Subject: Should I close your file?
+
+{{first_name}},
+
+I haven't heard back, so I'm guessing:
+
+a) Email deliverability isn't a priority right now
+b) You're already happy with your current solution
+c) My timing is just off
+
+If it's (a) or (b), no worries - I'll close your file.
+
+If it's (c), just reply "later" and I'll check back in Q3.
+
+Either way, here's your 49 free credits if you want to test us out: {{signup_link}}
+
+Best,
+{{your_name}}
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{signup_link}} - Link to signup page with UTM parameters
+- {{your_name}} - Your name
+
+SIGNUP LINK FORMAT:
+https://zerobounceai.com/signup?utm_source=cold_email&utm_campaign=saas_breakup&email={{email}}
+
+WHY THIS WORKS:
+- Pattern interrupt (different tone)
+- Gives them an out (reduces pressure)
+- Still includes value (free credits)
+- Often gets replies from people who were just busy
+
+WHEN TO SEND: Day 10 (if no reply to any previous emails)
+EXPECTED REPLY RATE: 5-10% (lower but often high-quality)

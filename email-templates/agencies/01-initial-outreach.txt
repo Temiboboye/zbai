@@ -1,0 +1,50 @@
+Subject: Helping {{company}} prove ROI to clients
+
+Hi {{first_name}},
+
+Running an agency is tough - you're only as good as your last campaign.
+
+I noticed {{company}} specializes in {{service}} for {{industry}} clients.
+
+Quick question: how often do client email campaigns underperform because of bad data quality?
+
+We built ZeroBounce AI specifically for agencies managing multiple client lists:
+
+- 98%+ accuracy (better results for clients)
+- Confidence scoring (data-driven decisions)
+- White-label option (your branding)
+- Volume discounts (better margins)
+
+Try it free → {{signup_link}}
+
+49 free credits to test with a client list. See the difference in 2 minutes.
+
+Best,
+{{your_name}}
+
+P.S. Ask about our agency partnership program (30% recurring commission).
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{company}} - Agency name
+- {{service}} - Their service (email marketing, growth marketing, etc.)
+- {{industry}} - Their client industry focus
+- {{your_name}} - Your name
+
+SERVICE EXAMPLES:
+- "email marketing"
+- "growth marketing"
+- "demand generation"
+- "marketing automation"
+- "lead generation"
+
+INDUSTRY EXAMPLES:
+- "B2B SaaS"
+- "e-commerce"
+- "real estate"
+- "healthcare"
+- "financial services"
+
+WHEN TO SEND: Day 0 (initial outreach)
+EXPECTED REPLY RATE: 15-20%

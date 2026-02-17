@@ -1,0 +1,1040 @@
+/* Pitch Deck Styles */
+:root {
+    --green: #7FD957;
+    --dark: #0A0A0A;
+    --white: #FFFFFF;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: var(--dark);
+    color: var(--dark);
+    overflow: hidden;
+}
+
+.presentation {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--white);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
+}
+
+.slide-content {
+    width: 100%;
+    height: 100%;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-content.center {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.slide-number {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    font-size: 18px;
+    color: var(--gray-400);
+    font-weight: 500;
+}
+
+/* Slide 1: Title */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 60px;
+    font-size: 48px;
+}
+
+.logo-zb {
+    background: var(--green);
+    color: var(--dark);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.logo-text {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.title-main {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 32px;
+    color: var(--dark);
+}
+
+.subtitle {
+    font-size: 32px;
+    color: var(--gray-600);
+    margin-bottom: 80px;
+}
+
+.founder-info {
+    margin-top: 60px;
+}
+
+.founder-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.contact {
+    font-size: 20px;
+    color: var(--gray-600);
+}
+
+/* Slide 2: Problem */
+.slide-title {
+    font-size: 56px;
+    font-weight: 700;
+    margin-bottom: 60px;
+    color: var(--dark);
+}
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.problem-item {
+    background: var(--gray-50);
+    padding: 32px;
+    border-radius: 12px;
+    border: 2px solid var(--gray-200);
+}
+
+.problem-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.problem-item h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--dark);
+}
+
+.problem-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.problem-item li {
+    font-size: 18px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.problem-item li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--gray-400);
+}
+
+.cost-highlight {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: var(--white);
+    padding: 32px 48px;
+    border-radius: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cost-icon {
+    font-size: 48px;
+}
+
+/* Slide 3: Solution */
+.solution-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.solution-item {
+    background: linear-gradient(135deg, var(--green) 0%, #9FE65C 100%);
+    padding: 40px;
+    border-radius: 12px;
+    color: var(--dark);
+}
+
+.solution-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.solution-item h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.solution-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.solution-item li {
+    font-size: 18px;
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.solution-item li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+}
+
+.solution-item strong {
+    font-weight: 700;
+}
+
+/* Slide 4: Product Demo */
+.demo-container {
+    display: grid;
+    grid-template-columns: 1fr auto 2fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.demo-input h3,
+.demo-output h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--gray-600);
+}
+
+.code-block {
+    background: var(--gray-900);
+    color: var(--green);
+    padding: 24px;
+    border-radius: 8px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 20px;
+}
+
+.demo-arrow {
+    font-size: 48px;
+    color: var(--green);
+    font-weight: 700;
+}
+
+.api-response {
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 32px;
+    border-radius: 8px;
+    font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.response-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+
+.response-line .label {
+    color: var(--gray-400);
+}
+
+.response-line .value {
+    color: var(--white);
+    font-weight: 600;
+}
+
+.confidence-high {
+    color: var(--green);
+}
+
+.demo-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+}
+
+.stat-label {
+    font-size: 18px;
+    color: var(--gray-600);
+}
+
+/* Slide 5: Market */
+.market-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+}
+
+.market-circles {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.circle {
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle.tam {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--white);
+}
+
+.circle.sam {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: var(--white);
+}
+
+.circle.som {
+    background: linear-gradient(135deg, var(--green) 0%, #9FE65C 100%);
+    color: var(--dark);
+}
+
+.circle-content {
+    text-align: center;
+}
+
+.circle-label {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.circle-value {
+    font-size: 56px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.circle-desc {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+.market-trends h3,
+.target-customers h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.market-trends ul {
+    list-style: none;
+    padding: 0;
+}
+
+.market-trends li {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--gray-700);
+}
+
+.customer-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tag {
+    background: var(--green);
+    color: var(--dark);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Slide 6: Business Model */
+.business-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.business-section h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.model-desc {
+    font-size: 22px;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.business-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.business-section li {
+    font-size: 18px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.business-section li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+}
+
+.pricing-table {
+    background: var(--gray-50);
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 18px;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.price-row .tier {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.price-row .price {
+    font-weight: 700;
+    color: var(--green);
+}
+
+.unit-economics {
+    background: var(--gray-50);
+    padding: 40px;
+    border-radius: 12px;
+}
+
+.unit-economics h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+}
+
+.metric {
+    text-align: center;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 8px;
+}
+
+.metric.highlight {
+    background: var(--green);
+}
+
+.metric-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.metric-label {
+    font-size: 14px;
+    color: var(--gray-600);
+}
+
+/* Slide 7: Traction */
+.traction-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.growth-chart h3,
+.traction-metrics h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 300px;
+    background: var(--gray-50);
+    padding: 20px;
+    border-radius: 8px;
+    gap: 12px;
+}
+
+.bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--green) 0%, #9FE65C 100%);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+}
+
+.bar span {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.growth-rate {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.traction-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.traction-stat {
+    background: var(--gray-50);
+    padding: 24px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 8px;
+}
+
+.stat-text {
+    font-size: 16px;
+    color: var(--gray-600);
+}
+
+.achievements {
+    margin-bottom: 32px;
+}
+
+.achievements h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.achievement-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.achievement {
+    background: var(--green);
+    color: var(--dark);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.testimonial {
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 32px;
+    border-radius: 12px;
+    border-left: 4px solid var(--green);
+}
+
+.testimonial p {
+    font-size: 22px;
+    font-style: italic;
+    margin-bottom: 16px;
+}
+
+.testimonial cite {
+    font-size: 16px;
+    color: var(--gray-400);
+    font-style: normal;
+}
+
+/* Slide 8: Competition */
+.competition-table {
+    margin-bottom: 40px;
+}
+
+.competition-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+}
+
+.competition-table th,
+.competition-table td {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--gray-200);
+    font-size: 18px;
+}
+
+.competition-table th {
+    background: var(--gray-900);
+    color: var(--white);
+    font-weight: 700;
+}
+
+.competition-table th.us {
+    background: var(--green);
+    color: var(--dark);
+}
+
+.competition-table td.us {
+    background: var(--gray-50);
+    font-weight: 700;
+}
+
+.competition-table .highlight-row {
+    background: var(--gray-50);
+}
+
+.advantages h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.advantage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.advantage {
+    background: var(--gray-50);
+    padding: 24px;
+    border-radius: 8px;
+    border-left: 4px solid var(--green);
+}
+
+.advantage strong {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: var(--dark);
+}
+
+.advantage p {
+    font-size: 16px;
+    color: var(--gray-700);
+}
+
+/* Slide 9: Team */
+.team-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.team-member {
+    text-align: center;
+}
+
+.member-photo {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green) 0%, #9FE65C 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-placeholder {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.team-member h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.role {
+    font-size: 20px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.credentials {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.credentials li {
+    font-size: 16px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.credentials li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+}
+
+.advisors {
+    margin-bottom: 32px;
+}
+
+.advisors h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.advisor-list {
+    display: flex;
+    gap: 16px;
+}
+
+.advisor {
+    flex: 1;
+    background: var(--gray-50);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    color: var(--gray-700);
+}
+
+.why-win h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.win-reasons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.reason {
+    background: var(--green);
+    color: var(--dark);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Slide 10: Financials */
+.financials-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.projections h3,
+.the-ask h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.forecast-table th,
+.forecast-table td {
+    padding: 16px;
+    text-align: left;
+    border: 1px solid var(--gray-200);
+    font-size: 18px;
+}
+
+.forecast-table th {
+    background: var(--gray-900);
+    color: var(--white);
+    font-weight: 700;
+}
+
+.forecast-table .highlight-row {
+    background: var(--green);
+    font-weight: 700;
+}
+
+.ask-amount {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 32px;
+}
+
+.use-of-funds h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.fund-bar {
+    display: flex;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.fund-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.fund-segment.eng {
+    background: #667eea;
+}
+
+.fund-segment.marketing {
+    background: #f093fb;
+}
+
+.fund-segment.ops {
+    background: var(--green);
+    color: var(--dark);
+}
+
+.fund-segment.legal {
+    background: var(--gray-600);
+}
+
+.milestones h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.milestone-list {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.milestone {
+    background: var(--gray-50);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: var(--gray-700);
+}
+
+.exit-potential {
+    background: var(--gray-50);
+    padding: 24px;
+    border-radius: 8px;
+    margin-top: 32px;
+}
+
+.exit-potential p {
+    font-size: 16px;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+}
+
+/* Slide 11: Thank You */
+.thank-you {
+    font-size: 96px;
+    font-weight: 700;
+    margin-bottom: 60px;
+    color: var(--dark);
+}
+
+.contact-info {
+    margin-bottom: 60px;
+}
+
+.contact-line {
+    font-size: 28px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+}
+
+.contact-line strong {
+    color: var(--dark);
+}
+
+.cta p {
+    font-size: 32px;
+    color: var(--green);
+    font-weight: 600;
+}
+
+/* Navigation Controls */
+.controls {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--dark);
+    padding: 16px 32px;
+    border-radius: 50px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.nav-btn {
+    background: var(--green);
+    color: var(--dark);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: #9FE65C;
+    transform: scale(1.1);
+}
+
+.nav-btn:disabled {
+    background: var(--gray-600);
+    cursor: not-allowed;
+    transform: scale(1);
+}
+
+#slide-counter {
+    color: var(--white);
+    font-size: 18px;
+    font-weight: 600;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Print Styles */
+@media print {
+    .controls {
+        display: none;
+    }
+
+    .slide {
+        page-break-after: always;
+        display: block !important;
+        opacity: 1 !important;
+        position: relative !important;
+    }
+}

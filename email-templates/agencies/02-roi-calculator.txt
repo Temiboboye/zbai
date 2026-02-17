@@ -1,0 +1,44 @@
+Subject: Re: Helping {{company}} prove ROI to clients
+
+{{first_name}},
+
+Quick math for you:
+
+If you manage 5 clients with 50K contacts each:
+- Traditional tools: 5-8% bounce rate = 12,500-20,000 wasted emails
+- ZeroBounce AI: 1-2% bounce rate = 2,500-5,000 wasted emails
+
+**That's 10,000-15,000 more emails delivered per campaign.**
+
+At $0.01/email, that's $100-150 saved per campaign.
+Over 12 campaigns/year = $1,200-1,800 saved per client.
+Across 5 clients = $6,000-9,000/year.
+
+Plus, better deliverability = better campaign results = happier clients = higher retention.
+
+Start free trial → {{signup_link}}
+
+Test with 49 free credits. Upload a client list and see the ROI yourself.
+
+Best,
+{{your_name}}
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{your_name}} - Your name
+
+CUSTOMIZATION OPTIONS:
+- Adjust client count (3, 5, 10 clients)
+- Adjust contact count (25K, 50K, 100K)
+- Adjust campaigns/year (6, 12, 24)
+
+ROI CALCULATOR:
+Use this formula to customize for their situation:
+Savings = (contacts × clients × campaigns × bounce_reduction × cost_per_email)
+
+Example:
+50K × 5 × 12 × 0.06 × $0.01 = $1,800/year per client
+
+WHEN TO SEND: Day 3 (if no reply to Email 1)
+EXPECTED REPLY RATE: 12-18%

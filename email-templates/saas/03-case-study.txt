@@ -1,0 +1,37 @@
+Subject: How {{similar_company}} reduced bounce rates by 60%
+
+{{first_name}},
+
+Thought you might find this interesting:
+
+{{similar_company}} ({{industry}} SaaS, similar size to {{company}}) was struggling with 8% bounce rates on their email campaigns.
+
+After switching to ZeroBounce AI:
+- Bounce rate dropped from 8% to 2%
+- Email deliverability improved 40%
+- Saved $12K/year in wasted email sends
+
+The key difference? Our AI confidence scoring for catch-all domains - something traditional tools can't do.
+
+See it for yourself → {{signup_link}}
+
+Start with 49 free credits and verify your riskiest emails first.
+
+Best,
+{{your_name}}
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{similar_company}} - Similar company (same industry/size)
+- {{industry}} - Their industry
+- {{company}} - Company name
+- {{your_name}} - Your name
+
+SIMILAR COMPANY EXAMPLES:
+- If targeting 50-person SaaS: "Acme Corp (B2B SaaS, 60 employees)"
+- If targeting e-commerce: "ShopCo (e-commerce platform, $10M ARR)"
+- If targeting agency: "GrowthAgency (marketing agency, 25 employees)"
+
+WHEN TO SEND: Day 6 (if no reply to Email 1 or 2)
+EXPECTED REPLY RATE: 8-12%

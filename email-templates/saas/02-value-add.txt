@@ -1,0 +1,38 @@
+Subject: Re: Quick question about {{company}}'s email deliverability
+
+Hi {{first_name}},
+
+I know you're busy, so I'll keep this quick.
+
+I put together a quick analysis of common email deliverability issues for SaaS companies at {{company}}'s stage:
+
+1. **Catch-all domains** - Traditional tools can't verify these (30% of B2B emails). We use AI to give you a 0-100 confidence score.
+
+2. **Pattern recognition** - Our AI suggests correct email formats when you have partial info (saves hours of manual research).
+
+3. **Domain reputation** - We flag risky domains before they damage your sender score.
+
+Companies like {{competitor}} saw 60% fewer bounces after switching to us.
+
+Test it yourself with 49 free credits → {{signup_link}}
+
+Upload your list and see the AI confidence scoring in action. Takes 2 minutes.
+
+Best,
+{{your_name}}
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{company}} - Company name
+- {{competitor}} - Similar company in their industry
+- {{your_name}} - Your name
+
+COMPETITOR EXAMPLES (by industry):
+- MarTech: "HubSpot customers"
+- Sales Tech: "Salesforce users"
+- E-commerce: "Shopify stores"
+- FinTech: "Stripe merchants"
+
+WHEN TO SEND: Day 3 (if no reply to Email 1)
+EXPECTED REPLY RATE: 10-15%

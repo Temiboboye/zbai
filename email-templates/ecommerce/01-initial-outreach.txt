@@ -1,0 +1,50 @@
+Subject: {{company}}'s cart abandonment emails - quick question
+
+Hi {{first_name}},
+
+I was checking out {{company}}'s site (love the {{product}}!) and had a quick question:
+
+What % of your cart abandonment emails are bouncing?
+
+Most e-commerce brands we work with lose 5-8% of these high-value emails to bounces - that's direct revenue lost.
+
+We built ZeroBounce AI to fix this:
+- 98%+ accuracy (more emails delivered)
+- Real-time API (verify at checkout)
+- Catch-all scoring (know which emails to trust)
+
+A 3% improvement in deliverability could mean thousands in recovered revenue.
+
+Try it free → {{signup_link}}
+
+49 free credits. Verify your cart abandonment list and see the difference.
+
+Best,
+{{your_name}}
+
+P.S. Most e-commerce brands see ROI in the first week.
+
+---
+PERSONALIZATION VARIABLES:
+- {{first_name}} - Prospect's first name
+- {{company}} - E-commerce brand name
+- {{product}} - Specific product from their site
+- {{your_name}} - Your name
+- {{audit_link}} - Link to free audit tool
+
+PRODUCT RESEARCH:
+- Visit their website
+- Find a specific product to mention
+- Shows you did your homework
+- Makes email feel personal
+
+EXAMPLES:
+- "love the organic coffee beans!"
+- "love the minimalist desk setup!"
+- "love the sustainable yoga mats!"
+
+AUDIT LINK FORMAT:
+https://zerobounceai.com/audit?utm_source=cold_email&utm_campaign=ecommerce&company={{company}}
+
+WHEN TO SEND: Day 0 (initial outreach)
+EXPECTED REPLY RATE: 15-20%
