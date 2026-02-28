@@ -64,6 +64,18 @@
     gap: 1rem;
 }
 
+/* Override global btn-outline colors for white navbar background */
+.actions :global(.btn-outline) {
+    color: var(--black);
+    border-color: var(--black);
+}
+
+.actions :global(.btn-outline):hover {
+    background: var(--dark);
+    color: var(--white);
+    border-color: var(--dark);
+}
+
 /* Hamburger Menu Button */
 .hamburger {
     display: none;
@@ -149,6 +161,17 @@
     width: 100%;
     text-align: center;
     padding: 14px 20px;
+}
+
+.mobileActions :global(.btn-outline) {
+    color: var(--black);
+    border-color: var(--black);
+}
+
+.mobileActions :global(.btn-outline):hover {
+    background: var(--dark);
+    color: var(--white);
+    border-color: var(--dark);
 }
 
 @media (max-width: 768px) {
