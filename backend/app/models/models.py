@@ -15,7 +15,7 @@ class User(Base):
     verification_token = Column(String, nullable=True)
     reset_token = Column(String, nullable=True)
     reset_token_expires = Column(DateTime, nullable=True)
-    credits = Column(Integer, default=100)  # Sign up bonus (updated to 100 as per EXPECTED.md)
+    credits = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     api_keys = relationship("ApiKey", back_populates="owner")

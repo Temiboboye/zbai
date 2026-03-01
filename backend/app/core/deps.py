@@ -49,13 +49,6 @@ async def get_current_user(
         api_key_str = authorization
     
     if api_key_str:
-        # Check for demo key
-        if api_key_str == "zb_live_demo_key_123456":
-            # For demo user, return user with ID 1
-            user = db.query(User).filter(User.id == 1).first()
-            if user:
-                return user
-        
         # Hash the provided key to match stored hash
         key_hash = hashlib.sha256(api_key_str.encode()).hexdigest()
         key_record = db.query(ApiKey).filter(

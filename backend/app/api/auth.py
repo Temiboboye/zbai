@@ -1,9 +1,9 @@
 from datetime import timedelta
 from typing import Any, Optional
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 
 from app.core import security, deps
 from app.core.security import get_password_hash, verify_password, create_access_token
@@ -11,6 +11,7 @@ from app.models.models import User
 from app.services.email_service import email_service
 from app.core.database import get_db
 from app.core.config import settings
+from app.core.rate_limiter import limiter
 
 router = APIRouter()
 
@@ -19,6 +20,14 @@ router = APIRouter()
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
     
 class Token(BaseModel):
     access_token: str
@@ -28,10 +37,20 @@ class PasswordReset(BaseModel):
     token: str
     new_password: str
 
+    @validator('new_password')
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
+
 # --- Endpoints ---
 
 @router.post("/signup", response_model=Token)
+@limiter.limit("3/minute")
 async def signup(
+    request: Request,
     user_in: UserCreate,
     db: Session = Depends(get_db)
 ) -> Any:
@@ -79,7 +98,9 @@ async def signup(
 
 
 @router.post("/login", response_model=Token)
+@limiter.limit("5/minute")
 async def login(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ) -> Any:
@@ -204,7 +225,9 @@ def verify_email(
 
 
 @router.post("/forgot-password")
+@limiter.limit("3/minute")
 async def forgot_password(
+    request: Request,
     email: str = Body(..., embed=True),
     db: Session = Depends(get_db)
 ) -> Any:
@@ -274,6 +297,14 @@ def read_users_me(
 class PasswordUpdate(BaseModel):
     current_password: str
     new_password: str
+
+    @validator('new_password')
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not any(c.isdigit() for c in v):
+            raise ValueError('Password must contain at least one digit')
+        return v
 
 @router.post("/update-password")
 async def update_password(

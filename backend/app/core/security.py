@@ -10,7 +10,13 @@ from jose import jwt
 from passlib.context import CryptContext
 
 # Configuration
-SECRET_KEY = os.getenv("SECRET_KEY", "your_secret_key_change_me")
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+if not SECRET_KEY or SECRET_KEY in ("your_secret_key_change_me", "your-secret-key-change-in-production"):
+    import warnings
+    warnings.warn("SECRET_KEY is not set or is using a default value. Set a strong SECRET_KEY in production!", RuntimeWarning)
+    if os.getenv("ENVIRONMENT", "development") == "production":
+        raise RuntimeError("SECRET_KEY must be set to a secure random value in production")
+    SECRET_KEY = "dev-only-insecure-key-do-not-use-in-production"
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
