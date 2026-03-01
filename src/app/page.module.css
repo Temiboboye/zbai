@@ -317,19 +317,22 @@
   align-items: flex-end;
   border: 1px solid var(--black);
   min-height: 310px;
+  color: #000;
 }
 
 .featureCardGray {
   background: var(--gray);
+  color: #000;
 }
 
 .featureCardGreen {
   background: var(--green);
+  color: #000;
 }
 
 .featureCardDark {
   background: var(--dark);
-  color: var(--white);
+  color: #fff;
 }
 
 .featureCardTitle {
@@ -341,6 +344,7 @@
 .featureCardTitle h3 {
   font-size: 30px;
   font-weight: 500;
+  color: inherit;
 }
 
 .featureCardTitle h3 span {
@@ -366,6 +370,7 @@
   gap: 15px;
   font-size: 20px;
   font-weight: 500;
+  color: inherit;
 }
 
 .learnMore svg {
