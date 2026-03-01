@@ -10,9 +10,9 @@ Most SaaS companies we work with lose 5-8% of their emails to bounces, which dam
 
 We built ZeroBounce AI to solve this - our AI-powered verification hits 98%+ accuracy (vs. 92-95% for traditional tools) and includes confidence scoring for catch-all domains.
 
-Try it free → {{signup_link}}
+Try our free tools → {{signup_link}}
 
-49 free credits. No credit card required. See results in 2 minutes.
+No credit card required. See results in 2 minutes.
 
 Best,
 {{your_name}}

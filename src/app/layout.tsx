@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: "ZeroBounce AI - AI-Powered Email Verification & Validation",
     template: "%s | ZeroBounce AI"
   },
-  description: "AI-powered email verification with 98%+ accuracy. Get confidence scores (0-100) for catch-all domains, email pattern recognition, and domain reputation intelligence. Try 49 free credits.",
+  description: "AI-powered email verification with 98%+ accuracy. Get confidence scores (0-100) for catch-all domains, email pattern recognition, and domain reputation intelligence. Try our free tools.",
   keywords: [
     "AI email verification",
     "AI-powered email validation",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     title: 'ZeroBounce AI - AI-Powered Email Verification with 98%+ Accuracy',
-    description: 'The only AI-powered email verification platform. Get confidence scores (0-100) for catch-all domains, email pattern recognition, and 98%+ accuracy. Start with 49 free credits.',
+    description: 'The only AI-powered email verification platform. Get confidence scores (0-100) for catch-all domains, email pattern recognition, and 98%+ accuracy. Try our free lead generation tools.',
     siteName: 'ZeroBounce AI',
     images: [
       {
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ZeroBounce AI - AI-Powered Email Verification',
-    description: '98%+ accuracy with AI confidence scoring. The only email verifier with catch-all confidence scores (0-100) and pattern recognition. Try 49 free credits.',
+    description: '98%+ accuracy with AI confidence scoring. The only email verifier with catch-all confidence scores (0-100) and pattern recognition. Try our free tools.',
     images: ['/twitter-image.png'],
     creator: '@zerobounceai',
   },

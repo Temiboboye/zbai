@@ -85,7 +85,7 @@ export default function SignupPage() {
                 </div>
 
                 <h1>Create Account</h1>
-                <p className={styles.subtitle}>Start verifying emails with 49 free credits</p>
+                <p className={styles.subtitle}>Create your account to get started</p>
 
                 {error && (
                     <div className={styles.error}>
@@ -193,13 +193,13 @@ export default function SignupPage() {
                 <h2>Get Started Today</h2>
                 <div className={styles.pricingHighlight}>
                     <div className={styles.freeTier}>
-                        <h3>Free Trial</h3>
-                        <div className={styles.price}>49</div>
-                        <p>Free Credits</p>
+                        <h3>Free Tools</h3>
+                        <div className={styles.price}>5</div>
+                        <p>Lead Gen Tools</p>
                         <ul>
                             <li>✅ No credit card required</li>
-                            <li>✅ Full API access</li>
-                            <li>✅ All features included</li>
+                            <li>✅ Email syntax checker</li>
+                            <li>✅ Disposable email detector</li>
                         </ul>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ export default function Home() {
               reputation intelligence. Know exactly which emails to trust.
             </p>
             <div className={styles.heroActions}>
-              <a href="/signup" className="btn btn-primary">Start Free Trial - 49 Credits</a>
+              <a href="/free-tools" className="btn btn-primary">Try Free Tools</a>
               <a href="/comparison" className="btn btn-secondary">Compare Features</a>
             </div>
           </div>

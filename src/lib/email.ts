@@ -157,9 +157,9 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<boo
                     </tr>
                     <tr>
                         <td align="center" style="padding-bottom: 32px;">
-                            <div style="background: rgba(185, 255, 102, 0.1); border: 1px solid rgba(185, 255, 102, 0.3); border-radius: 12px; padding: 20px;">
-                                <p style="margin: 0 0 8px 0; color: #B9FF66; font-size: 14px; font-weight: 600;">🎁 Your Free Credits</p>
-                                <span style="font-size: 48px; font-weight: 700; color: #B9FF66;">49</span>
+                                <div style="background: rgba(185, 255, 102, 0.1); border: 1px solid rgba(185, 255, 102, 0.3); border-radius: 12px; padding: 20px;">
+                                <p style="margin: 0 0 8px 0; color: #B9FF66; font-size: 14px; font-weight: 600;">🎉 You're All Set</p>
+                                <span style="font-size: 16px; color: #ffffff;">Your account is ready. Explore our free tools or purchase credits to start verifying emails.</span>
                             </div>
                         </td>
                     </tr>
@@ -180,7 +180,7 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<boo
 </body>
 </html>
         `,
-        text: `Welcome to ZeroBounce AI, ${name}!\n\nYour account is verified. You have 49 free credits to start.\n\nGo to your dashboard: ${process.env.NEXT_PUBLIC_APP_URL || 'https://zerobounce.ai'}/dashboard`
+        text: `Welcome to ZeroBounce AI, ${name}!\n\nYour account is verified and ready to use. Explore our free tools or purchase credits to start verifying emails.\n\nGo to your dashboard: ${process.env.NEXT_PUBLIC_APP_URL || 'https://zerobounce.ai'}/dashboard`
     });
 
     return result.success;

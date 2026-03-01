@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, JSON, Float
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, JSON, Float, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.core.database import Base
@@ -21,6 +21,8 @@ class User(Base):
     api_keys = relationship("ApiKey", back_populates="owner")
     transactions = relationship("Transaction", back_populates="user")
     bulk_jobs = relationship("BulkJob", back_populates="user")
+    leads = relationship("Lead", back_populates="user")
+    campaigns = relationship("Campaign", back_populates="user")
 
 
 class ApiKey(Base):
@@ -82,3 +84,37 @@ class BlacklistEntry(Base):
     email = Column(String, index=True)
     reason = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class Lead(Base):
+    __tablename__ = "leads"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    name = Column(String, nullable=True)
+    email = Column(String, index=True)
+    company = Column(String, nullable=True)
+    status = Column(String, default="new", index=True)  # new, contacted, qualified, won, lost
+    source = Column(String, nullable=True)  # manual, import, free-tools, campaign
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = relationship("User", back_populates="leads")
+
+
+class Campaign(Base):
+    __tablename__ = "campaigns"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    name = Column(String)
+    template_category = Column(String, nullable=True)  # saas, agencies, ecommerce
+    template_name = Column(String, nullable=True)
+    subject = Column(String)
+    body = Column(Text)
+    recipient_count = Column(Integer, default=0)
+    status = Column(String, default="sent", index=True)  # draft, sent, failed
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    user = relationship("User", back_populates="campaigns")

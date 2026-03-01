@@ -41,7 +41,7 @@ export default function Footer() {
                             <a href="/#features">Features</a>
                             <a href="/comparison">Compare</a>
                             <a href="/#pricing">Pricing</a>
-                            <a href="/signup">Free Trial</a>
+                            <a href="/free-tools">Free Tools</a>
                         </div>
 
                         <div className={styles.footerColumn}>

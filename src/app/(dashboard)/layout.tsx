@@ -51,6 +51,13 @@ function DashboardInner({
         { href: '/profile', icon: '👤', label: 'Profile' },
     ];
 
+    const adminItems = [
+        { href: '/crm', icon: '👥', label: 'CRM' },
+        { href: '/campaigns', icon: '📨', label: 'Campaigns' },
+    ];
+
+    const allNavItems = user?.is_admin ? [...navItems, ...adminItems] : navItems;
+
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
     };
@@ -70,7 +77,7 @@ function DashboardInner({
                 </div>
 
                 <nav className={styles.nav}>
-                    {navItems.map((item) => (
+                    {allNavItems.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}

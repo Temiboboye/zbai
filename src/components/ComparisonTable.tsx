@@ -186,9 +186,9 @@ const features: Feature[] = [
         clearout: '12 months',
     },
     {
-        name: 'Free Trial Credits',
+        name: 'Free Tools',
         category: 'Pricing & Credits',
-        zeroBounceAI: '49 credits',
+        zeroBounceAI: '5 tools',
         zeroBounce: '100 credits',
         neverBounce: '1,000 credits',
         hunter: '25 searches',
@@ -293,9 +293,9 @@ export default function ComparisonTable() {
             {/* CTA Section */}
             <div className={styles.ctaSection}>
                 <h3>Ready to experience the difference?</h3>
-                <p>Start with 49 free credits. No credit card required.</p>
+                <p>Try our free lead generation tools. No credit card required.</p>
                 <div className={styles.ctaButtons}>
-                    <a href="/signup" className="btn btn-primary">Start Free Trial</a>
+                    <a href="/free-tools" className="btn btn-primary">Try Free Tools</a>
                     <a href="/billing" className="btn btn-secondary">View Pricing</a>
                 </div>
             </div>

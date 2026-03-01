@@ -40,7 +40,7 @@ export default function BlogPost() {
                             <a href="/#pricing">Pricing</a>
                             <a href="/blog">Blog</a>
                             <a href="/login" className={styles.loginLink}>Login</a>
-                            <a href="/signup" className="btn btn-primary btn-small">Start Free Trial</a>
+                            <a href="/free-tools" className="btn btn-primary btn-small">Try Free Tools</a>
                         </nav>
                     </div>
                 </div>
@@ -422,8 +422,8 @@ export default function BlogPost() {
                         <p>If you're serious about email deliverability, the choice is clear.</p>
 
                         <div className={styles.cta}>
-                            <a href="/signup" className="btn btn-primary btn-large">Start Your Free Trial →</a>
-                            <p className={styles.ctaSubtext}>49 free credits. No credit card required.</p>
+                            <a href="/free-tools" className="btn btn-primary btn-large">Try Free Tools →</a>
+                            <p className={styles.ctaSubtext}>Free lead gen tools. No credit card required.</p>
                         </div>
                     </section>
 
@@ -433,7 +433,7 @@ export default function BlogPost() {
                         <ul>
                             <li><a href="/comparison">Full Feature Comparison →</a></li>
                             <li><a href="/billing">Pricing Calculator →</a></li>
-                            <li><a href="/signup">Start Free Trial →</a></li>
+                            <li><a href="/free-tools">Try Free Tools →</a></li>
                         </ul>
                     </section>
 
@@ -506,7 +506,7 @@ export default function BlogPost() {
                                 <a href="/#features">Features</a>
                                 <a href="/comparison">Compare</a>
                                 <a href="/#pricing">Pricing</a>
-                                <a href="/signup">Free Trial</a>
+                                <a href="/free-tools">Free Tools</a>
                             </div>
 
                             <div className={styles.footerColumn}>

@@ -144,14 +144,14 @@ export default function ComparisonPage() {
                         <h2>Ready to Make the Switch?</h2>
                         <p>
                             Join hundreds of businesses who've upgraded to AI-powered email verification.
-                            Start with 49 free credits—no credit card required.
+                            Try our free lead generation tools—no credit card required.
                         </p>
                         <div className={styles.ctaButtons}>
-                            <a href="/signup" className="btn btn-primary">Start Free Trial</a>
+                            <a href="/free-tools" className="btn btn-primary">Try Free Tools</a>
                             <a href="/billing" className="btn btn-secondary">View Pricing</a>
                         </div>
                         <div className={styles.trustBadges}>
-                            <span>✓ 49 Free Credits</span>
+                            <span>✓ Free Lead Gen Tools</span>
                             <span>✓ No Credit Card</span>
                             <span>✓ Cancel Anytime</span>
                         </div>

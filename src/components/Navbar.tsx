@@ -28,6 +28,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className={styles.links}>
+          <Link href="/free-tools">Free Tools</Link>
           <Link href="#features">Features</Link>
           <Link href="/comparison">Compare</Link>
           <Link href="#pricing">Pricing</Link>
@@ -54,6 +55,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileLinks}>
+          <Link href="/free-tools" onClick={closeMobileMenu}>Free Tools</Link>
           <Link href="#features" onClick={closeMobileMenu}>Features</Link>
           <Link href="/comparison" onClick={closeMobileMenu}>Compare</Link>
           <Link href="#pricing" onClick={closeMobileMenu}>Pricing</Link>

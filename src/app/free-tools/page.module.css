@@ -1,0 +1,350 @@
+.main {
+    background: var(--background);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1240px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero */
+.hero {
+    padding: 140px 0 60px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.heroDesc {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Email Gate */
+.gateSection {
+    padding: 0 0 60px;
+}
+
+.gateBox {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.gateBox h2 {
+    font-size: 1.5rem;
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.gateBox p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.gateForm {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.gateForm input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.gateForm input:focus {
+    border-color: var(--green);
+}
+
+.gateBox small {
+    color: var(--gray-500);
+    font-size: 0.8rem;
+}
+
+/* Tools Grid */
+.toolsSection {
+    padding: 0 0 80px;
+}
+
+.toolsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.toolCard {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 20px;
+    padding: 28px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.toolCard:hover {
+    border-color: var(--green);
+    transform: translateY(-3px);
+}
+
+.toolCardActive {
+    border-color: var(--green);
+    background: rgba(185, 255, 102, 0.05);
+}
+
+.toolIcon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.toolCard h3 {
+    font-size: 1.05rem;
+    color: var(--white);
+    margin-bottom: 6px;
+}
+
+.toolCard p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Active Tool Panel */
+.activePanel {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 24px;
+    padding: 36px;
+}
+
+.activePanel h3 {
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-bottom: 20px;
+}
+
+.inputGroup {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.inputGroup input {
+    flex: 1;
+    min-width: 180px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.inputGroup input:focus {
+    border-color: var(--green);
+}
+
+/* Results */
+.resultBox {
+    margin-top: 24px;
+    border-radius: 16px;
+    padding: 28px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.resultSuccess {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.resultError {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.resultHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.resultIcon {
+    font-size: 1.5rem;
+}
+
+.resultHeader h4 {
+    font-size: 1.1rem;
+    color: var(--white);
+}
+
+.resultDetails {
+    color: var(--gray-300);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.resultDetails strong {
+    color: var(--white);
+}
+
+.resultDetails ul {
+    margin: 8px 0 0 20px;
+    list-style: disc;
+}
+
+.resultDetails code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.issues {
+    margin-top: 12px;
+}
+
+.riskHigh {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.riskLow {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.patternList {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.patternItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+}
+
+.patternRank {
+    color: var(--green);
+    font-weight: 700;
+    font-size: 0.85rem;
+    width: 28px;
+}
+
+.patternItem code {
+    color: var(--white);
+    font-size: 0.95rem;
+}
+
+/* CTA Section */
+.ctaSection {
+    padding: 0 0 100px;
+}
+
+.ctaBox {
+    background: var(--dark);
+    border: 1px solid var(--surface-border);
+    border-radius: 30px;
+    padding: 60px;
+    text-align: center;
+}
+
+.ctaBox h2 {
+    font-size: 2rem;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.ctaBox p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 28px;
+}
+
+.ctaActions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .gateBox {
+        padding: 32px 20px;
+    }
+
+    .gateForm {
+        flex-direction: column;
+    }
+
+    .toolsGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .activePanel {
+        padding: 24px;
+    }
+
+    .inputGroup {
+        flex-direction: column;
+    }
+
+    .ctaBox {
+        padding: 40px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .toolsGrid {
+        grid-template-columns: 1fr;
+    }
+}
