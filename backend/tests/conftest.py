@@ -32,6 +32,13 @@ def db_session() -> Generator:
     """Create a fresh database session for each test."""
     Base.metadata.create_all(bind=engine)
     session = TestingSessionLocal()
+    
+    from app.models.models import User
+    # Insert a mock user into the database for endpoints querying it
+    dummy = User(id=1, email="test@example.com", hashed_password="pw", credits=100)
+    session.add(dummy)
+    session.commit()
+    
     try:
         yield session
     finally:
@@ -40,7 +47,7 @@ def db_session() -> Generator:
 
 
 @pytest.fixture(scope="function")
-def client(db_session) -> Generator:
+def client(db_session, monkeypatch) -> Generator:
     """Create a test client with database override."""
     def override_get_db():
         try:
@@ -48,7 +55,23 @@ def client(db_session) -> Generator:
         finally:
             pass
 
+    from app.core.deps import get_current_user, get_current_user_id
+    from app.models.models import User
+    from app.tasks import process_bulk_job
+
+    def override_get_current_user_id():
+        return 1
+
+    def override_get_current_user():
+        return User(id=1, email="test@example.com", credits=100)
+
+    # Mock celery task to bypass Redis
+    monkeypatch.setattr(process_bulk_job, "delay", lambda *args, **kwargs: True)
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user_id] = override_get_current_user_id
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
