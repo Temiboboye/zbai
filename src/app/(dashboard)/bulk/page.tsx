@@ -182,29 +182,12 @@ export default function BulkPage() {
                 const jobStatus = await res.json();
                 setActiveJob(jobStatus);
 
-                // Try to fetch partial results even while processing
-                try {
-                    const resultsRes = await fetch(`/api/verify/bulk/${jobId}/results`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (resultsRes.ok) {
-                        const data = await resultsRes.json();
-                        // Update results even if job isn't complete yet
-                        if (data.results && data.results.length > 0) {
-                            setResults(data.results);
-                        }
-                    }
-                } catch (e) {
-                    // Results not ready yet, that's okay
-                }
-
                 if (jobStatus.status === 'completed') {
                     clearInterval(interval);
-                    // Final fetch to ensure we have all results
                     fetchResults(jobId);
                 }
             } catch (e) { console.error(e); }
-        }, 1000); // Poll every second
+        }, 5000); // Poll every 5 seconds to avoid rate limiting
     };
 
     const fetchResults = async (jobId: string) => {
