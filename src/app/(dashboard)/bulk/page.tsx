@@ -119,8 +119,12 @@ export default function BulkPage() {
 
     // -- Job Processing --
     const startVerification = async () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const emailList = mode === 'paste'
-            ? emails.split('\n').map(e => e.trim()).filter(e => e.includes('@'))
+            ? emails
+                .split(/[\r\n]+/)
+                .map(e => e.trim())
+                .filter(e => emailRegex.test(e))
             : parsedFile?.data || [];
 
         if (emailList.length === 0) return alert('No emails to verify');
@@ -297,7 +301,7 @@ export default function BulkPage() {
                                 onChange={(e) => setEmails(e.target.value)}
                             />
                             <div className={styles.inputMeta}>
-                                {emails.split('\n').filter(e => e.includes('@')).length} emails detected
+                                {emails.split(/[\r\n]+/).map(e => e.trim()).filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)).length} valid emails detected
                             </div>
                         </>
                     ) : (
@@ -348,7 +352,7 @@ export default function BulkPage() {
                         <div className={styles.costEstimate}>
                             Estimated Cost: <span>{
                                 mode === 'paste'
-                                    ? emails.split('\n').filter(e => e.includes('@')).length
+                                    ? emails.split(/[\r\n]+/).map(e => e.trim()).filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)).length
                                     : (parsedFile?.count || 0)
                             } credits</span>
                         </div>
