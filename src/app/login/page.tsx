@@ -72,18 +72,21 @@ export default function LoginPage() {
 
             if (!res.ok) {
                 const text = await res.text();
+                let errorMsg = `Google login failed: ${res.status} ${res.statusText}`;
                 try {
                     const data = JSON.parse(text);
-                    throw new Error(data.detail || 'Google login failed');
-                } catch (e) {
-                    throw new Error(`Google login failed: ${res.statusText}`);
+                    errorMsg = data.detail || errorMsg;
+                } catch (_) {
+                    // Response wasn't JSON
                 }
+                console.error('Google login error:', errorMsg, 'Status:', res.status);
+                throw new Error(errorMsg);
             }
 
             const data = await res.json();
             login(data.access_token);
         } catch (err: any) {
-            console.error(err);
+            console.error('Google login exception:', err);
             setError(err.message || 'An unexpected error occurred');
             setLoading(false);
         }
