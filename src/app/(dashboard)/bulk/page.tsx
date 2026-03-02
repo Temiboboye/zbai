@@ -372,16 +372,16 @@ export default function BulkPage() {
                 <div className={styles.progressCard}>
                     <div className={styles.progressHeader}>
                         <h3>Processing Batch...</h3>
-                        <span>{Math.round((activeJob.processed / activeJob.total_emails) * 100)}%</span>
+                        <span>{Math.round(((activeJob.processed || 0) / (activeJob.total_emails || 1)) * 100)}%</span>
                     </div>
                     <div className={styles.progressBar}>
                         <div
                             className={styles.progressFill}
-                            style={{ width: `${(activeJob.processed / activeJob.total_emails) * 100}%` }}
+                            style={{ width: `${((activeJob.processed || 0) / (activeJob.total_emails || 1)) * 100}%` }}
                         />
                     </div>
                     <p className={styles.progressMeta}>
-                        {activeJob.processed.toLocaleString()} of {activeJob.total_emails.toLocaleString()} processed
+                        {(activeJob.processed || 0).toLocaleString()} of {(activeJob.total_emails || 0).toLocaleString()} processed
                     </p>
                 </div>
             )}

@@ -146,12 +146,16 @@ function DashboardInner({
     );
 }
 
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
     return (
-        <DashboardInner>{children}</DashboardInner>
+        <ErrorBoundary>
+            <DashboardInner>{children}</DashboardInner>
+        </ErrorBoundary>
     );
 }
