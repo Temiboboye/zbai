@@ -109,13 +109,14 @@ export default function LoginPage() {
 
             if (!response.ok) {
                 const text = await response.text();
+                let errorMsg = `Server returned error: ${response.status} ${response.statusText}`;
                 try {
                     const data = JSON.parse(text);
-                    throw new Error(data.detail || 'Login failed');
-                } catch (e) {
-                    // If parsing failed, use the text (likely HTML error)
-                    throw new Error(`Server returned error: ${response.status} ${response.statusText}`);
+                    errorMsg = data.detail || errorMsg;
+                } catch (_) {
+                    // Response wasn't JSON, keep the default error message
                 }
+                throw new Error(errorMsg);
             }
 
             const data = await response.json();

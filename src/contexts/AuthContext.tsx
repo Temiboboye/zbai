@@ -71,6 +71,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (newToken: string) => {
         localStorage.setItem('token', newToken);
+        // Also set a browser cookie so the Next.js middleware can detect auth
+        // (In production, Nginx bypasses Next.js API routes that would set httpOnly cookies)
+        document.cookie = `token=${newToken}; path=/; max-age=${60 * 60 * 24 * 7}; samesite=lax${window.location.protocol === 'https:' ? '; secure' : ''}`;
         setToken(newToken);
         fetchUser(newToken);
         router.push('/dashboard');
@@ -78,6 +81,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = () => {
         localStorage.removeItem('token');
+        // Clear the browser cookie as well
+        document.cookie = 'token=; path=/; max-age=0';
         setToken(null);
         setUser(null);
         router.push('/login');
