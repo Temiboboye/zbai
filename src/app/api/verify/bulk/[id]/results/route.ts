@@ -8,9 +8,10 @@ export async function GET(
 ) {
     const { id } = await params;
     try {
-        const response = await fetch(`${BACKEND_URL}/v1/bulk/${id}/results`, {
+        const auth = req.headers.get('Authorization') || '';
+        const response = await fetch(`${BACKEND_URL}/v1/verify/bulk/${id}/results`, {
             headers: {
-                'Authorization': `Bearer ${process.env.API_KEY || 'zb_live_demo_key_123456'}`
+                'Authorization': auth
             },
             next: { revalidate: 0 }
         });

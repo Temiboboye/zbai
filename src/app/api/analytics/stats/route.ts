@@ -4,9 +4,10 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function GET(req: NextRequest) {
     try {
+        const auth = req.headers.get('Authorization') || '';
         const response = await fetch(`${BACKEND_URL}/v1/analytics/stats`, {
             headers: {
-                'Authorization': `Bearer ${process.env.API_KEY || 'zb_live_demo_key_123456'}`
+                'Authorization': auth
             },
             next: { revalidate: 60 } // Cache for 1 minute
         });

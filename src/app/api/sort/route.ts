@@ -4,6 +4,7 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(req: NextRequest) {
     try {
+        const auth = req.headers.get('Authorization') || '';
         const { emails } = await req.json();
 
         if (!emails || !Array.isArray(emails)) {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.API_KEY || 'zb_live_demo_key_123456'}`
+                'Authorization': auth
             },
             body: JSON.stringify({ emails })
         });

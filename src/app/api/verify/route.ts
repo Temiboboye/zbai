@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
-const API_KEY = process.env.API_KEY || 'zb_live_demo_key_123456';
 
 export async function POST(req: NextRequest) {
     try {
+        const auth = req.headers.get('Authorization') || '';
         const body = await req.json();
         const { email } = body;
 
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'Authorization': auth
             },
             body: JSON.stringify({ email })
         });

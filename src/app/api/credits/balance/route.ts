@@ -4,13 +4,12 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function GET(req: NextRequest) {
     try {
-        // Get user ID from session/token (mock for now)
-        const user_id = 'user_123';
+        const auth = req.headers.get('Authorization') || '';
 
         // Call backend to get credit balance
         const response = await fetch(`${BACKEND_URL}/v1/credits`, {
             headers: {
-                'Authorization': `Bearer ${process.env.API_KEY || 'zb_live_demo_key_123456'}`
+                'Authorization': auth
             }
         });
 

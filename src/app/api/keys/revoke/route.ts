@@ -4,12 +4,13 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(req: NextRequest) {
     try {
+        const auth = req.headers.get('Authorization') || '';
         const { key } = await req.json();
 
         const response = await fetch(`${BACKEND_URL}/v1/keys/${key}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${process.env.API_KEY || 'zb_live_demo_key_123456'}`
+                'Authorization': auth
             }
         });
 
