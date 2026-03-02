@@ -1,66 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mock authentication - replace with real backend call
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
+
 export async function POST(req: NextRequest) {
     try {
-        const { email, password } = await req.json();
+        // Since frontend sends x-www-form-urlencoded, we parse it as text/formData
+        const formData = await req.text();
 
-        // Mock validation
-        if (!email || !password) {
-            return NextResponse.json(
-                { error: 'Email and password are required' },
-                { status: 400 }
-            );
-        }
-
-        // Mock user database (replace with real database query)
-        const mockUsers = [
-            {
-                id: 1,
-                email: 'demo@zerobounce.ai',
-                password: 'demo123',
-                full_name: 'Demo User',
-                credits_balance: 142500
-            }
-        ];
-
-        const user = mockUsers.find(u => u.email === email && u.password === password);
-
-        if (!user) {
-            return NextResponse.json(
-                { error: 'Invalid email or password' },
-                { status: 401 }
-            );
-        }
-
-        // Generate mock token (in production, use JWT)
-        const token = Buffer.from(`${user.id}:${user.email}:${Date.now()}`).toString('base64');
-
-        const response = NextResponse.json({
-            token,
-            user: {
-                id: user.id,
-                email: user.email,
-                full_name: user.full_name,
-                credits_balance: user.credits_balance
-            }
+        const response = await fetch(`${BACKEND_URL}/v1/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData
         });
 
-        // Set HTTP-only cookie
-        response.cookies.set('token', token, {
+        const data = await response.json();
+
+        if (!response.ok) {
+            return NextResponse.json(data, { status: response.status });
+        }
+
+        // Forward successful response and set cookie
+        const res = NextResponse.json(data);
+        res.cookies.set('token', data.access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 60 * 60 * 24 * 7 // 7 days
         });
 
-        return response;
+        return res;
 
-    } catch (error) {
-        console.error('Login error:', error);
+    } catch (error: any) {
+        console.error('Login proxy error:', error);
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: error.message || 'Internal server error' },
             { status: 500 }
         );
     }
 }
+

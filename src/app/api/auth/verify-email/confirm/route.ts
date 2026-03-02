@@ -1,85 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPendingVerification, deletePendingVerification } from '../../signup/route';
-import { sendWelcomeEmail } from '@/lib/email';
+
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(req: NextRequest) {
     try {
-        const { token, code } = await req.json();
+        const { token } = await req.json();
 
-        if (!token || !code) {
+        if (!token) {
             return NextResponse.json(
-                { error: 'Token and code are required' },
+                { error: 'Token is required' },
                 { status: 400 }
             );
         }
 
-        const pending = getPendingVerification(token);
+        // Forward to the real Python backend
+        const response = await fetch(`${BACKEND_URL}/v1/auth/verify-email?token=${token}`, {
+            method: 'GET'
+        });
 
-        if (!pending) {
+        const data = await response.json();
+
+        if (!response.ok) {
             return NextResponse.json(
-                { error: 'Verification session expired. Please sign up again.' },
-                { status: 400 }
+                { error: data.detail || 'Verification failed' },
+                { status: response.status }
             );
         }
 
-        if (Date.now() > pending.expires) {
-            deletePendingVerification(token);
-            return NextResponse.json(
-                { error: 'Verification code expired. Please sign up again.' },
-                { status: 400 }
-            );
-        }
-
-        if (pending.code !== code) {
-            return NextResponse.json(
-                { error: 'Invalid verification code.' },
-                { status: 400 }
-            );
-        }
-
-        // Success! Create the user account
-        const userData = pending.userData;
-        deletePendingVerification(token);
-
-        // In production, this would create the user in the database
-        const newUser = {
-            id: Math.floor(Math.random() * 10000),
-            email: userData.email,
-            full_name: userData.full_name,
-            credits_balance: 49,
-            email_verified: true,
-            created_at: new Date().toISOString()
-        };
-
-        // Send welcome email (async, don't wait)
-        sendWelcomeEmail(userData.email, userData.full_name).catch(err =>
-            console.error('[WELCOME EMAIL] Failed to send:', err)
-        );
-
-        // Generate auth token
-        const authToken = Buffer.from(`${newUser.id}:${newUser.email}:${Date.now()}`).toString('base64');
-
-        const response = NextResponse.json({
-            token: authToken,
-            user: newUser,
+        return NextResponse.json({
+            success: true,
             message: 'Email verified successfully! Welcome to ZeroBounce.'
         });
 
-        // Set HTTP-only cookie
-        response.cookies.set('token', authToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 7 days
-        });
-
-        return response;
-
     } catch (error) {
-        console.error('Verification error:', error);
+        console.error('Verification proxy error:', error);
         return NextResponse.json(
             { error: 'Verification failed' },
             { status: 500 }
         );
     }
 }
+
