@@ -19,22 +19,25 @@ class VerifyRequest(BaseModel):
     email: EmailStr
 
 class BulkVerifyRequest(BaseModel):
-    emails: List[EmailStr]
+    emails: List[str]
     
     @validator('emails')
     def validate_emails(cls, v):
-        if len(v) == 0:
-            raise ValueError('At least 1 email required')
-        if len(v) > 100000:
-            raise ValueError('Maximum 100,000 emails per batch')
-        # Remove duplicates while preserving order
+        import re
+        email_re = re.compile(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+        # Filter to valid-looking emails, strip whitespace
+        cleaned = []
         seen = set()
-        unique = []
-        for email in v:
-            if email.lower() not in seen:
-                seen.add(email.lower())
-                unique.append(email)
-        return unique
+        for e in v:
+            e = e.strip()
+            if email_re.match(e) and e.lower() not in seen:
+                seen.add(e.lower())
+                cleaned.append(e)
+        if len(cleaned) == 0:
+            raise ValueError('At least 1 valid email required')
+        if len(cleaned) > 100000:
+            raise ValueError('Maximum 100,000 emails per batch')
+        return cleaned
 
 @router.post("")
 async def verify_single(

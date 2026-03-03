@@ -157,16 +157,18 @@ export default function BulkPage() {
                     setLoading(false);
                     return;
                 }
-                throw new Error('Start failed');
+                const errorData = await res.json().catch(() => ({}));
+                const detail = errorData.detail || `Verification failed (${res.status})`;
+                throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
             }
 
             const job = await res.json();
             setActiveJob(job);
             deductCredits(emailList.length);
             pollJob(job.job_id);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Failed to start verification.');
+            alert(error.message || 'Failed to start verification.');
             setLoading(false);
         }
     };
