@@ -23,6 +23,7 @@ class User(Base):
     bulk_jobs = relationship("BulkJob", back_populates="user")
     leads = relationship("Lead", back_populates="user")
     campaigns = relationship("Campaign", back_populates="user")
+    verification_history = relationship("VerificationHistory", back_populates="user")
 
 
 class ApiKey(Base):
@@ -118,3 +119,23 @@ class Campaign(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     user = relationship("User", back_populates="campaigns")
+
+
+class VerificationHistory(Base):
+    __tablename__ = "verification_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    email = Column(String, index=True)
+    final_status = Column(String, index=True)  # valid_safe, invalid, risky, etc.
+    safety_score = Column(Integer, default=0)
+    smtp_provider = Column(String, nullable=True)
+    is_catch_all = Column(Boolean, default=False)
+    is_disposable = Column(Boolean, default=False)
+    is_role_based = Column(Boolean, default=False)
+    source = Column(String, default="single")  # "single" or "bulk"
+    bulk_job_id = Column(String, nullable=True, index=True)
+    result_json = Column(JSON, nullable=True)  # Full result for detail view
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    user = relationship("User", back_populates="verification_history")

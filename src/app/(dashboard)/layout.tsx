@@ -43,6 +43,7 @@ function DashboardInner({
         { href: '/dashboard', icon: '📊', label: 'Dashboard' },
         { href: '/verify', icon: '🔍', label: 'Real-Time Verify' },
         { href: '/bulk', icon: '📁', label: 'Bulk Verifier' },
+        { href: '/history', icon: '📋', label: 'History' },
         { href: '/sort', icon: '📧', label: 'Email Sorter' },
         { href: '/email-finder', icon: '🔎', label: 'Email Finder' },
         { href: '/api-keys', icon: '🔑', label: 'API Keys' },

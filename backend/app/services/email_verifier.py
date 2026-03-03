@@ -1,6 +1,7 @@
 """
 Comprehensive Email Verification Service
 Integrates multiple validation methods including O365 autodiscover and Gmail calendar checking
+Optimized with domain-level caching and parallel async checks
 """
 
 import re
@@ -12,12 +13,30 @@ import random
 import string
 import asyncio
 import logging
+import time
 from typing import Dict, Tuple, Optional
 from email_validator import validate_email, EmailNotValidError
 import aiosmtplib
 from app.services.office365_checker import office365_checker
 from app.services.gmail_checker import gmail_checker
 from app.services.avatar_checker import avatar_checker
+
+
+class DomainCache:
+    """TTL-based domain cache for MX records, catch-all, and O365 status"""
+    
+    def __init__(self, ttl_seconds: int = 3600):
+        self._cache: Dict[str, dict] = {}
+        self._ttl = ttl_seconds
+    
+    def get(self, domain: str, key: str):
+        entry = self._cache.get(f"{domain}:{key}")
+        if entry and (time.time() - entry['ts']) < self._ttl:
+            return entry['value']
+        return None
+    
+    def set(self, domain: str, key: str, value):
+        self._cache[f"{domain}:{key}"] = {'value': value, 'ts': time.time()}
 
 
 class EmailVerificationService:
@@ -33,6 +52,11 @@ class EmailVerificationService:
     - Catch-all detection
     - Spam trap identification
     - Social Profile Validation (Avatar)
+    
+    Optimized with:
+    - Domain-level caching (MX, catch-all, O365, provider)
+    - Parallel async checks where possible
+    - Reduced timeouts
     """
     
     # Common role-based prefixes
@@ -45,7 +69,8 @@ class EmailVerificationService:
     def __init__(self):
         self.user_agent = 'Microsoft Office/16.0 (Windows NT 10.0; Microsoft Outlook 16.0.12026; Pro)'
         self.headers = {'User-Agent': self.user_agent, 'Accept': 'application/json'}
-        self.domain_cache = {}
+        self.domain_cache_old = {}  # Legacy O365 cache
+        self.cache = DomainCache(ttl_seconds=3600)  # 1-hour TTL
         
         # Load disposable domains from file (5000+ domains)
         self.disposable_domains = self._load_disposable_domains()
@@ -54,18 +79,15 @@ class EmailVerificationService:
         """Load disposable email domains from file"""
         import os
         
-        # Path to the disposable domains file
         file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'disposable_domains.txt')
         
         try:
             with open(file_path, 'r') as f:
-                # Read all lines, strip whitespace, and create a set
                 domains = {line.strip().lower() for line in f if line.strip()}
             print(f"✅ Loaded {len(domains)} disposable email domains")
             return domains
         except FileNotFoundError:
             print(f"⚠️ Disposable domains file not found at {file_path}, using fallback list")
-            # Fallback to small list if file not found
             return {
                 'tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com',
                 'throwaway.email', 'temp-mail.org', 'getnada.com', 'maildrop.cc',
@@ -77,17 +99,17 @@ class EmailVerificationService:
     
     async def verify_email(self, email: str) -> Dict:
         """
-        Perform comprehensive email verification
-        Returns detailed validation results
+        Perform comprehensive email verification with caching and parallelism.
+        Returns detailed validation results.
         """
         result = {
             'email': email,
             'syntax': 'unknown',
             'domain': 'unknown',
             'mx': 'unknown',
-            'mx_records': [],  # MX records list
+            'mx_records': [],
             'smtp': 'unknown',
-            'smtp_provider': None,  # SMTP provider name
+            'smtp_provider': None,
             'catch_all': False,
             'disposable': False,
             'role_based': False,
@@ -95,14 +117,14 @@ class EmailVerificationService:
             'spam_risk': 'unknown',
             'final_status': 'unknown',
             'safety_score': 0,
-            'reason': None,  # Reason for the status
+            'reason': None,
             'has_social': False,
             'social_platform': None,
             'details': {}
         }
         
         try:
-            # 1. Syntax Validation
+            # ── Phase 1: Quick local checks (instant) ──────────────────
             syntax_valid, syntax_msg = self._validate_syntax(email)
             result['syntax'] = 'valid' if syntax_valid else 'invalid'
             result['details']['syntax'] = syntax_msg
@@ -112,20 +134,18 @@ class EmailVerificationService:
                 result['safety_score'] = 0
                 return result
             
-            # Extract domain
             local, domain = email.split('@')
             
-            # 2. Disposable Email Check
+            # These are instant — run synchronously
             result['disposable'] = self._is_disposable(domain)
+            result['role_based'] = self._is_role_based(local)
+            
             if result['disposable']:
                 result['spam_risk'] = 'high'
                 result['safety_score'] = 20
             
-            # 3. Role-Based Check
-            result['role_based'] = self._is_role_based(local)
-            
-            # 4. Domain Validation
-            domain_valid, domain_msg = self._validate_domain(domain)
+            # ── Phase 2: Domain + MX (cached or parallel) ────────────
+            domain_valid, domain_msg = self._validate_domain_cached(domain)
             result['domain'] = 'valid' if domain_valid else 'invalid'
             result['details']['domain'] = domain_msg
             
@@ -134,13 +154,11 @@ class EmailVerificationService:
                 result['safety_score'] = 10
                 return result
             
-            # 5. MX Record Lookup
-            mx_valid, mx_records = self._check_mx_records(domain)
+            mx_valid, mx_records = self._check_mx_cached(domain)
             result['mx'] = 'found' if mx_valid else 'not_found'
-            result['mx_records'] = mx_records  # Add to top level
+            result['mx_records'] = mx_records
             result['details']['mx_records'] = mx_records
             
-            # Extract SMTP provider from MX records
             if mx_records:
                 result['smtp_provider'] = self._extract_smtp_provider(mx_records[0])
             
@@ -150,34 +168,28 @@ class EmailVerificationService:
                 result['reason'] = 'No MX records found'
                 return result
             
-            # 6. Specialized Provider Checking (Office 365 / Gmail)
+            # ── Phase 3: Provider-specific check (uses cache) ────────
             specialized_check_result = await self._use_specialized_checker(email, domain, mx_records)
             if specialized_check_result:
                 result['details']['specialized_check'] = specialized_check_result
                 
-                # Check if specialized checker detected catch-all
                 is_catch_all = specialized_check_result.get('catch_all', False)
                 if is_catch_all:
                     result['catch_all'] = True
                 
-                # If specialized checker gave a definitive answer, use it
                 if specialized_check_result.get('valid') is not None:
                     result['smtp'] = 'valid' if specialized_check_result['valid'] else 'invalid'
                     result['details']['smtp'] = f"Verified via {specialized_check_result['method']}: {specialized_check_result['details']}"
                     
-                    # Handle valid emails
                     if specialized_check_result['valid']:
-                        # Check if this was verified via Login API (most reliable)
                         method = specialized_check_result.get('method', '')
                         
                         if 'microsoft_login_api' in method:
-                            # Login API confirmation is definitive, even on catch-all
                             result['final_status'] = 'valid_safe'
                             result['safety_score'] = 90 if not result['role_based'] else 80
                             result['spam_risk'] = 'low'
                             result['reason'] = 'Confirmed via Microsoft Login API'
                         elif is_catch_all:
-                            # Catch-all without Login API confirmation
                             result['final_status'] = 'valid_risky'
                             result['safety_score'] = 60
                             result['spam_risk'] = 'medium'
@@ -190,50 +202,46 @@ class EmailVerificationService:
                         result['safety_score'] = 10
                         result['spam_risk'] = 'high'
                     
-                    # Still check for Office 365 flag
                     if 'office365' in specialized_check_result['method']:
                         result['is_o365'] = True
                     
                     return result
             
-            # 7. Office 365 Detection (fallback if specialized check didn't run)
-            result['is_o365'] = await self._check_o365(email, domain)
+            # ── Phase 4: SMTP + Catch-all + O365 + Social (parallel) ─
+            mx_host = mx_records[0] if mx_records else None
             
-            # 8. SMTP Verification
-            smtp_valid, smtp_msg = await self._verify_smtp(email, mx_records[0] if mx_records else None)
+            # Run SMTP, O365 check, and social check in parallel
+            smtp_task = self._verify_smtp(email, mx_host)
+            o365_task = self._check_o365_cached(email, domain)
+            
+            smtp_result, is_o365 = await asyncio.gather(smtp_task, o365_task)
+            smtp_valid, smtp_msg = smtp_result
+            
             result['smtp'] = smtp_msg
             result['details']['smtp'] = smtp_msg
+            result['is_o365'] = is_o365
             
-            # 9. Catch-All Detection
+            # Catch-all check (uses cache)
             if smtp_valid:
-                result['catch_all'] = await self._check_catch_all(domain, mx_records[0] if mx_records else None)
+                result['catch_all'] = await self._check_catch_all_cached(domain, mx_host)
             else:
-                # If SMTP is unreachable (port 25 blocked), check known catch-all database
                 from app.services.catch_all_db import is_known_catch_all
                 result['catch_all'] = is_known_catch_all(domain)
                 if result['catch_all']:
                     result['details']['catch_all_source'] = 'known_database'
             
-            # 10. Social Profile Check (Avatar)
-            # This is a strong signal for valid emails, even on catch-all domains
+            # Social check for uncertain results
             if result['catch_all'] or result['final_status'] == 'unknown':
-                logger = logging.getLogger(__name__) # Ensure logger
-                
-                # Run async check (wrapping the sync method for now, or make avatar_checker async)
                 social_result = await avatar_checker.check_social_presence(email)
-                
                 if social_result['has_social']:
                     result['has_social'] = True
                     result['social_platform'] = social_result['platform']
                     result['details']['social'] = social_result['details']
-                    # Increase score significantly if social profile found
                     result['safety_score'] = max(result['safety_score'], 90)
                     result['final_status'] = 'valid_safe'
             
-            # 11. Calculate Final Status and Safety Score
+            # ── Phase 5: Final scoring ───────────────────────────────
             result['final_status'], result['safety_score'], result['reason'] = self._calculate_final_status(result)
-            
-            # 12. Spam Risk Assessment
             result['spam_risk'] = self._assess_spam_risk(result)
             
         except Exception as e:
@@ -241,6 +249,47 @@ class EmailVerificationService:
             result['final_status'] = 'error'
         
         return result
+    
+    # ── Cached domain lookups ──────────────────────────────────────────
+    
+    def _validate_domain_cached(self, domain: str) -> Tuple[bool, str]:
+        """Validate domain with caching"""
+        cached = self.cache.get(domain, 'domain_valid')
+        if cached is not None:
+            return cached
+        result = self._validate_domain(domain)
+        self.cache.set(domain, 'domain_valid', result)
+        return result
+    
+    def _check_mx_cached(self, domain: str) -> Tuple[bool, list]:
+        """Check MX records with caching"""
+        cached = self.cache.get(domain, 'mx')
+        if cached is not None:
+            return cached
+        result = self._check_mx_records(domain)
+        self.cache.set(domain, 'mx', result)
+        return result
+    
+    async def _check_o365_cached(self, email: str, domain: str) -> bool:
+        """Check O365 with domain-level caching"""
+        cached = self.cache.get(domain, 'is_o365_domain')
+        if cached is False:
+            return False
+        result = await self._check_o365(email, domain)
+        if not result:
+            self.cache.set(domain, 'is_o365_domain', False)
+        return result
+    
+    async def _check_catch_all_cached(self, domain: str, mx_host: Optional[str]) -> bool:
+        """Check catch-all with domain-level caching"""
+        cached = self.cache.get(domain, 'catch_all')
+        if cached is not None:
+            return cached
+        result = await self._check_catch_all(domain, mx_host)
+        self.cache.set(domain, 'catch_all', result)
+        return result
+    
+    # ── Core checks ───────────────────────────────────────────────────
     
     def _validate_syntax(self, email: str) -> Tuple[bool, str]:
         """Validate email syntax using email-validator library"""
@@ -261,17 +310,15 @@ class EmailVerificationService:
     def _check_mx_records(self, domain: str) -> Tuple[bool, list]:
         """Check MX records for the domain"""
         try:
-            # Create resolver with longer timeout and Google DNS
             resolver = dns.resolver.Resolver()
-            resolver.nameservers = ['8.8.8.8', '8.8.4.4']  # Google DNS
-            resolver.timeout = 10
-            resolver.lifetime = 10
+            resolver.nameservers = ['8.8.8.8', '8.8.4.4']
+            resolver.timeout = 5   # Reduced from 10s
+            resolver.lifetime = 5  # Reduced from 10s
             
             mx_records = resolver.resolve(domain, 'MX')
             mx_hosts = [str(r.exchange).rstrip('.') for r in mx_records]
             return True, mx_hosts
         except dns.exception.Timeout:
-            # DNS timeout - might be network issue
             print(f"DNS timeout for {domain}")
             return False, []
         except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.NoNameservers):
@@ -281,79 +328,70 @@ class EmailVerificationService:
             return False, []
     
     async def _use_specialized_checker(self, email: str, domain: str, mx_records: list) -> Optional[Dict]:
-        """
-        Route email to specialized checker based on provider
-        Returns None if no specialized checker applies
-        """
-        # Check if it's an Office 365 / Outlook domain
+        """Route email to specialized checker based on provider"""
         o365_indicators = [
             'outlook.com', 'hotmail.com', 'live.com', 'msn.com',
             'office365.com', 'microsoft.com'
         ]
         
-        # Check MX records for Office 365
         mx_is_o365 = any('outlook' in mx.lower() or 'microsoft' in mx.lower() for mx in mx_records)
         domain_is_o365 = any(indicator in domain.lower() for indicator in o365_indicators)
         
-        # Check SPF record for Office 365 (catches domains behind mail gateways)
+        # Check SPF for O365 (cached at domain level)
         spf_is_o365 = False
-        try:
-            spf_records = dns.resolver.resolve(domain, 'TXT')
-            for record in spf_records:
-                txt_value = str(record).lower()
-                if 'spf.protection.outlook.com' in txt_value:
-                    spf_is_o365 = True
-                    break
-        except Exception:
-            pass  # SPF check is optional, continue if it fails
+        cached_spf = self.cache.get(domain, 'spf_o365')
+        if cached_spf is not None:
+            spf_is_o365 = cached_spf
+        else:
+            try:
+                spf_records = dns.resolver.resolve(domain, 'TXT')
+                for record in spf_records:
+                    txt_value = str(record).lower()
+                    if 'spf.protection.outlook.com' in txt_value:
+                        spf_is_o365 = True
+                        break
+            except Exception:
+                pass
+            self.cache.set(domain, 'spf_o365', spf_is_o365)
         
         if mx_is_o365 or domain_is_o365 or spf_is_o365:
-            # Use Office 365 specialized checker
             result = office365_checker.check_email(email)
             return result
         
-        # Check if it's a Gmail / GSuite domain
         gmail_indicators = ['gmail.com', 'googlemail.com']
         mx_is_google = any('google' in mx.lower() or 'gmail' in mx.lower() for mx in mx_records)
         domain_is_gmail = any(indicator in domain.lower() for indicator in gmail_indicators)
         
         if mx_is_google or domain_is_gmail:
-            # Use Gmail specialized checker
             result = gmail_checker.check_email(email)
             return result
         
         return None
     
     async def _check_o365(self, email: str, domain: str) -> bool:
-        """
-        Check if email is on Office 365 using autodiscover API
-        Based on the 365checker.py logic
-        """
+        """Check if email is on Office 365 using autodiscover API"""
         try:
-            # Check domain cache first
-            if domain in self.domain_cache:
-                if not self.domain_cache[domain]:
+            if domain in self.domain_cache_old:
+                if not self.domain_cache_old[domain]:
                     return False
             else:
-                # Test with junk user to see if domain uses O365
                 junk_user = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20))
                 test_url = f'https://outlook.office365.com/autodiscover/autodiscover.json/v1.0/{junk_user}@{domain}?Protocol=rest'
-                r = requests.get(test_url, headers=self.headers, verify=True, allow_redirects=False, timeout=5)
+                r = requests.get(test_url, headers=self.headers, verify=True, allow_redirects=False, timeout=3)
                 
                 if 'outlook.office365.com' in r.text:
-                    self.domain_cache[domain] = True
+                    self.domain_cache_old[domain] = True
                 else:
-                    self.domain_cache[domain] = False
+                    self.domain_cache_old[domain] = False
                     return False
             
-            # Now check the actual email
             url = f'https://outlook.office365.com/autodiscover/autodiscover.json/v1.0/{email}?Protocol=rest'
-            r = requests.get(url, headers=self.headers, verify=True, allow_redirects=False, timeout=5)
+            r = requests.get(url, headers=self.headers, verify=True, allow_redirects=False, timeout=3)
             
             if r.status_code == 200:
                 return True
             elif r.status_code == 302:
-                if self.domain_cache.get(domain) and 'outlook.office365.com' not in r.text:
+                if self.domain_cache_old.get(domain) and 'outlook.office365.com' not in r.text:
                     return True
             
             return False
@@ -361,17 +399,15 @@ class EmailVerificationService:
             return False
     
     async def _verify_smtp(self, email: str, mx_host: Optional[str]) -> Tuple[bool, str]:
-        """Verify email via SMTP handshake"""
+        """Verify email via SMTP handshake (reduced timeout)"""
         if not mx_host:
             return False, "no_mx"
         
         try:
-            # Use aiosmtplib for async SMTP
-            smtp = aiosmtplib.SMTP(hostname=mx_host, port=25, timeout=10)
+            smtp = aiosmtplib.SMTP(hostname=mx_host, port=25, timeout=5)  # Reduced from 10s
             await smtp.connect()
             await smtp.ehlo()
             
-            # Try RCPT TO command
             code, message = await smtp.rcpt(email)
             await smtp.quit()
             
@@ -381,7 +417,6 @@ class EmailVerificationService:
             if code == 250:
                 return True, "responsive"
             elif code == 550:
-                # Check for specific rejection reasons
                 if 'mailbox full' in message_lower or 'quota' in message_lower or 'over quota' in message_lower:
                     return False, "mailbox_full"
                 elif 'does not exist' in message_lower or 'user unknown' in message_lower or 'no such user' in message_lower:
@@ -391,13 +426,10 @@ class EmailVerificationService:
                 else:
                     return False, "rejected"
             elif code == 552:
-                # Mailbox full
                 return False, "mailbox_full"
             elif code == 553:
-                # Mailbox name not allowed
                 return False, "invalid_mailbox"
             elif code == 450 or code == 451:
-                # Temporary failure
                 return False, "temporary_failure"
             else:
                 return False, f"code_{code}"
@@ -412,7 +444,7 @@ class EmailVerificationService:
         
         try:
             random_email = f"{''.join(random.choices(string.ascii_lowercase, k=20))}@{domain}"
-            smtp = aiosmtplib.SMTP(hostname=mx_host, port=25, timeout=10)
+            smtp = aiosmtplib.SMTP(hostname=mx_host, port=25, timeout=5)  # Reduced from 10s
             await smtp.connect()
             await smtp.ehlo()
             
@@ -435,7 +467,6 @@ class EmailVerificationService:
         """Extract SMTP provider name from MX record"""
         mx_lower = mx_record.lower()
         
-        # Common providers
         if 'google' in mx_lower or 'gmail' in mx_lower:
             return 'Google Workspace'
         elif 'outlook' in mx_lower or 'microsoft' in mx_lower:
@@ -453,14 +484,12 @@ class EmailVerificationService:
         elif 'sendgrid' in mx_lower:
             return 'SendGrid'
         else:
-            # Return the domain part of MX record
             return mx_record.split('.')[0] if '.' in mx_record else mx_record
     
     def _calculate_final_status(self, result: Dict) -> Tuple[str, int, str]:
         """Calculate final status, safety score, and reason"""
         score = 100
         
-        # Deduct points for issues
         if result['disposable']:
             score -= 70
             return 'disposable', score, 'Disposable email address'
@@ -474,7 +503,6 @@ class EmailVerificationService:
         if result['mx'] != 'found':
             return 'no_mx', 15, 'No MX records found'
         
-        # Check SMTP status for specific rejection reasons
         smtp_status = result['smtp']
         
         if smtp_status == 'mailbox_full':
@@ -495,9 +523,7 @@ class EmailVerificationService:
         if smtp_status == 'temporary_failure':
             return 'temporary_failure', 60, 'Temporary server issue - try again later'
         
-        # CRITICAL: Catch-all + Unreachable SMTP = Cannot verify = Risky
         if smtp_status == 'unreachable' and result['catch_all']:
-            # Cannot verify if email exists on a catch-all domain with blocked SMTP
             return 'risky', 50, 'ACCEPT ALL'
         
         if smtp_status == 'unreachable':
@@ -509,7 +535,6 @@ class EmailVerificationService:
         if result['role_based']:
             score -= 10
         
-        # Determine status and reason
         if score >= 90:
             return 'valid_safe', score, 'Valid and safe to send'
         elif score >= 70:
