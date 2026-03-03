@@ -63,10 +63,10 @@ quick_deploy() {
     run_remote "cd $PROJECT_DIR && git pull origin main"
     
     echo "2. Rebuilding frontend and backend..."
-    run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE build frontend backend"
+    run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE build frontend backend celery_worker"
     
     echo "3. Restarting services..."
-    run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE up -d frontend backend"
+    run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE up -d frontend backend celery_worker"
     run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE restart nginx"
     
     echo "4. Waiting for services..."
