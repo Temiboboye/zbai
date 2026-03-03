@@ -21,6 +21,10 @@ class APIKeyResponse(BaseModel):
     rate_limit: int
     status: str
 
+class RevokeKeyRequest(BaseModel):
+    key: str
+
+@router.get("/list", response_model=List[APIKeyResponse])
 @router.get("/", response_model=List[APIKeyResponse])
 async def list_keys(
     db: Session = Depends(get_db),
@@ -28,6 +32,7 @@ async def list_keys(
 ):
     return api_key_manager.get_keys(db, user_id)
 
+@router.post("/create", response_model=APIKeyResponse)
 @router.post("/", response_model=APIKeyResponse)
 async def create_key(
     request: CreateKeyRequest,
@@ -36,13 +41,18 @@ async def create_key(
 ):
     return api_key_manager.create_key(db, user_id, request.name, request.limit)
 
+@router.post("/revoke")
 @router.delete("/{key_string}")
 async def revoke_key(
-    key_string: str,
     db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id)
+    user_id: int = Depends(get_current_user_id),
+    request: Optional[RevokeKeyRequest] = None,
+    key_string: Optional[str] = None
 ):
-    success = api_key_manager.revoke_key(db, user_id, key_string)
+    key_to_revoke = key_string if key_string else (request.key if request else None)
+    if not key_to_revoke:
+        raise HTTPException(status_code=400, detail="Key string must be provided")
+    success = api_key_manager.revoke_key(db, user_id, key_to_revoke)
     if not success:
         raise HTTPException(status_code=404, detail="Key not found")
     return {"success": True}

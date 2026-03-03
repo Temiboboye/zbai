@@ -5,7 +5,12 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 export async function POST(req: NextRequest) {
     try {
         const auth = req.headers.get('Authorization') || '';
-        const { key } = await req.json();
+        const body = await req.json();
+        const { key } = body;
+
+        if (!key) {
+            return NextResponse.json({ error: 'Key is required' }, { status: 400 });
+        }
 
         const response = await fetch(`${BACKEND_URL}/v1/keys/${key}`, {
             method: 'DELETE',
@@ -15,18 +20,25 @@ export async function POST(req: NextRequest) {
         });
 
         if (!response.ok) {
-            const data = await response.json();
+            let errorMessage = 'Failed to revoke key';
+            try {
+                const error = await response.json();
+                errorMessage = error.detail || errorMessage;
+            } catch (e) {
+                // Ignore parse errors
+            }
             return NextResponse.json(
-                { error: data.detail || 'Failed to revoke key' },
+                { error: errorMessage },
                 { status: response.status }
             );
         }
 
-        return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error('Revoke key proxy error:', error);
+        const data = await response.json();
+        return NextResponse.json(data);
+    } catch (error) {
+        console.error('Revoke key error:', error);
         return NextResponse.json(
-            { error: error.message },
+            { error: 'Internal Server Error' },
             { status: 500 }
         );
     }

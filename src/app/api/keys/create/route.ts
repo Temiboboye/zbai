@@ -7,29 +7,38 @@ export async function POST(req: NextRequest) {
         const auth = req.headers.get('Authorization') || '';
         const body = await req.json();
 
-        const response = await fetch(`${BACKEND_URL}/v1/keys`, {
+        const response = await fetch(`${BACKEND_URL}/v1/keys/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': auth
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({
+                name: body.name,
+                limit: body.limit || 1000
+            })
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
+            let errorMessage = 'Failed to create key';
+            try {
+                const error = await response.json();
+                errorMessage = error.detail || errorMessage;
+            } catch (e) {
+                // Ignore parsing parsing errors
+            }
             return NextResponse.json(
-                { error: data.detail || 'Failed to create key' },
+                { error: errorMessage },
                 { status: response.status }
             );
         }
 
+        const data = await response.json();
         return NextResponse.json(data);
-    } catch (error: any) {
-        console.error('Create key proxy error:', error);
+    } catch (error) {
+        console.error('Create key error:', error);
         return NextResponse.json(
-            { error: error.message },
+            { error: 'Internal Server Error' },
             { status: 500 }
         );
     }
