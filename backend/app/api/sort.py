@@ -17,7 +17,7 @@ class SortRequest(BaseModel):
     emails: List[EmailStr]
 
 
-@router.post("/")
+@router.post("")
 async def sort_emails(
     request: SortRequest,
     db: Session = Depends(get_db),
