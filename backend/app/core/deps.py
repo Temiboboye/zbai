@@ -47,6 +47,9 @@ async def get_current_user(
     api_key_str = x_api_key
     if not api_key_str and authorization and not authorization.startswith("Bearer "):
         api_key_str = authorization
+        
+    if not api_key_str and token and token.startswith("zb_"):
+        api_key_str = token
     
     if api_key_str:
         # Hash the provided key to match stored hash
