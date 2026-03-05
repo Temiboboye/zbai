@@ -74,7 +74,7 @@ async def get_user_credits(
     return {"credits_remaining": user.credits}
 
 # CORS middleware
-ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
+ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001,https://zerobounceai.com,https://api.zerobounceai.com').split(',')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,

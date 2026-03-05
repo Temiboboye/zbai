@@ -196,11 +196,10 @@ export default function ApiKeysPage() {
                 <div className={styles.codeBlock}>
                     <pre>
                         {`# Example using curl
-curl -X POST ${typeof window !== 'undefined' ? window.location.origin : 'https://api.zerobounce.ai'}/api/verify \\
+curl -X POST https://api.zerobounceai.com/v1/verify \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
-  -d '{"email": "test@example.com"}'`}
-                    </pre>
+  -d '{"email": "test@example.com"}'`}                    </pre>
                 </div>
             </div>
         </div>
