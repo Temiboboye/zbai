@@ -2,11 +2,11 @@ import { MetadataRoute } from 'next'
 import { getAllCompetitorSlugs } from './data/competitors'
 import { getAllProviderSlugs } from './data/providers'
 import { getAllIndustrySlugs } from './data/industries'
+import { getAllCompanySlugs } from './data/companies'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zerobounceai.com'
 
-    // Core pages
     const corePages: MetadataRoute.Sitemap = [
         { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
         { url: `${baseUrl}/signup`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
@@ -22,29 +22,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/security`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     ]
 
-    // pSEO: Competitor comparison pages
     const competitorPages: MetadataRoute.Sitemap = getAllCompetitorSlugs().map(slug => ({
-        url: `${baseUrl}/compare/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.8,
+        url: `${baseUrl}/compare/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
     }))
 
-    // pSEO: Email provider verification guides
     const providerPages: MetadataRoute.Sitemap = getAllProviderSlugs().map(slug => ({
-        url: `${baseUrl}/verify/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.8,
+        url: `${baseUrl}/verify/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
     }))
 
-    // pSEO: Industry use-case pages
     const industryPages: MetadataRoute.Sitemap = getAllIndustrySlugs().map(slug => ({
-        url: `${baseUrl}/email-verification-for/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
+        url: `${baseUrl}/email-verification-for/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7,
     }))
 
-    return [...corePages, ...competitorPages, ...providerPages, ...industryPages]
+    const companyPages: MetadataRoute.Sitemap = getAllCompanySlugs().map(slug => ({
+        url: `${baseUrl}/email-format/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6,
+    }))
+
+    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages]
 }
+

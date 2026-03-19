@@ -1,0 +1,338 @@
+.main {
+    min-height: 100vh;
+    background: var(--dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero */
+.hero {
+    padding: 120px 0 60px;
+    text-align: center;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.companyBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--white);
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 24px;
+}
+
+.heroMeta {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.metaItem {
+    font-size: 14px;
+    color: var(--gray-400);
+    background: var(--gray-900);
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-800);
+}
+
+.metaItem strong {
+    color: var(--green);
+}
+
+.heroCta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Patterns */
+.patterns {
+    padding: 80px 0;
+    background: var(--gray-900);
+}
+
+.patterns h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.patternsSubtitle {
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 16px;
+    margin-bottom: 48px;
+}
+
+.patternsList {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.patternCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 12px;
+    padding: 16px 24px;
+    transition: all 0.3s;
+}
+
+.patternCard:hover {
+    border-color: var(--green);
+}
+
+.patternRank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--green);
+    color: var(--dark);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.patternFormat {
+    flex: 1;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 16px;
+    color: var(--green);
+}
+
+.patternLabel {
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+/* Examples */
+.examples {
+    padding: 80px 0;
+}
+
+.examples h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.examplesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.exampleCard {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--gray-300);
+    text-align: center;
+}
+
+/* How It Works */
+.howItWorks {
+    padding: 80px 0;
+    background: var(--gray-900);
+}
+
+.howItWorks h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.stepsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.stepCard {
+    text-align: center;
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 16px;
+    padding: 32px 24px;
+}
+
+.stepNumber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--green);
+    color: var(--dark);
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.stepCard h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.stepCard p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--gray-400);
+}
+
+/* CTA */
+.cta {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--gray-900), var(--dark));
+}
+
+.ctaBox {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 40px;
+    background: var(--dark);
+    border: 2px solid var(--green);
+    border-radius: 24px;
+    box-shadow: 0 16px 64px rgba(185, 255, 102, 0.1);
+}
+
+.ctaBox h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.ctaBox p {
+    font-size: 17px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Related Companies */
+.related {
+    padding: 48px 0;
+    border-top: 1px solid var(--gray-800);
+}
+
+.related h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.relatedGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.relatedGrid a {
+    padding: 6px 14px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 6px;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.relatedGrid a:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+/* Footer */
+.footer {
+    padding: 40px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.footer p {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero { padding: 80px 0 40px; }
+    .hero h1 { font-size: 30px; }
+    .heroMeta { flex-direction: column; align-items: center; }
+    .stepsGrid { grid-template-columns: 1fr; }
+    .patterns h2, .examples h2, .howItWorks h2, .ctaBox h2 { font-size: 26px; }
+    .ctaBox { padding: 32px 20px; }
+    .ctaButtons { flex-direction: column; }
+}
