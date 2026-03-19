@@ -39,6 +39,15 @@ export default async function ProviderPage({ params }: PageProps) {
     const jsonLd = [
         {
             '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://zerobounceai.com' },
+                { '@type': 'ListItem', position: 2, name: 'Email Verification', item: 'https://zerobounceai.com/verify' },
+                { '@type': 'ListItem', position: 3, name: `${prov.name} Verification`, item: `https://zerobounceai.com/verify/${slug}` },
+            ],
+        },
+        {
+            '@context': 'https://schema.org',
             '@type': 'FAQPage',
             mainEntity: prov.faq.map(f => ({
                 '@type': 'Question',

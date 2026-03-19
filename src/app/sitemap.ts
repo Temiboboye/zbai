@@ -41,6 +41,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const blogPages: MetadataRoute.Sitemap = [
         { url: `${baseUrl}/blog/email-verification-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
         { url: `${baseUrl}/blog/zerobounce-ai-vs-competitors`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/catch-all-email-verification`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/email-verification-b2b-sales`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/reduce-email-bounce-rate`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     ]
 
     return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...blogPages]

@@ -90,10 +90,21 @@ export default async function CompanyEmailFormatPage({ params }: PageProps) {
         ],
     }
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://zerobounceai.com' },
+            { '@type': 'ListItem', position: 2, name: 'Email Format Lookup', item: 'https://zerobounceai.com/free-tools' },
+            { '@type': 'ListItem', position: 3, name: `${co.name} Email Format`, item: `https://zerobounceai.com/email-format/${slug}` },
+        ],
+    }
+
     return (
         <main className={styles.main}>
             <Navbar />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
             {/* Hero */}
             <section className={styles.hero}>

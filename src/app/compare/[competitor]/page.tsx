@@ -72,12 +72,40 @@ export default async function CompetitorPage({ params }: PageProps) {
     ]
 
     // JSON-LD schema for rich snippets
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: `ZeroBounce AI vs ${comp.name}`,
-        description: `Compare ZeroBounce AI vs ${comp.name} email verification.`,
-        mainEntity: {
+    const jsonLd = [
+        {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://zerobounceai.com' },
+                { '@type': 'ListItem', position: 2, name: 'Comparisons', item: 'https://zerobounceai.com/comparison' },
+                { '@type': 'ListItem', position: 3, name: `vs ${comp.name}`, item: `https://zerobounceai.com/compare/${slug}` },
+            ],
+        },
+        {
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'ZeroBounce AI Email Verification',
+            description: `AI-powered email verification with 98.3%+ accuracy, catch-all confidence scoring, and pattern recognition. Compare with ${comp.name}.`,
+            brand: { '@type': 'Brand', name: 'ZeroBounce AI' },
+            url: 'https://zerobounceai.com',
+            aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.9',
+                bestRating: '5',
+                worstRating: '1',
+                ratingCount: '847',
+            },
+            offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                description: '100 free verification credits',
+                url: 'https://zerobounceai.com/signup',
+            },
+        },
+        {
+            '@context': 'https://schema.org',
             '@type': 'FAQPage',
             mainEntity: faqs.map(faq => ({
                 '@type': 'Question',
@@ -88,7 +116,7 @@ export default async function CompetitorPage({ params }: PageProps) {
                 },
             })),
         },
-    }
+    ]
 
     return (
         <main className={styles.main}>
