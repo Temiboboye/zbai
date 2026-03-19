@@ -13,7 +13,7 @@ function getResendClient(): Resend | null {
     return resendClient;
 }
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'ZeroBounce AI <noreply@zerobounce.ai>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'ZeroBounce AI <noreply@notify.zerobounceai.com>';
 
 export interface EmailOptions {
     to: string;

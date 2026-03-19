@@ -21,7 +21,7 @@ class EmailService:
     
     def __init__(self):
         self.api_key = os.getenv('RESEND_API_KEY', '')
-        self.from_email = os.getenv('FROM_EMAIL', 'noreply@zerobounceai.com')
+        self.from_email = os.getenv('FROM_EMAIL', 'ZeroBounce AI <noreply@notify.zerobounceai.com>')
         self.api_url = 'https://api.resend.com/emails'
         self.app_url = os.getenv('APP_URL', 'https://zerobounceai.com')
         

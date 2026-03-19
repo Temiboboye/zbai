@@ -52,7 +52,7 @@ class Settings(BaseSettings):
 
     # Email
     RESEND_API_KEY: Optional[str] = None
-    FROM_EMAIL: str = "noreply@zerobounceai.com"
+    FROM_EMAIL: str = "ZeroBounce AI <noreply@notify.zerobounceai.com>"
 
     # Payments
     STRIPE_SECRET_KEY: Optional[str] = None
