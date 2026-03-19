@@ -38,6 +38,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${baseUrl}/email-format/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6,
     }))
 
-    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages]
+    const blogPages: MetadataRoute.Sitemap = [
+        { url: `${baseUrl}/blog/email-verification-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/zerobounce-ai-vs-competitors`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    ]
+
+    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...blogPages]
 }
 

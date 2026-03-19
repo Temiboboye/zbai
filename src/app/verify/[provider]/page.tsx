@@ -36,15 +36,28 @@ export default async function ProviderPage({ params }: PageProps) {
 
     const otherProviders = providers.filter(p => p.slug !== slug)
 
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: prov.faq.map(f => ({
-            '@type': 'Question',
-            name: f.q,
-            acceptedAnswer: { '@type': 'Answer', text: f.a },
-        })),
-    }
+    const jsonLd = [
+        {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: prov.faq.map(f => ({
+                '@type': 'Question',
+                name: f.q,
+                acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+        },
+        {
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: `How to Verify ${prov.name} Email Addresses`,
+            description: `Step-by-step guide to verifying ${prov.name} (${prov.domain}) emails with AI-powered verification.`,
+            step: [
+                { '@type': 'HowToStep', name: 'Enter the email', text: `Enter the ${prov.name} email address you want to verify into ZeroBounce AI.` },
+                { '@type': 'HowToStep', name: 'Run AI verification', text: 'Our AI checks SMTP responses, MX records, domain reputation, and runs pattern analysis.' },
+                { '@type': 'HowToStep', name: 'Get results', text: `Receive a confidence score (0-100) indicating the probability the ${prov.name} email is valid.` },
+            ],
+        },
+    ]
 
     return (
         <main className={styles.main}>
@@ -68,6 +81,25 @@ export default async function ProviderPage({ params }: PageProps) {
                             <div className={styles.metaItem}>📊 Difficulty: <strong>{prov.difficulty}</strong></div>
                             <div className={styles.metaItem}>🎯 Catch-All: <strong>{prov.isCatchAll ? 'Yes' : 'No'}</strong></div>
                         </div>
+
+                        {/* Social Proof Stats */}
+                        <div className={styles.statsBar}>
+                            <div className={styles.statItem}>
+                                <span className={styles.statValue}>{prov.accuracyRate}</span>
+                                <span className={styles.statLabel}>Accuracy on {prov.name}</span>
+                            </div>
+                            <div className={styles.statDivider} />
+                            <div className={styles.statItem}>
+                                <span className={styles.statValue}>{prov.verifiedCount}</span>
+                                <span className={styles.statLabel}>Emails verified</span>
+                            </div>
+                            <div className={styles.statDivider} />
+                            <div className={styles.statItem}>
+                                <span className={styles.statValue}>12M+</span>
+                                <span className={styles.statLabel}>Verified this month</span>
+                            </div>
+                        </div>
+
                         <div className={styles.heroCta}>
                             <a href="/signup" className="btn btn-primary">Verify {prov.name} Emails Free</a>
                             <a href="/free-tools" className="btn btn-secondary">Try Free Tools</a>

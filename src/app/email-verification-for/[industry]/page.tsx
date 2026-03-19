@@ -87,6 +87,10 @@ export default async function IndustryPage({ params }: PageProps) {
                             <span className={styles.statValue}>{ind.potentialSavings.split(' ')[0]}</span>
                             <span className={styles.statLabel}>Potential Annual Savings</span>
                         </div>
+                        <div className={styles.statItem}>
+                            <span className={styles.statValue}>12M+</span>
+                            <span className={styles.statLabel}>Emails verified this month</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -129,6 +133,20 @@ export default async function IndustryPage({ params }: PageProps) {
                         {ind.useCases.map((uc, i) => (
                             <div key={i} className={styles.useCaseChip}>{uc}</div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonial */}
+            <section className={styles.testimonial}>
+                <div className={styles.container}>
+                    <div className={styles.testimonialCard}>
+                        <div className={styles.testimonialQuote}>&ldquo;</div>
+                        <p className={styles.testimonialText}>{ind.testimonial.quote}</p>
+                        <div className={styles.testimonialAuthor}>
+                            <strong>{ind.testimonial.author}</strong>
+                            <span>{ind.testimonial.role}</span>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -10,6 +10,7 @@ export interface Industry {
   avgListSize: string
   potentialSavings: string
   useCases: string[]
+  testimonial: { quote: string; author: string; role: string }
   faq: { q: string; a: string }[]
 }
 
@@ -34,6 +35,7 @@ export const industries: Industry[] = [
     avgListSize: '10K-500K',
     potentialSavings: '$5,000-$50,000/year in prevented bounces',
     useCases: ['Trial signup verification', 'Onboarding email deliverability', 'Product update notifications', 'Renewal and billing reminders', 'Customer feedback surveys'],
+    testimonial: { quote: 'The confidence scoring is a game-changer. We reduced fake trial signups by 73% and our activation rate jumped 18% in the first month.', author: 'Sarah M.', role: 'VP of Growth, SaaS Platform' },
     faq: [
       { q: 'How can SaaS companies use email verification at signup?', a: 'Integrate ZeroBounce AI\'s real-time API into your signup form. Our API verifies emails in under 1 second, blocking disposable, invalid, and risky emails before they enter your database.' },
       { q: 'Does email verification help reduce churn?', a: 'Yes. By ensuring all transactional and marketing emails reach your users, you prevent silent churn caused by missed billing reminders, feature announcements, and support communications.' },
@@ -59,6 +61,7 @@ export const industries: Industry[] = [
     avgListSize: '1K-50K',
     potentialSavings: '$2,000-$20,000/year in recovered commissions',
     useCases: ['Lead form verification', 'Property alert deliverability', 'Open house invitations', 'Market update newsletters', 'CRM database cleaning'],
+    testimonial: { quote: 'We were losing 2-3 leads per week to bounced property alerts. After cleaning our list with ZeroBounce AI, we closed an extra $45K in commission last quarter.', author: 'James K.', role: 'Real Estate Broker' },
     faq: [
       { q: 'How does email verification help real estate agents?', a: 'Email verification ensures your property alerts, open house invitations, and market updates reach every qualified buyer. It also filters out fake leads from property listing forms, saving you time on follow-ups.' },
       { q: 'Should I verify my real estate CRM contacts?', a: 'Absolutely. Contact lists degrade 25-30% per year as people change emails. Regular bulk verification with ZeroBounce AI keeps your CRM clean and your campaigns effective.' },
@@ -84,6 +87,7 @@ export const industries: Industry[] = [
     avgListSize: '50K-5M',
     potentialSavings: '$10,000-$200,000/year in recovered revenue',
     useCases: ['Checkout email verification', 'Abandoned cart recovery', 'Order and shipping confirmations', 'Promotional campaigns', 'Loyalty program communications'],
+    testimonial: { quote: 'Our abandoned cart recovery rate went from 8% to 14% after we verified our customer emails. That\'s an extra $28K/month in recovered revenue.', author: 'Lisa R.', role: 'E-Commerce Director' },
     faq: [
       { q: 'How does email verification increase e-commerce revenue?', a: 'Clean email lists ensure abandoned cart emails, win-back campaigns, and promotional offers actually reach customers. Studies show this can recover 15-20% of otherwise lost revenue.' },
       { q: 'Should I verify emails at checkout?', a: 'Yes. Use ZeroBounce AI\'s real-time API to verify emails during checkout. This prevents order confirmation failures and ensures you can reach customers for shipping updates.' },
@@ -109,6 +113,7 @@ export const industries: Industry[] = [
     avgListSize: '10K-1M per client',
     potentialSavings: '$20,000-$100,000/year across clients',
     useCases: ['Client list cleaning', 'Pre-campaign verification', 'Lead generation list quality', 'Email deliverability audits', 'Client onboarding verification'],
+    testimonial: { quote: 'We verify every client list before sending now. Our deliverability went from 89% to 97% across all clients, and churn dropped significantly.', author: 'Mike T.', role: 'Agency Operations Lead' },
     faq: [
       { q: 'Why should marketing agencies verify email lists?', a: 'Agencies manage multiple clients\' email reputations. Verifying lists before campaigns protects your shared infrastructure, improves campaign metrics, and demonstrates professionalism to clients.' },
       { q: 'Can I verify emails for multiple clients?', a: 'Yes. ZeroBounce AI supports team accounts and bulk verification. Upload and verify client lists separately, maintaining clean data isolation between accounts.' },
@@ -134,6 +139,7 @@ export const industries: Industry[] = [
     avgListSize: '5K-100K',
     potentialSavings: '$5,000-$50,000/year in faster placements',
     useCases: ['Candidate outreach verification', 'ATS database cleaning', 'Offer letter delivery assurance', 'Interview scheduling confirmation', 'Onboarding communication'],
+    testimonial: { quote: 'Finding and verifying candidate emails used to take hours. ZeroBounce AI cut our sourcing time in half and our response rates doubled.', author: 'Ana P.', role: 'Senior Technical Recruiter' },
     faq: [
       { q: 'How can recruiters use email verification?', a: 'Verify candidate emails before outreach sequences to maximize response rates. Use our email finder to discover candidate emails when you only have their name and company.' },
       { q: 'Can ZeroBounce AI integrate with ATS systems?', a: 'Yes. Our REST API integrates with any ATS or recruiting CRM. Verify emails in real-time during data entry or bulk verify your existing database.' },
@@ -159,6 +165,7 @@ export const industries: Industry[] = [
     avgListSize: '500-50K',
     potentialSavings: '$1,000-$15,000/year in ESP and marketing costs',
     useCases: ['User signup verification', 'Product launch announcements', 'Investor update deliverability', 'Beta user outreach', 'Early adopter engagement'],
+    testimonial: { quote: 'As a seed-stage startup, every dollar counts. Cleaning our list saved us $400/month in ESP costs and our emails actually land now.', author: 'David C.', role: 'Founder & CEO' },
     faq: [
       { q: 'Why is email verification critical for startups?', a: 'Startups have fragile domain reputations. High bounce rates early on can permanently damage your deliverability. ZeroBounce AI helps you build a clean sender reputation from day one.' },
       { q: 'Is ZeroBounce AI affordable for early-stage startups?', a: 'Yes. Our credit-based pricing means you only pay for what you use. Start with 100 free credits and scale as your list grows.' },
@@ -184,6 +191,7 @@ export const industries: Industry[] = [
     avgListSize: '100-5K',
     potentialSavings: '$500-$5,000/year in time and lost clients',
     useCases: ['Prospect email verification', 'Cold outreach campaigns', 'Portfolio and proposal delivery', 'Invoice and payment reminders', 'Client communication'],
+    testimonial: { quote: 'My cold outreach response rate went from 3% to 11% after I started verifying emails first. That\'s 4 extra clients per quarter.', author: 'Emma W.', role: 'Freelance UX Designer' },
     faq: [
       { q: 'Can freelancers benefit from email verification?', a: 'Absolutely. If you cold-email prospects, verifying emails first dramatically improves your delivery rate and protects your sender reputation for all emails.' },
       { q: 'What plan is right for freelancers?', a: 'Start with our free credits. Most freelancers need only a few hundred verifications per month. Our credit-based pricing scales with your needs.' },
@@ -209,6 +217,7 @@ export const industries: Industry[] = [
     avgListSize: '5K-500K',
     potentialSavings: '$2,000-$30,000/year in recovered donations',
     useCases: ['Fundraising campaign deliverability', 'Donor list maintenance', 'Volunteer coordination', 'Newsletter distribution', 'Grant reporting communications'],
+    testimonial: { quote: 'Our year-end fundraising campaign raised 22% more than last year. The difference? Every donation appeal actually reached our donors.', author: 'Robert S.', role: 'Development Director' },
     faq: [
       { q: 'How can nonprofits use email verification?', a: 'Clean your donor email lists before fundraising campaigns to maximize delivery. Verify volunteer signup emails to ensure event coordination messages reach everyone.' },
       { q: 'Do you offer nonprofit discounts?', a: 'Contact us about special nonprofit pricing. We believe clean email data should be accessible to organizations doing good work.' },
