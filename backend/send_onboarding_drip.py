@@ -40,7 +40,7 @@ DRIP_SCHEDULE = [
     (2, 1, 2),    # Day 1-2 — feature showcase
     (3, 3, 4),    # Day 3-4 — social proof
     (4, 5, 6),    # Day 5-6 — limited offer
-    (5, 7, 14),   # Day 7-14 — final nudge
+    (5, 7, 90),   # Day 7-90 — final nudge (wide window to catch existing users)
 ]
 
 DRIP_METHODS = {

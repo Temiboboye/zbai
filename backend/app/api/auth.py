@@ -78,12 +78,10 @@ async def signup(
     db.commit()
     db.refresh(user)
     
-    # Send verification email
+    # Send verification email + onboarding drip #1
     try:
         email_service.send_verification_email(user.email, verification_token)
-        # Send welcome email (maybe delay this until verification? 
-        # But for now, let's send it immediately to engage user)
-        email_service.send_welcome_email(user.email, user.email.split('@')[0])
+        email_service.send_drip_1_welcome_quickwin(user.email, user.email.split('@')[0])
     except Exception as e:
         print(f"Failed to send email: {e}")
         
@@ -184,9 +182,9 @@ async def google_login(
             db.commit()
             db.refresh(user)
             
-            # Send welcome email
+            # Send onboarding drip #1 (welcome + quick win)
             try:
-                email_service.send_welcome_email(user.email, user.email.split('@')[0])
+                email_service.send_drip_1_welcome_quickwin(user.email, user.email.split('@')[0])
             except Exception as e:
                 print(f"Failed to send welcome email: {e}")
         

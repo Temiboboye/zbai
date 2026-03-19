@@ -28,4 +28,14 @@ celery_app.conf.update(
 celery_app.conf.task_routes = {
     'app.tasks.verify_email': {'queue': 'verification'},
     'app.tasks.process_bulk_job': {'queue': 'bulk'},
+    'app.tasks.send_onboarding_drip': {'queue': 'celery'},
+}
+
+# Celery Beat schedule — periodic tasks
+celery_app.conf.beat_schedule = {
+    'daily-onboarding-drip': {
+        'task': 'app.tasks.send_onboarding_drip',
+        'schedule': 60 * 60 * 24,  # Every 24 hours
+        'options': {'queue': 'celery'},
+    },
 }
