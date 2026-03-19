@@ -16,6 +16,7 @@ class User(Base):
     reset_token = Column(String, nullable=True)
     reset_token_expires = Column(DateTime, nullable=True)
     credits = Column(Integer, default=0)
+    last_drip_sent = Column(Integer, default=0)  # Tracks which onboarding drip was last sent (0-5)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     api_keys = relationship("ApiKey", back_populates="owner")

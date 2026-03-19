@@ -246,17 +246,31 @@ def send_onboarding_drip_task() -> dict:
                 skipped += 1
                 continue
 
+            # Skip if already sent this drip or a later one
+            last_sent = getattr(user, 'last_drip_sent', 0) or 0
+            if email_num <= last_sent:
+                skipped += 1
+                continue
+
             method = getattr(email_service, DRIP_METHODS[email_num])
             name = user.email.split("@")[0].replace(".", " ").title()
             result = method(to=user.email, name=name)
 
             if result.get("success"):
                 sent += 1
+                user.last_drip_sent = email_num
+                try:
+                    db.commit()
+                except Exception:
+                    db.rollback()
                 logger.info("drip_sent", email=user.email, drip=email_num)
             else:
                 failed += 1
                 logger.error("drip_failed", email=user.email, drip=email_num,
                              error=result.get("error"))
+
+            import time
+            time.sleep(0.3)  # Rate limit
 
         logger.info("drip_run_complete", sent=sent, skipped=skipped, failed=failed,
                      total=len(free_users))

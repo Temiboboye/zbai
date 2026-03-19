@@ -137,12 +137,26 @@ def run_auto(dry_run: bool = False):
                 skipped += 1
                 continue
 
+            # Skip if this drip was already sent
+            last_sent = getattr(user, 'last_drip_sent', 0) or 0
+            if email_num <= last_sent:
+                print(f"  ⏭️  Skipping {user.email} (already received drip #{last_sent}, next is #{last_sent + 1})")
+                skipped += 1
+                continue
+
             # Extract name from email if not available
             name = user.email.split("@")[0].replace(".", " ").title()
 
             success = send_drip(user.email, name, email_num, dry_run)
             if success:
                 sent += 1
+                # Update tracking
+                if not dry_run:
+                    try:
+                        user.last_drip_sent = email_num
+                        db.commit()
+                    except Exception:
+                        db.rollback()
             else:
                 failed += 1
 
