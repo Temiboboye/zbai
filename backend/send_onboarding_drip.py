@@ -24,6 +24,7 @@ Usage (inside Docker on VPS):
 import argparse
 import sys
 import os
+import time
 from datetime import datetime, timedelta
 
 # Ensure app package is importable
@@ -145,6 +146,9 @@ def run_auto(dry_run: bool = False):
             else:
                 failed += 1
 
+            if not dry_run:
+                time.sleep(0.3)  # Rate limit: max 5 req/sec on Resend
+
         print(f"\n{'📋 DRY RUN ' if dry_run else ''}Summary:")
         print(f"  ✅ Sent: {sent}")
         print(f"  ⏭️  Skipped: {skipped}")
@@ -174,6 +178,9 @@ def run_specific(email_number: int, dry_run: bool = False):
             else:
                 failed += 1
 
+            if not dry_run:
+                time.sleep(0.3)
+
         print(f"\n{'📋 DRY RUN ' if dry_run else ''}Summary:")
         print(f"  ✅ Sent: {sent}")
         print(f"  ❌ Failed: {failed}")
@@ -189,6 +196,7 @@ def run_test(test_email: str, email_number: int = None, send_all: bool = False):
         print(f"\n📧 Sending ALL 5 drip emails to {test_email}\n")
         for num in range(1, 6):
             send_drip(test_email, "Test User", num)
+            time.sleep(0.3)
         print("\n✅ All 5 drip emails sent! Check your inbox.")
     elif email_number:
         print(f"\n📧 Sending test Drip #{email_number} to {test_email}\n")
