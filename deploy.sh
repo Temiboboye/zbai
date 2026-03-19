@@ -159,6 +159,37 @@ finally:
 \""
 }
 
+# Function: Send Onboarding Drip (Auto)
+drip_auto() {
+    echo -e "${YELLOW}📧 Sending onboarding drip emails (auto-detect)...${NC}"
+    run_remote "cd $PROJECT_DIR && docker exec zerobounce_backend python send_onboarding_drip.py --auto"
+    echo -e "${GREEN}✅ Drip emails sent!${NC}"
+}
+
+# Function: Drip Preview (Dry Run)
+drip_preview() {
+    echo -e "${YELLOW}📋 Previewing onboarding drip (dry run)...${NC}"
+    run_remote "cd $PROJECT_DIR && docker exec zerobounce_backend python send_onboarding_drip.py --dry-run"
+}
+
+# Function: Drip Test (Send to admin)
+drip_test() {
+    echo -e "${YELLOW}📧 Sending all 5 test drip emails to admin...${NC}"
+    run_remote "cd $PROJECT_DIR && docker exec zerobounce_backend python send_onboarding_drip.py --test-email workwithtems@gmail.com --all"
+    echo -e "${GREEN}✅ Check your inbox at workwithtems@gmail.com${NC}"
+}
+
+# Function: Send specific drip number
+drip_send() {
+    if [ -z "$2" ]; then
+        echo "Usage: $0 drip-send <1-5>"
+        exit 1
+    fi
+    echo -e "${YELLOW}📧 Sending Drip #$2 to all free users...${NC}"
+    run_remote "cd $PROJECT_DIR && docker exec zerobounce_backend python send_onboarding_drip.py --email-number $2"
+    echo -e "${GREEN}✅ Drip #$2 sent!${NC}"
+}
+
 # Main menu
 case "$1" in
     full)
@@ -181,20 +212,36 @@ case "$1" in
     email)
         test_email
         ;;
+    drip)
+        drip_auto
+        ;;
+    drip-preview)
+        drip_preview
+        ;;
+    drip-test)
+        drip_test
+        ;;
+    drip-send)
+        drip_send "$@"
+        ;;
     backup)
         backup_database
         ;;
     *)
-        echo "Usage: $0 {full|quick|restart|logs|status|email|backup}"
+        echo "Usage: $0 {full|quick|restart|logs|status|email|drip|drip-preview|drip-test|drip-send|backup}"
         echo ""
         echo "Options:"
-        echo "  full     - Full deployment (rebuild all containers)"
-        echo "  quick    - Quick deployment (code changes only)"
-        echo "  restart  - Restart all services"
-        echo "  logs     - View live logs"
-        echo "  status   - Check service status"
-        echo "  email    - Test email service"
-        echo "  backup   - Backup database"
+        echo "  full          - Full deployment (rebuild all containers)"
+        echo "  quick         - Quick deployment (code changes only)"
+        echo "  restart       - Restart all services"
+        echo "  logs          - View live logs"
+        echo "  status        - Check service status"
+        echo "  email         - Test email service"
+        echo "  drip          - Send onboarding drip (auto-detect by signup date)"
+        echo "  drip-preview  - Preview drip (dry run, no emails sent)"
+        echo "  drip-test     - Send all 5 test emails to admin inbox"
+        echo "  drip-send N   - Send specific drip #N (1-5) to all free users"
+        echo "  backup        - Backup database"
         exit 1
         ;;
 esac

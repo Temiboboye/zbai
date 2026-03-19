@@ -783,5 +783,405 @@ class EmailService:
         
         return self._send_email(to, subject, html, text)
 
+    # ── Onboarding Drip Emails ──────────────────────────────────────────
+
+    def _drip_wrapper(self, inner_html: str) -> str:
+        """Wrap drip email content in the standard brand shell."""
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #0f1012; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: #191A23; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; border-bottom: 3px solid #B9FF66; }}
+                .header h1 {{ color: #B9FF66; margin: 0; font-size: 22px; }}
+                .content {{ background: #1a1b23; padding: 30px; color: #e0e0e0; }}
+                .content h2 {{ color: #ffffff; }}
+                .content p {{ color: #cccccc; font-size: 15px; }}
+                .content a {{ color: #B9FF66; }}
+                .button {{ display: inline-block; background: #B9FF66; color: #191A23 !important; padding: 14px 36px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; font-size: 16px; }}
+                .feature-box {{ background: rgba(185,255,102,0.08); border-left: 4px solid #B9FF66; padding: 16px 20px; margin: 16px 0; border-radius: 0 8px 8px 0; }}
+                .feature-box h3 {{ color: #B9FF66; margin: 0 0 6px 0; font-size: 15px; }}
+                .feature-box p {{ color: #cccccc; margin: 0; font-size: 14px; }}
+                .highlight {{ background: rgba(185,255,102,0.12); border: 1px solid rgba(185,255,102,0.3); border-radius: 10px; padding: 20px; margin: 20px 0; text-align: center; }}
+                .highlight .big {{ font-size: 32px; font-weight: 800; color: #B9FF66; }}
+                .footer {{ background: #191A23; color: #888; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; }}
+                .footer a {{ color: #B9FF66; text-decoration: none; }}
+                .divider {{ border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                {inner_html}
+                <div class="footer">
+                    <p>&copy; 2026 ZeroBounce AI &bull; <a href="{self.app_url}">zerobounceai.com</a></p>
+                    <p style="margin-top:8px;font-size:11px;color:#666;">You're receiving this because you signed up at ZeroBounce AI.<br>
+                    <a href="{self.app_url}" style="color:#666;">Unsubscribe</a></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+    def send_drip_1_welcome_quickwin(self, to: str, name: str) -> Dict:
+        """Drip #1 — Welcome + Quick Win: get them to verify 1 email right now"""
+        subject = "Welcome to ZeroBounce AI — verify your first email in 10 seconds ⚡"
+        display_name = name or "there"
+
+        inner = f"""
+        <div class="header">
+            <h1>Welcome to ZeroBounce AI ⚡</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {display_name},</h2>
+            <p>Thanks for signing up! You just joined <strong>the fastest-growing AI email verification platform</strong>.</p>
+
+            <p>Before anything else — let's prove it works. Try verifying one email right now (takes 10 seconds):</p>
+
+            <center>
+                <a href="{self.app_url}/dashboard" class="button">Verify Your First Email →</a>
+            </center>
+
+            <hr class="divider">
+
+            <p><strong>Here's what makes ZeroBounce AI different:</strong></p>
+
+            <div class="feature-box">
+                <h3>🤖 AI-Powered Accuracy (98%+)</h3>
+                <p>Not just SMTP pings — our AI analyzes patterns, reputation, and history.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>📊 Catch-All Confidence Scoring</h3>
+                <p>Instead of "maybe valid," get a 0-100 confidence score on risky domains.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>🔍 Built-In Email Finder</h3>
+                <p>Find + verify emails in one platform. No need for separate tools.</p>
+            </div>
+
+            <p>We'll send you a few tips over the next week to help you get the most out of ZeroBounce AI. Keep an eye on your inbox!</p>
+
+            <p>— The ZeroBounce AI Team</p>
+        </div>
+        """
+
+        text = f"""Welcome to ZeroBounce AI!
+
+Hi {display_name},
+
+Thanks for signing up! Try verifying your first email now: {self.app_url}/dashboard
+
+What makes us different:
+- AI-Powered Accuracy (98%+)
+- Catch-All Confidence Scoring (0-100)
+- Built-In Email Finder
+
+— The ZeroBounce AI Team"""
+
+        return self._send_email(to, subject, self._drip_wrapper(inner), text)
+
+    def send_drip_2_feature_showcase(self, to: str, name: str) -> Dict:
+        """Drip #2 — Feature Showcase: educate on AI features competitors lack"""
+        subject = "3 features your current email verifier doesn't have 🧠"
+        display_name = name or "there"
+
+        inner = f"""
+        <div class="header">
+            <h1>Features That Change Everything 🧠</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {display_name},</h2>
+            <p>Most email verification tools do one thing: ping an SMTP server and hope for the best. That gives you ~90% accuracy.</p>
+
+            <p><strong>ZeroBounce AI does three things no one else does:</strong></p>
+
+            <div class="feature-box">
+                <h3>1. 🎯 AI Pattern Recognition</h3>
+                <p>Our AI learns email patterns across companies. Verified john@acme.com? We can predict that jane@acme.com and mike@acme.com are likely valid too — saving you hours of manual research.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>2. 📈 Catch-All Confidence Scoring</h3>
+                <p>Other tools just say "catch-all detected" and leave you guessing. We give you a <strong>0-100 confidence score</strong> based on SMTP responsiveness, MX strength, and domain reputation — so you can make informed decisions.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>3. 🛡️ Domain Reputation Intelligence</h3>
+                <p>Every domain gets a reputation score based on spam history, blacklist status, and age. gmail.com scores 98/100. sketchy-domain-2024.com scores 12/100. <strong>Know which domains to trust before you send.</strong></p>
+            </div>
+
+            <hr class="divider">
+
+            <p>These aren't "nice to haves." <strong>They're the difference between 90% and 98%+ accuracy</strong> — and that 8% can mean thousands of bounced emails, damaged sender reputation, and wasted ad spend.</p>
+
+            <center>
+                <a href="{self.app_url}/dashboard" class="button">Try These Features Now →</a>
+            </center>
+
+            <p>Tomorrow: We'll show you exactly how much money clean email lists save.</p>
+
+            <p>— The ZeroBounce AI Team</p>
+        </div>
+        """
+
+        text = f"""3 features your current email verifier doesn't have
+
+Hi {display_name},
+
+Most email verification tools do one thing: ping an SMTP server. That gives ~90% accuracy.
+
+ZeroBounce AI does three things no one else does:
+
+1. AI Pattern Recognition — learns email patterns across companies
+2. Catch-All Confidence Scoring — 0-100 score instead of just "maybe"
+3. Domain Reputation Intelligence — trust scores for every domain
+
+These features mean 98%+ accuracy vs 90%. That gap = thousands of bounces avoided.
+
+Try them: {self.app_url}/dashboard
+
+— The ZeroBounce AI Team"""
+
+        return self._send_email(to, subject, self._drip_wrapper(inner), text)
+
+    def send_drip_3_social_proof(self, to: str, name: str) -> Dict:
+        """Drip #3 — Social Proof + ROI: create FOMO with real numbers"""
+        subject = "How companies save $2,000+/month with clean email lists 💰"
+        display_name = name or "there"
+
+        inner = f"""
+        <div class="header">
+            <h1>The ROI of Clean Email Lists 💰</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {display_name},</h2>
+            <p>Let's talk numbers — because this is where email verification pays for itself 10x over.</p>
+
+            <div class="highlight">
+                <p style="color:#888;margin:0 0 8px 0;font-size:13px;">AVERAGE SAVINGS PER MONTH</p>
+                <div class="big">$2,340</div>
+                <p style="color:#aaa;margin:8px 0 0 0;font-size:13px;">for companies verifying 50,000+ emails</p>
+            </div>
+
+            <p><strong>Here's the math:</strong></p>
+
+            <div class="feature-box">
+                <h3>📧 12% of emails are typically invalid</h3>
+                <p>On a 50K list, that's 6,000 bad emails. At $0.05 per email sent (ESP cost), you're wasting <strong>$300/month</strong> sending to addresses that bounce.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>🚫 High bounce rates damage sender reputation</h3>
+                <p>ISPs flag senders with >2% bounce rates. This tanks your deliverability — meaning your <em>valid</em> emails land in spam too. The cascade cost: <strong>$1,500+/month</strong> in lost conversions.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>⚡ Verification cost: ~$40 for 50K emails</h3>
+                <p>Spend $40 to save $2,000+. That's a <strong>50x return</strong>.</p>
+            </div>
+
+            <hr class="divider">
+
+            <p><strong>Companies using ZeroBounce AI report:</strong></p>
+            <ul style="color:#ccc;">
+                <li>47% improvement in email deliverability</li>
+                <li>3.2x higher open rates after list cleaning</li>
+                <li>89% reduction in hard bounces</li>
+            </ul>
+
+            <center>
+                <a href="{self.app_url}/dashboard" class="button">Start Saving Now →</a>
+            </center>
+
+            <p>Coming up next: An exclusive offer you won't want to miss. 👀</p>
+
+            <p>— The ZeroBounce AI Team</p>
+        </div>
+        """
+
+        text = f"""How companies save $2,000+/month with clean email lists
+
+Hi {display_name},
+
+The math:
+- 12% of emails are typically invalid
+- On a 50K list = 6,000 bad emails = $300/month wasted on ESP costs
+- High bounce rates damage sender reputation = $1,500+/month in lost conversions
+- Verification cost: ~$40 for 50K emails = 50x ROI
+
+Companies using ZeroBounce AI report:
+- 47% improvement in email deliverability
+- 3.2x higher open rates after list cleaning
+- 89% reduction in hard bounces
+
+Start saving: {self.app_url}/dashboard
+
+— The ZeroBounce AI Team"""
+
+        return self._send_email(to, subject, self._drip_wrapper(inner), text)
+
+    def send_drip_4_limited_offer(self, to: str, name: str) -> Dict:
+        """Drip #4 — Limited-Time Offer: 30% Founding Member discount"""
+        subject = "🔒 Founding Member Offer: 30% off forever (48 hours only)"
+        display_name = name or "there"
+
+        inner = f"""
+        <div class="header">
+            <h1>🔒 Founding Member Exclusive</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {display_name},</h2>
+            <p>By now you've seen what ZeroBounce AI can do. Today, I want to make you an offer we'll <strong>never repeat</strong>.</p>
+
+            <div class="highlight">
+                <p style="color:#888;margin:0 0 4px 0;font-size:13px;">FOUNDING MEMBER PRICING</p>
+                <div class="big">30% OFF</div>
+                <p style="color:#B9FF66;margin:8px 0 0 0;font-size:15px;font-weight:bold;">Locked in forever. Price never increases.</p>
+            </div>
+
+            <p><strong>What this means for you:</strong></p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;">
+                <tr>
+                    <td style="background:rgba(185,255,102,0.08);padding:14px 18px;border-radius:8px 8px 0 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span style="color:#B9FF66;font-weight:bold;">Starter</span>
+                        <span style="color:#666;text-decoration:line-through;margin-left:12px;">$12</span>
+                        <span style="color:#fff;font-weight:bold;margin-left:8px;font-size:18px;">$8.40</span>
+                        <span style="color:#888;font-size:13px;"> / 1,000 credits</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background:rgba(185,255,102,0.15);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span style="color:#B9FF66;font-weight:bold;">Professional ⭐</span>
+                        <span style="color:#666;text-decoration:line-through;margin-left:12px;">$79</span>
+                        <span style="color:#fff;font-weight:bold;margin-left:8px;font-size:18px;">$55.30</span>
+                        <span style="color:#888;font-size:13px;"> / 10,000 credits</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background:rgba(185,255,102,0.08);padding:14px 18px;border-radius:0 0 8px 8px;">
+                        <span style="color:#B9FF66;font-weight:bold;">Business</span>
+                        <span style="color:#666;text-decoration:line-through;margin-left:12px;">$299</span>
+                        <span style="color:#fff;font-weight:bold;margin-left:8px;font-size:18px;">$209.30</span>
+                        <span style="color:#888;font-size:13px;"> / 50,000 credits</span>
+                    </td>
+                </tr>
+            </table>
+
+            <p style="color:#ff6b6b;font-weight:bold;text-align:center;">⏰ This offer expires in 48 hours</p>
+
+            <center>
+                <a href="{self.app_url}/dashboard" class="button">Lock In Your Founding Member Price →</a>
+            </center>
+
+            <hr class="divider">
+
+            <p><strong>Why "Founding Member"?</strong></p>
+            <p>We're building ZeroBounce AI into the #1 email intelligence platform. Early supporters get rewarded with pricing that <em>never</em> increases — even as we add more features and raise prices for new customers.</p>
+
+            <p>This isn't a gimmick. Once the founding member spots are filled, this discount is gone.</p>
+
+            <p>— The ZeroBounce AI Team</p>
+        </div>
+        """
+
+        text = f"""Founding Member Offer: 30% off forever (48 hours only)
+
+Hi {display_name},
+
+As a Founding Member, lock in 30% off forever:
+
+- Starter: $12 → $8.40 / 1,000 credits
+- Professional: $79 → $55.30 / 10,000 credits  (Most Popular)
+- Business: $299 → $209.30 / 50,000 credits
+
+This price is locked forever — it never increases.
+
+Offer expires in 48 hours.
+
+Claim your price: {self.app_url}/dashboard
+
+— The ZeroBounce AI Team"""
+
+        return self._send_email(to, subject, self._drip_wrapper(inner), text)
+
+    def send_drip_5_final_nudge(self, to: str, name: str) -> Dict:
+        """Drip #5 — Final Nudge / Breakup: last chance + scarcity"""
+        subject = "Last call — your Founding Member spot is expiring"
+        display_name = name or "there"
+
+        inner = f"""
+        <div class="header">
+            <h1>Last Call ⏳</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {display_name},</h2>
+            <p>This is the last email I'll send about the Founding Member offer.</p>
+
+            <p>Quick recap of what you'd get:</p>
+
+            <div class="feature-box">
+                <h3>✅ 30% off every purchase — forever</h3>
+                <p>Your price never increases, even when we raise rates for new customers.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>✅ Full AI-powered verification suite</h3>
+                <p>Catch-all scoring, pattern recognition, domain intelligence, email finder — all included.</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>✅ Early access to new features</h3>
+                <p>Founding Members get first access to everything we build next.</p>
+            </div>
+
+            <div class="highlight">
+                <p style="color:#ff6b6b;font-weight:bold;margin:0;font-size:16px;">⏰ Founding Member pricing ends today</p>
+                <p style="color:#aaa;margin:8px 0 0 0;font-size:13px;">After this, all plans go to full price.</p>
+            </div>
+
+            <center>
+                <a href="{self.app_url}/dashboard" class="button">Claim Your Spot Before It's Gone →</a>
+            </center>
+
+            <hr class="divider">
+
+            <p>If ZeroBounce AI isn't for you right now, no hard feelings at all. Your free account stays active and you can always come back.</p>
+
+            <p>But if you think you'll ever need to verify emails, clean a list, or find prospect contacts — locking in 30% off <em>forever</em> right now is a no-brainer.</p>
+
+            <p>Either way, thanks for checking us out. 🤝</p>
+
+            <p>— The ZeroBounce AI Team</p>
+        </div>
+        """
+
+        text = f"""Last call — your Founding Member spot is expiring
+
+Hi {display_name},
+
+This is my last email about the Founding Member offer.
+
+What you'd get:
+- 30% off every purchase — forever
+- Full AI verification suite (catch-all scoring, pattern recognition, domain intel)
+- Early access to new features
+
+Founding Member pricing ends today. After this, all plans go to full price.
+
+Claim your spot: {self.app_url}/dashboard
+
+If not now, no worries — your free account stays active.
+
+— The ZeroBounce AI Team"""
+
+        return self._send_email(to, subject, self._drip_wrapper(inner), text)
+
+
 # Create singleton instance
 email_service = EmailService()
