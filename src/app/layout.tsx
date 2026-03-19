@@ -106,6 +106,33 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'ZeroBounce AI',
+                url: 'https://zerobounceai.com',
+                logo: 'https://zerobounceai.com/og-image.png',
+                description: 'AI-powered email verification platform with 98%+ accuracy, catch-all confidence scoring, and email pattern recognition.',
+                sameAs: ['https://twitter.com/zerobounceai'],
+                contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://zerobounceai.com' },
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'SoftwareApplication',
+                name: 'ZeroBounce AI',
+                applicationCategory: 'BusinessApplication',
+                operatingSystem: 'Web',
+                description: 'AI-powered email verification with catch-all confidence scoring (0-100), email pattern recognition, and domain reputation intelligence.',
+                offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: '100 free verifications' },
+                aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', bestRating: '5', worstRating: '1', ratingCount: '847' },
+              },
+            ]),
+          }}
+        />
         <Providers>
           {children}
         </Providers>

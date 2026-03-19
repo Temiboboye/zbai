@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/billing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/verify`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
         { url: `${baseUrl}/bulk`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+        { url: `${baseUrl}/email-checker`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+        { url: `${baseUrl}/email-verifier`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+        { url: `${baseUrl}/free-email-verification`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
         { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
         { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
         { url: `${baseUrl}/gdpr`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
@@ -44,6 +47,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/blog/catch-all-email-verification`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
         { url: `${baseUrl}/blog/email-verification-b2b-sales`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
         { url: `${baseUrl}/blog/reduce-email-bounce-rate`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/email-deliverability-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/how-to-clean-email-list`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/blog/how-to-avoid-spam-traps`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     ]
 
     return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...blogPages]

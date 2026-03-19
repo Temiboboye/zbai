@@ -20,6 +20,26 @@ export default function robots(): MetadataRoute.Robots {
                 allow: '/',
                 disallow: ['/api/', '/dashboard/settings/'],
             },
+            {
+                userAgent: 'GPTBot',
+                allow: '/',
+                disallow: ['/api/', '/dashboard/', '/_next/'],
+            },
+            {
+                userAgent: 'ClaudeBot',
+                allow: '/',
+                disallow: ['/api/', '/dashboard/', '/_next/'],
+            },
+            {
+                userAgent: 'PerplexityBot',
+                allow: '/',
+                disallow: ['/api/', '/dashboard/', '/_next/'],
+            },
+            {
+                userAgent: 'Google-Extended',
+                allow: '/',
+                disallow: ['/api/', '/dashboard/', '/_next/'],
+            },
         ],
         sitemap: `${baseUrl}/sitemap.xml`,
     }

@@ -1,0 +1,87 @@
+# ZeroBounce AI
+
+> ZeroBounce AI is an AI-powered email verification platform that delivers 98%+ accuracy with catch-all confidence scoring, email pattern recognition, and domain reputation intelligence. We help businesses verify email addresses, reduce bounce rates, and protect sender reputation.
+
+## Core Product
+
+- [Email Verification Tool](https://zerobounceai.com/free-tools): Free email verification with AI-powered catch-all scoring, disposable detection, and pattern recognition.
+- [Email Checker](https://zerobounceai.com/email-checker): Check if any email address is valid, deliverable, and safe to send.
+- [Email Verifier](https://zerobounceai.com/email-verifier): AI-powered email verification with confidence scoring for catch-all domains.
+- [Free Email Verification](https://zerobounceai.com/free-email-verification): 100 free email verifications with no credit card required.
+
+## Key Features
+
+- **AI Confidence Scoring (0-100)**: Instead of returning "unknown" for catch-all domains (~30% of business emails), we provide a probability score predicting email validity.
+- **Email Pattern Recognition**: AI learns naming conventions across companies to predict valid addresses.
+- **Domain Reputation Intelligence**: Trust scoring for email domains to identify risky senders.
+- **Real-Time API**: Sub-2-second email verification for signup forms and CRM integrations.
+- **Bulk Verification**: Upload CSV files and verify thousands of emails at once.
+- **Email Finder**: Find email addresses by name and company domain.
+- **Disposable Email Detection**: Identify temporary emails from 100+ throwaway providers.
+
+## Pricing
+
+- **Free Tier**: 100 free verifications, no credit card required
+- **Starter**: $9/month for 5,000 verifications
+- **Growth**: $29/month for 25,000 verifications
+- **Scale**: $79/month for 100,000 verifications
+- **Enterprise**: Custom pricing for high-volume needs
+
+## Provider-Specific Verification Guides
+
+- [Gmail Verification](https://zerobounceai.com/verify/gmail): 99.2% accuracy on Gmail addresses
+- [Outlook Verification](https://zerobounceai.com/verify/outlook): Catch-all scoring for Microsoft 365
+- [Yahoo Verification](https://zerobounceai.com/verify/yahoo): 98.5% accuracy
+- [ProtonMail Verification](https://zerobounceai.com/verify/protonmail): Privacy-focused verification
+- [iCloud Verification](https://zerobounceai.com/verify/icloud): Apple ecosystem handling
+- [Zoho Verification](https://zerobounceai.com/verify/zoho): SMB domain verification
+
+## Competitor Comparisons
+
+- [vs ZeroBounce](https://zerobounceai.com/compare/zerobounce)
+- [vs NeverBounce](https://zerobounceai.com/compare/neverbounce)
+- [vs Hunter.io](https://zerobounceai.com/compare/hunter-io)
+- [vs Clearout](https://zerobounceai.com/compare/clearout)
+- [vs Kickbox](https://zerobounceai.com/compare/kickbox)
+- [vs Emailable](https://zerobounceai.com/compare/emailable)
+- [All Comparisons](https://zerobounceai.com/comparison)
+
+## Industry Solutions
+
+- [SaaS](https://zerobounceai.com/email-verification-for/saas)
+- [E-Commerce](https://zerobounceai.com/email-verification-for/ecommerce)
+- [Real Estate](https://zerobounceai.com/email-verification-for/real-estate)
+- [Agencies](https://zerobounceai.com/email-verification-for/agencies)
+- [Recruiters](https://zerobounceai.com/email-verification-for/recruiters)
+- [Startups](https://zerobounceai.com/email-verification-for/startups)
+
+## Blog & Guides
+
+- [Email Verification Guide](https://zerobounceai.com/blog/email-verification-guide): Comprehensive guide to email verification
+- [Catch-All Email Verification](https://zerobounceai.com/blog/catch-all-email-verification): How AI scoring handles catch-all domains
+- [Email Verification for B2B Sales](https://zerobounceai.com/blog/email-verification-b2b-sales): Sales-specific strategies
+- [How to Reduce Email Bounce Rate](https://zerobounceai.com/blog/reduce-email-bounce-rate): 7 proven strategies
+
+## Company Email Format Database
+
+Over 450 company email format lookups available at:
+[Email Format Lookup](https://zerobounceai.com/free-tools)
+
+Popular lookups: [Google](https://zerobounceai.com/email-format/google), [Microsoft](https://zerobounceai.com/email-format/microsoft), [Amazon](https://zerobounceai.com/email-format/amazon), [Apple](https://zerobounceai.com/email-format/apple), [Salesforce](https://zerobounceai.com/email-format/salesforce)
+
+## API Documentation
+
+- Base URL: `https://api.zerobounceai.com`
+- Authentication: API key in header
+- Single verification: `POST /verify-email`
+- Bulk verification: Upload via dashboard
+- Response includes: status, confidence score, is_catch_all, is_disposable, is_role_based
+
+## Contact & Links
+
+- Website: https://zerobounceai.com
+- Sign Up: https://zerobounceai.com/signup
+- Pricing: https://zerobounceai.com/#pricing
+- GDPR: https://zerobounceai.com/gdpr
+- Privacy: https://zerobounceai.com/privacy
+- Terms: https://zerobounceai.com/terms
