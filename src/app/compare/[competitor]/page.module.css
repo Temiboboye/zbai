@@ -1,0 +1,438 @@
+.main {
+    min-height: 100vh;
+    background: var(--dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero */
+.hero {
+    padding: 120px 0 60px;
+    text-align: center;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: 24px;
+}
+
+.badge span {
+    font-size: 18px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--white);
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 32px;
+}
+
+.heroCta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Feature Comparison Table */
+.featureTable {
+    padding: 80px 0;
+}
+
+.featureTable h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.comparisonTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--gray-800);
+}
+
+.comparisonTable thead th {
+    background: var(--gray-900);
+    padding: 20px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    text-align: left;
+    border-bottom: 2px solid var(--gray-800);
+}
+
+.comparisonTable thead th:first-child {
+    width: 200px;
+}
+
+.comparisonTable thead th:nth-child(2) {
+    background: linear-gradient(135deg, rgba(185, 255, 102, 0.15), rgba(185, 255, 102, 0.05));
+    color: var(--green);
+    border-bottom-color: var(--green);
+}
+
+.comparisonTable tbody td {
+    padding: 16px 24px;
+    font-size: 15px;
+    color: var(--gray-300);
+    border-bottom: 1px solid var(--gray-800);
+    background: var(--dark);
+}
+
+.comparisonTable tbody td:nth-child(2) {
+    background: rgba(185, 255, 102, 0.03);
+}
+
+.comparisonTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.featureLabel {
+    font-weight: 600;
+    color: var(--white);
+}
+
+.check {
+    color: var(--green);
+    font-size: 20px;
+}
+
+.cross {
+    color: var(--gray-600);
+    font-size: 20px;
+}
+
+/* Why Switch Section */
+.whySwitch {
+    padding: 80px 0;
+    background: var(--gray-900);
+}
+
+.whySwitchContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.whySwitch h2 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--white);
+}
+
+.whySwitchText {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--gray-300);
+    margin-bottom: 40px;
+}
+
+/* Pros/Cons Grid */
+.prosConsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+}
+
+.prosCard, .consCard {
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 16px;
+    padding: 32px;
+}
+
+.prosCard {
+    border-top: 3px solid var(--green);
+}
+
+.consCard {
+    border-top: 3px solid #ff5f56;
+}
+
+.prosCard h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 16px;
+}
+
+.consCard h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff5f56;
+    margin-bottom: 16px;
+}
+
+.prosCard ul, .consCard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.prosCard li, .consCard li {
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--gray-300);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.prosCard li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.consCard li::before {
+    content: '✗';
+    color: #ff5f56;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* AI Advantages Section */
+.advantages {
+    padding: 80px 0;
+}
+
+.advantages h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.advantagesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.advantageCard {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+}
+
+.advantageCard:hover {
+    border-color: var(--green);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(185, 255, 102, 0.1);
+}
+
+.advantageIcon {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+.advantageCard h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--white);
+}
+
+.advantageCard p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-400);
+}
+
+/* CTA Section */
+.cta {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--gray-900), var(--dark));
+}
+
+.ctaBox {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 64px 48px;
+    background: var(--dark);
+    border: 2px solid var(--green);
+    border-radius: 24px;
+    box-shadow: 0 16px 64px rgba(185, 255, 102, 0.1);
+}
+
+.ctaBox h2 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.ctaBox p {
+    font-size: 18px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.trustBadges {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--gray-400);
+    margin-top: 24px;
+}
+
+/* SEO Links Section */
+.seoLinks {
+    padding: 60px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.seoLinks h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.linksGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.linksGrid a {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 8px;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.linksGrid a:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+/* FAQ Section */
+.faq {
+    padding: 80px 0;
+}
+
+.faq h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.faqList {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faqItem {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.faqItem h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.faqItem p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-400);
+}
+
+/* Footer */
+.footer {
+    padding: 40px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.footer p {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero { padding: 80px 0 40px; }
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 16px; }
+    .featureTable h2, .whySwitch h2, .advantages h2, .faq h2, .ctaBox h2 { font-size: 28px; }
+    .prosConsGrid { grid-template-columns: 1fr; }
+    .ctaBox { padding: 40px 24px; }
+    .ctaButtons { flex-direction: column; }
+    .ctaButtons a { width: 100%; }
+    .advantagesGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 26px; }
+    .badge { font-size: 12px; padding: 6px 16px; }
+}
