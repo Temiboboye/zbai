@@ -207,6 +207,25 @@ export default async function CompanyEmailFormatPage({ params }: PageProps) {
                             </a>
                         ))}
                     </div>
+
+                    {/* Cross-category links */}
+                    <h3 style={{ marginTop: '32px' }}>📧 Verify Emails by Provider</h3>
+                    <div className={styles.relatedGrid}>
+                        <a href="/verify/gmail">Verify Gmail</a>
+                        <a href="/verify/outlook">Verify Outlook</a>
+                        <a href="/verify/yahoo">Verify Yahoo</a>
+                        <a href="/verify/icloud">Verify iCloud</a>
+                        <a href="/verify/catch-all">Catch-All Guide</a>
+                        <a href="/verify/disposable">Disposable Guide</a>
+                    </div>
+
+                    <h3 style={{ marginTop: '24px' }}>🏆 Compare Verification Tools</h3>
+                    <div className={styles.relatedGrid}>
+                        <a href="/compare/neverbounce">vs NeverBounce</a>
+                        <a href="/compare/hunter-io">vs Hunter.io</a>
+                        <a href="/compare/clearout">vs Clearout</a>
+                        <a href="/comparison">Full Comparison →</a>
+                    </div>
                 </div>
             </section>
 
@@ -218,3 +237,4 @@ export default async function CompanyEmailFormatPage({ params }: PageProps) {
         </main>
     )
 }
+

@@ -1,5 +1,8 @@
 import Navbar from "@/components/Navbar";
 import ComparisonTable from "@/components/ComparisonTable";
+import { competitors } from "@/app/data/competitors";
+import { providers } from "@/app/data/providers";
+import { industries } from "@/app/data/industries";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -155,6 +158,46 @@ export default function ComparisonPage() {
                             <span>✓ No Credit Card</span>
                             <span>✓ Cancel Anytime</span>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Detailed Comparisons */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h2>Detailed Head-to-Head Comparisons</h2>
+                    <p className={styles.seoLinksSubtitle}>
+                        See exactly how ZeroBounce AI stacks up against each competitor
+                    </p>
+                    <div className={styles.seoLinksGrid}>
+                        {competitors.map(c => (
+                            <a key={c.slug} href={`/compare/${c.slug}`} className={styles.seoLinkCard}>
+                                <strong>ZeroBounce AI vs {c.name}</strong>
+                                <span>Full comparison →</span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Provider Guides */}
+            <section className={styles.seoLinksAlt}>
+                <div className={styles.container}>
+                    <h3>Email Verification by Provider</h3>
+                    <div className={styles.seoLinksRow}>
+                        {providers.map(p => (
+                            <a key={p.slug} href={`/verify/${p.slug}`}>
+                                {p.icon} Verify {p.name}
+                            </a>
+                        ))}
+                    </div>
+                    <h3 style={{ marginTop: '32px' }}>Email Verification by Industry</h3>
+                    <div className={styles.seoLinksRow}>
+                        {industries.map(ind => (
+                            <a key={ind.slug} href={`/email-verification-for/${ind.slug}`}>
+                                {ind.icon} {ind.name}
+                            </a>
+                        ))}
                     </div>
                 </div>
             </section>

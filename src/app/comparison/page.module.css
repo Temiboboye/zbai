@@ -296,3 +296,97 @@
         font-size: 18px;
     }
 }
+
+/* SEO Internal Links */
+.seoLinks {
+    padding: 80px 0;
+    border-top: 1px solid var(--gray-800);
+}
+
+.seoLinks h2 {
+    font-size: 32px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--white);
+}
+
+.seoLinksSubtitle {
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 16px;
+    margin-bottom: 40px;
+}
+
+.seoLinksGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.seoLinkCard {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 24px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.seoLinkCard:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+}
+
+.seoLinkCard strong {
+    color: var(--white);
+    font-size: 15px;
+}
+
+.seoLinkCard span {
+    color: var(--green);
+    font-size: 13px;
+}
+
+.seoLinksAlt {
+    padding: 48px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.seoLinksAlt h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.seoLinksRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.seoLinksRow a {
+    padding: 6px 14px;
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 6px;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.seoLinksRow a:hover {
+    border-color: var(--green);
+    color: var(--green);
+}

@@ -348,3 +348,41 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* SEO Internal Links */
+.seoLinks {
+    padding: 48px 0 80px;
+    border-top: 1px solid var(--surface-border);
+}
+
+.seoLinks h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.seoLinksGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.seoLinksGrid a {
+    padding: 6px 14px;
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.seoLinksGrid a:hover {
+    border-color: var(--green);
+    color: var(--green);
+}

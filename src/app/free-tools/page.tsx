@@ -456,6 +456,33 @@ export default function FreeToolsPage() {
                     </div>
                 </div>
             </section>
+
+            {/* SEO: Provider Guides */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>📧 Email Verification Guides by Provider</h3>
+                    <div className={styles.seoLinksGrid}>
+                        <a href="/verify/gmail">Verify Gmail Emails</a>
+                        <a href="/verify/outlook">Verify Outlook Emails</a>
+                        <a href="/verify/yahoo">Verify Yahoo Emails</a>
+                        <a href="/verify/icloud">Verify iCloud Emails</a>
+                        <a href="/verify/protonmail">Verify ProtonMail Emails</a>
+                        <a href="/verify/zoho">Verify Zoho Emails</a>
+                        <a href="/verify/catch-all">Catch-All Domain Guide</a>
+                        <a href="/verify/disposable">Disposable Email Guide</a>
+                    </div>
+                    <h3 style={{ marginTop: '24px' }}>🏆 Compare Email Verification Tools</h3>
+                    <div className={styles.seoLinksGrid}>
+                        <a href="/compare/neverbounce">vs NeverBounce</a>
+                        <a href="/compare/hunter-io">vs Hunter.io</a>
+                        <a href="/compare/clearout">vs Clearout</a>
+                        <a href="/compare/zerobounce">vs ZeroBounce</a>
+                        <a href="/compare/kickbox">vs Kickbox</a>
+                        <a href="/compare/millionverifier">vs MillionVerifier</a>
+                        <a href="/comparison">Full Comparison Table →</a>
+                    </div>
+                </div>
+            </section>
         </main>
     );
 }
