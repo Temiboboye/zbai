@@ -1,0 +1,365 @@
+.main {
+    min-height: 100vh;
+    background: var(--dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero */
+.hero {
+    padding: 120px 0 60px;
+    text-align: center;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.industryBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: 24px;
+}
+
+.industryIcon {
+    font-size: 22px;
+}
+
+.hero h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--white);
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 32px;
+}
+
+.heroCta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Stats Bar */
+.statsBar {
+    padding: 40px 0;
+    border-top: 1px solid var(--gray-800);
+    border-bottom: 1px solid var(--gray-800);
+}
+
+.statsGrid {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+
+.statItem {
+    text-align: center;
+}
+
+.statValue {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--green);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.statLabel {
+    font-size: 13px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Pain Points */
+.painPoints {
+    padding: 80px 0;
+    background: var(--gray-900);
+}
+
+.painPoints h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.painGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.painCard {
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-top: 3px solid #ff5f56;
+    border-radius: 12px;
+    padding: 28px;
+}
+
+.painCard h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+}
+
+.painCard p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-400);
+}
+
+/* Benefits */
+.benefits {
+    padding: 80px 0;
+}
+
+.benefits h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.benefitCard {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-top: 3px solid var(--green);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.3s;
+}
+
+.benefitCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(185, 255, 102, 0.1);
+}
+
+.benefitCard h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 10px;
+}
+
+.benefitCard p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-300);
+}
+
+/* Use Cases */
+.useCases {
+    padding: 80px 0;
+    background: var(--gray-900);
+}
+
+.useCases h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.useCasesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.useCaseChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--dark);
+    border: 1px solid var(--gray-800);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: var(--gray-300);
+}
+
+.useCaseChip::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+}
+
+/* FAQ */
+.faq {
+    padding: 80px 0;
+}
+
+.faq h2 {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--white);
+}
+
+.faqList {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faqItem {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.faqItem h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.faqItem p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-400);
+}
+
+/* CTA */
+.cta {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--gray-900), var(--dark));
+}
+
+.ctaBox {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 40px;
+    background: var(--dark);
+    border: 2px solid var(--green);
+    border-radius: 24px;
+    box-shadow: 0 16px 64px rgba(185, 255, 102, 0.1);
+}
+
+.ctaBox h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.ctaBox p {
+    font-size: 17px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.ctaButtons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Links */
+.seoLinks {
+    padding: 48px 0;
+    border-top: 1px solid var(--gray-800);
+}
+
+.seoLinks h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.linksGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.linksGrid a {
+    padding: 6px 14px;
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 6px;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.linksGrid a:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+/* Footer */
+.footer {
+    padding: 40px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.footer p {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero { padding: 80px 0 40px; }
+    .hero h1 { font-size: 30px; }
+    .statsGrid { gap: 24px; }
+    .painGrid, .benefitsGrid { grid-template-columns: 1fr; }
+    .painPoints h2, .benefits h2, .useCases h2, .faq h2, .ctaBox h2 { font-size: 26px; }
+    .ctaBox { padding: 32px 20px; }
+    .ctaButtons { flex-direction: column; }
+}

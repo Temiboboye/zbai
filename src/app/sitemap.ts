@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getAllCompetitorSlugs } from './data/competitors'
+import { getAllProviderSlugs } from './data/providers'
+import { getAllIndustrySlugs } from './data/industries'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zerobounceai.com'
@@ -28,6 +30,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
     }))
 
-    return [...corePages, ...competitorPages]
-}
+    // pSEO: Email provider verification guides
+    const providerPages: MetadataRoute.Sitemap = getAllProviderSlugs().map(slug => ({
+        url: `${baseUrl}/verify/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+    }))
 
+    // pSEO: Industry use-case pages
+    const industryPages: MetadataRoute.Sitemap = getAllIndustrySlugs().map(slug => ({
+        url: `${baseUrl}/email-verification-for/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+    }))
+
+    return [...corePages, ...competitorPages, ...providerPages, ...industryPages]
+}

@@ -1,0 +1,288 @@
+export interface Provider {
+  slug: string
+  name: string
+  icon: string
+  domain: string
+  description: string
+  userBase: string
+  isCatchAll: boolean
+  difficulty: 'Easy' | 'Medium' | 'Hard'
+  tips: string[]
+  commonPatterns: string[]
+  challenges: string[]
+  faq: { q: string; a: string }[]
+}
+
+export const providers: Provider[] = [
+  {
+    slug: 'gmail',
+    name: 'Gmail',
+    icon: '📧',
+    domain: 'gmail.com',
+    description: 'Gmail is the world\'s most popular email provider with over 1.8 billion users. Gmail emails are generally straightforward to verify because Google provides clear SMTP responses.',
+    userBase: '1.8B+ users',
+    isCatchAll: false,
+    difficulty: 'Easy',
+    tips: [
+      'Gmail accounts return definitive valid/invalid SMTP responses',
+      'Google Workspace (business Gmail) domains may behave differently',
+      'Dot placement in Gmail addresses doesn\'t matter (j.doe = jdoe)',
+      'Gmail ignores everything after a + sign (user+tag@gmail.com = user@gmail.com)',
+      'Inactive Gmail accounts can be reclaimed by Google after 2 years',
+    ],
+    commonPatterns: ['firstname.lastname', 'firstnamelastname', 'firstinitial.lastname', 'nickname'],
+    challenges: ['Google Workspace domains may have catch-all enabled', 'Rate limiting on high-volume verification'],
+    faq: [
+      { q: 'How accurate is Gmail email verification?', a: 'Gmail verification is highly accurate (99%+) because Google provides clear SMTP accept/reject responses. ZeroBounce AI can definitively tell you if a Gmail address exists.' },
+      { q: 'Does Gmail support catch-all?', a: 'Personal Gmail (gmail.com) does not support catch-all. However, Google Workspace (business email on custom domains) can have catch-all enabled, which is where ZeroBounce AI\'s confidence scoring becomes essential.' },
+      { q: 'Can I verify Gmail addresses in bulk?', a: 'Yes. ZeroBounce AI supports bulk Gmail verification. Upload a CSV with thousands of Gmail addresses and get results with 98%+ accuracy in minutes.' },
+    ],
+  },
+  {
+    slug: 'outlook',
+    name: 'Outlook / Microsoft 365',
+    icon: '📬',
+    domain: 'outlook.com',
+    description: 'Microsoft\'s email platform powers both personal Outlook accounts and millions of business emails via Microsoft 365 (formerly Office 365). Verification requires handling both consumer and enterprise configurations.',
+    userBase: '400M+ users',
+    isCatchAll: true,
+    difficulty: 'Medium',
+    tips: [
+      'Personal Outlook.com addresses are straightforward to verify',
+      'Microsoft 365 business domains frequently use catch-all configurations',
+      'Hotmail.com and live.com addresses route through the same Microsoft infrastructure',
+      'Microsoft may rate-limit verification requests — use batch processing',
+      'ZeroBounce AI\'s confidence scoring is critical for M365 catch-all domains',
+    ],
+    commonPatterns: ['firstname.lastname', 'firstnamelastname', 'firstinitial.lastname'],
+    challenges: ['M365 catch-all domains are extremely common', 'Microsoft implements aggressive rate limiting', 'Some M365 tenants have custom SMTP configurations'],
+    faq: [
+      { q: 'Why is Microsoft 365 email verification tricky?', a: 'Many M365 domains have catch-all enabled, meaning the server accepts all emails regardless of whether the mailbox exists. ZeroBounce AI\'s confidence scoring gives you a 0-100 score to determine validity.' },
+      { q: 'Can I verify Hotmail and Live.com addresses?', a: 'Yes. Hotmail.com, live.com, and outlook.com all use Microsoft\'s infrastructure. ZeroBounce AI verifies all of these with the same high accuracy.' },
+      { q: 'How does ZeroBounce AI handle M365 catch-all?', a: 'Our AI analyzes patterns across millions of M365 verifications to assign a confidence score (0-100). A score of 80+ means the email is very likely valid, even on a catch-all domain.' },
+    ],
+  },
+  {
+    slug: 'yahoo',
+    name: 'Yahoo Mail',
+    icon: '📮',
+    domain: 'yahoo.com',
+    description: 'Yahoo Mail remains one of the largest email providers globally. Yahoo emails have specific verification nuances including legacy accounts and regional domains.',
+    userBase: '225M+ users',
+    isCatchAll: false,
+    difficulty: 'Easy',
+    tips: [
+      'Yahoo provides clear SMTP validation responses',
+      'Regional Yahoo domains (yahoo.co.uk, yahoo.co.jp) use the same infrastructure',
+      'Ymail.com and rocketmail.com are Yahoo-owned aliases',
+      'Yahoo accounts can be deactivated after 12 months of inactivity',
+      'Disposable Yahoo addresses (created with plus signs) may behave differently',
+    ],
+    commonPatterns: ['firstname_lastname', 'firstnamelastname', 'nickname_numbers'],
+    challenges: ['Inactive Yahoo accounts may still appear valid briefly', 'Rate limiting on bulk verification'],
+    faq: [
+      { q: 'How accurate is Yahoo email verification?', a: 'Yahoo email verification is very accurate. Yahoo provides definitive SMTP responses that ZeroBounce AI leverages for 98%+ accuracy on Yahoo addresses.' },
+      { q: 'What about ymail.com and rocketmail.com?', a: 'Both are Yahoo-owned domains and are verified using the same process. ZeroBounce AI handles all Yahoo-family domains automatically.' },
+      { q: 'Can Yahoo emails become invalid?', a: 'Yes. Yahoo deactivates accounts after 12 months of inactivity and may reassign usernames. Regular re-verification is recommended for Yahoo email lists.' },
+    ],
+  },
+  {
+    slug: 'icloud',
+    name: 'iCloud Mail',
+    icon: '☁️',
+    domain: 'icloud.com',
+    description: 'Apple\'s iCloud Mail is used by hundreds of millions of Apple device owners. iCloud has unique verification challenges due to Apple\'s privacy-first approach.',
+    userBase: '300M+ users',
+    isCatchAll: false,
+    difficulty: 'Medium',
+    tips: [
+      'iCloud.com, me.com, and mac.com addresses all use Apple\'s mail infrastructure',
+      'Apple implements stricter SMTP policies than most providers',
+      'iCloud has aggressive anti-spam that may affect verification accuracy',
+      'Apple\'s Hide My Email feature creates random relay addresses',
+      'Use ZeroBounce AI for improved accuracy on Apple domains',
+    ],
+    commonPatterns: ['firstname.lastname', 'firstname', 'firstinitial.lastname'],
+    challenges: ['Apple\'s privacy features can mask true email validity', 'Hide My Email relay addresses are temporary', 'Stricter rate limiting compared to other providers'],
+    faq: [
+      { q: 'Can I verify icloud.com email addresses?', a: 'Yes. ZeroBounce AI verifies icloud.com, me.com, and mac.com addresses. Apple\'s SMTP servers provide responses that our AI interprets for accurate verification.' },
+      { q: 'What about Apple Hide My Email addresses?', a: 'Hide My Email creates random relay addresses (@privaterelay.appleid.com). These are technically valid but may be temporary. ZeroBounce AI flags these so you can decide how to handle them.' },
+      { q: 'Why is iCloud verification harder than Gmail?', a: 'Apple prioritizes privacy and implements stricter connection policies. ZeroBounce AI\'s advanced SMTP handling is optimized for Apple\'s infrastructure to maximize accuracy.' },
+    ],
+  },
+  {
+    slug: 'protonmail',
+    name: 'ProtonMail',
+    icon: '🔐',
+    domain: 'protonmail.com',
+    description: 'ProtonMail is the leading privacy-focused email provider. Its end-to-end encryption and Swiss privacy laws create unique verification challenges.',
+    userBase: '100M+ users',
+    isCatchAll: false,
+    difficulty: 'Hard',
+    tips: [
+      'ProtonMail accepts all emails at the SMTP level for privacy reasons',
+      'Standard SMTP verification alone cannot confirm ProtonMail addresses',
+      'protonmail.com, proton.me, and pm.me are all ProtonMail domains',
+      'ZeroBounce AI\'s pattern recognition helps identify likely valid ProtonMail addresses',
+      'Consider supplementing verification with engagement data for ProtonMail addresses',
+    ],
+    commonPatterns: ['firstname.lastname', 'firstname', 'privacy-conscious handles'],
+    challenges: ['ProtonMail accepts all emails for privacy — acts like catch-all', 'No way to definitively confirm individual address existence', 'Pattern recognition is the best approach'],
+    faq: [
+      { q: 'Can email verification tools verify ProtonMail addresses?', a: 'ProtonMail accepts all emails at the SMTP level for privacy, making traditional verification impossible. ZeroBounce AI uses AI pattern recognition to score the likelihood that a ProtonMail address is valid.' },
+      { q: 'Why does ProtonMail accept all emails?', a: 'ProtonMail\'s privacy model prevents external services from confirming or denying the existence of any account. This is a deliberate design choice to protect user privacy.' },
+      { q: 'What\'s the best approach for ProtonMail verification?', a: 'Use ZeroBounce AI\'s confidence scoring combined with domain validation. Our AI assigns a probability score based on pattern analysis across known ProtonMail accounts.' },
+    ],
+  },
+  {
+    slug: 'zoho',
+    name: 'Zoho Mail',
+    icon: '🏢',
+    domain: 'zoho.com',
+    description: 'Zoho Mail is a popular business email platform used by millions of SMBs worldwide. Zoho offers both free and premium email hosting with custom domain support.',
+    userBase: '90M+ users',
+    isCatchAll: true,
+    difficulty: 'Medium',
+    tips: [
+      'Zoho free accounts (zoho.com) are straightforward to verify',
+      'Zoho-hosted business domains may have catch-all enabled',
+      'Zoho implements rate limiting — batch your verification requests',
+      'ZeroBounce AI\'s catch-all scoring is valuable for Zoho business domains',
+      'Regional Zoho domains (zoho.in, zoho.eu) use the same infrastructure',
+    ],
+    commonPatterns: ['firstname', 'firstname.lastname', 'info', 'admin'],
+    challenges: ['Business domains on Zoho frequently use catch-all', 'Rate limiting on verification requests'],
+    faq: [
+      { q: 'How do I verify Zoho-hosted business emails?', a: 'ZeroBounce AI automatically detects Zoho-hosted domains and applies appropriate verification methods. For catch-all Zoho domains, our AI confidence scoring provides a 0-100 validity score.' },
+      { q: 'Do Zoho business domains use catch-all?', a: 'Many do. Zoho makes it easy to enable catch-all, which is why many SMBs have it turned on. ZeroBounce AI\'s confidence scoring turns "unknown" catch-all results into actionable data.' },
+    ],
+  },
+  {
+    slug: 'godaddy',
+    name: 'GoDaddy Email',
+    icon: '🌐',
+    domain: 'godaddy.com',
+    description: 'GoDaddy provides email hosting through Microsoft 365 partnerships. Millions of small business websites use GoDaddy-hosted email.',
+    userBase: '20M+ domains',
+    isCatchAll: true,
+    difficulty: 'Medium',
+    tips: [
+      'GoDaddy email is primarily Microsoft 365 under the hood',
+      'Many GoDaddy-hosted domains have catch-all enabled by default',
+      'GoDaddy email forwards often mask the true destination',
+      'Use ZeroBounce AI\'s M365 catch-all scoring for GoDaddy domains',
+      'Small business domains on GoDaddy have high turnover rates',
+    ],
+    commonPatterns: ['info@', 'admin@', 'contact@', 'firstname@'],
+    challenges: ['High catch-all rate', 'Domains may expire or change hosting frequently', 'M365 backend means same challenges as Outlook'],
+    faq: [
+      { q: 'How do I verify GoDaddy-hosted email addresses?', a: 'GoDaddy primarily uses Microsoft 365 for email. ZeroBounce AI applies the same AI-powered catch-all scoring to accurately verify GoDaddy-hosted addresses.' },
+      { q: 'Why do many GoDaddy emails show as catch-all?', a: 'GoDaddy makes catch-all easy to enable, and many small business owners turn it on to avoid missing emails. ZeroBounce AI\'s confidence scoring helps you determine which emails are real.' },
+    ],
+  },
+  {
+    slug: 'aol',
+    name: 'AOL Mail',
+    icon: '📨',
+    domain: 'aol.com',
+    description: 'AOL Mail is a legacy email provider now owned by Yahoo (Verizon). While declining in usage, millions of AOL addresses remain active, especially among older demographics.',
+    userBase: '25M+ users',
+    isCatchAll: false,
+    difficulty: 'Easy',
+    tips: [
+      'AOL uses Yahoo\'s infrastructure (same verification approach)',
+      'AOL addresses are straightforward to verify with clear SMTP responses',
+      'aim.com is an AOL-owned alias domain',
+      'AOL accounts have higher bounce rates due to dormant accounts',
+      'Regular re-verification is recommended for AOL-heavy lists',
+    ],
+    commonPatterns: ['firstnamelastname', 'nickname_numbers', 'screenname'],
+    challenges: ['Higher proportion of inactive/dormant accounts', 'Legacy accounts may have been recycled'],
+    faq: [
+      { q: 'Are AOL email addresses still valid?', a: 'Yes, millions of AOL addresses are still active. However, AOL has a higher rate of dormant accounts. ZeroBounce AI verifies AOL addresses with the same 98%+ accuracy and flags potentially inactive accounts.' },
+      { q: 'Does AOL use Yahoo\'s infrastructure?', a: 'Yes. Since Verizon acquired both, AOL and Yahoo share email infrastructure. ZeroBounce AI handles both providers with the same high accuracy.' },
+    ],
+  },
+  {
+    slug: 'catch-all',
+    name: 'Catch-All Domains',
+    icon: '🎯',
+    domain: 'any domain',
+    description: 'Catch-all domains accept emails to any address, making verification challenging. This is where ZeroBounce AI\'s AI-powered confidence scoring provides the biggest advantage over competitors.',
+    userBase: '~30% of business domains',
+    isCatchAll: true,
+    difficulty: 'Hard',
+    tips: [
+      'Catch-all domains accept ALL emails — no traditional way to verify individual addresses',
+      'Most competitors return "unknown" or "risky" for catch-all domains',
+      'ZeroBounce AI\'s confidence scoring gives you a 0-100 score',
+      'Scores above 80 are generally safe to email',
+      'Pattern recognition across similar companies improves accuracy',
+      'Catch-all status can change — re-verify periodically',
+    ],
+    commonPatterns: ['firstname.lastname@', 'firstname@', 'info@', 'hello@'],
+    challenges: ['No SMTP-level way to confirm individual addresses', 'Binary verification tools fail completely on catch-all', 'Many B2B domains use catch-all'],
+    faq: [
+      { q: 'What is a catch-all email domain?', a: 'A catch-all domain is configured to accept emails sent to ANY address at that domain, even addresses that don\'t have a mailbox. Traditional SMTP verification cannot distinguish real from fake addresses on catch-all domains.' },
+      { q: 'How does ZeroBounce AI handle catch-all domains?', a: 'ZeroBounce AI uses AI-powered confidence scoring, analyzing patterns across millions of verifications to assign a 0-100 probability score that a catch-all address is genuinely valid. This turns "unknown" into actionable data.' },
+      { q: 'Should I send to catch-all email addresses?', a: 'It depends on the confidence score. ZeroBounce AI addresses with scores above 80 have a high probability of being real. Scores below 40 should generally be avoided. This approach maximizes deliverability while minimizing bounces.' },
+    ],
+  },
+  {
+    slug: 'custom-domain',
+    name: 'Custom Domain Emails',
+    icon: '🏷️',
+    domain: 'yourcompany.com',
+    description: 'Custom domain business emails are the most diverse category. They can be hosted on Google Workspace, Microsoft 365, Zoho, or self-hosted servers — each requiring different verification approaches.',
+    userBase: 'Millions of businesses',
+    isCatchAll: true,
+    difficulty: 'Medium',
+    tips: [
+      'First identify the hosting provider via MX records',
+      'Google Workspace domains on custom domains are easy to verify',
+      'Self-hosted email servers vary widely in SMTP behavior',
+      'ZeroBounce AI auto-detects the email provider from MX records',
+      'Domain reputation scoring helps assess the legitimacy of the domain itself',
+      'Pattern recognition works especially well for enterprise custom domains',
+    ],
+    commonPatterns: ['firstname.lastname@', 'firstname@', 'firstinitial.lastname@', 'info@', 'hello@'],
+    challenges: ['Huge variety of hosting configurations', 'Self-hosted servers may have unusual responses', 'Catch-all prevalence varies by hosting provider'],
+    faq: [
+      { q: 'How does ZeroBounce AI verify custom domain emails?', a: 'ZeroBounce AI first identifies the email hosting provider via MX record lookup, then applies provider-specific verification strategies. For catch-all domains, our AI confidence scoring provides a probability score.' },
+      { q: 'What if a custom domain uses a self-hosted email server?', a: 'Self-hosted servers vary widely. ZeroBounce AI handles this by analyzing SMTP response patterns and applying domain reputation intelligence to determine email validity.' },
+      { q: 'Can ZeroBounce AI detect the email provider of a custom domain?', a: 'Yes. Our domain intelligence automatically detects whether a custom domain is hosted on Google Workspace, Microsoft 365, Zoho, or other providers, and applies the optimal verification approach.' },
+    ],
+  },
+  {
+    slug: 'disposable',
+    name: 'Disposable Emails',
+    icon: '🚫',
+    domain: 'tempmail.com, guerrillamail.com, etc.',
+    description: 'Disposable email services create temporary addresses that self-destruct. These are a major threat to email list quality and should always be filtered out.',
+    userBase: 'Millions of throwaway accounts',
+    isCatchAll: false,
+    difficulty: 'Easy',
+    tips: [
+      'ZeroBounce AI maintains a database of 10,000+ disposable email domains',
+      'New disposable services appear constantly — our database updates daily',
+      'Always filter disposable emails from your lists',
+      'Disposable emails dramatically increase bounce rates',
+      'Consider blocking disposable emails at signup with our real-time API',
+    ],
+    commonPatterns: ['random strings', 'temporary handles'],
+    challenges: ['New disposable services emerge constantly', 'Some use legitimate-looking domain names'],
+    faq: [
+      { q: 'How does ZeroBounce AI detect disposable emails?', a: 'We maintain an actively-updated database of 10,000+ known disposable email domains. Our AI also uses pattern recognition to identify new and unknown disposable services based on domain characteristics.' },
+      { q: 'Should I block disposable emails at signup?', a: 'Yes. Use ZeroBounce AI\'s real-time API to check email addresses at the point of registration and block disposable emails before they enter your database.' },
+      { q: 'What happens if I send to disposable emails?', a: 'Disposable emails lead to high bounce rates, damaged sender reputation, and wasted marketing spend. Filtering them out is one of the highest-ROI actions for email deliverability.' },
+    ],
+  },
+]
+
+export function getProviderBySlug(slug: string): Provider | undefined {
+  return providers.find(p => p.slug === slug)
+}
+
+export function getAllProviderSlugs(): string[] {
+  return providers.map(p => p.slug)
+}
