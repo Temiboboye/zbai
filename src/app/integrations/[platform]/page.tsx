@@ -4,12 +4,17 @@ import Navbar from '@/components/Navbar'
 import { getIntegrationBySlug, getAllIntegrationSlugs, getAllIntegrations } from '@/app/data/integrations'
 import styles from '@/app/email-checker/page.module.css'
 
-export function generateStaticParams() {
+interface PageProps {
+    params: Promise<{ platform: string }>
+}
+
+export async function generateStaticParams() {
     return getAllIntegrationSlugs().map(slug => ({ platform: slug }))
 }
 
-export function generateMetadata({ params }: { params: { platform: string } }): Metadata {
-    const integration = getIntegrationBySlug(params.platform)
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { platform: slug } = await params
+    const integration = getIntegrationBySlug(slug)
     if (!integration) return {}
     return {
         title: `Email Verification for ${integration.name} — AI-Powered Integration | ZeroBounce AI`,
@@ -23,8 +28,9 @@ export function generateMetadata({ params }: { params: { platform: string } }): 
     }
 }
 
-export default function IntegrationPage({ params }: { params: { platform: string } }) {
-    const integration = getIntegrationBySlug(params.platform)
+export default async function IntegrationPage({ params }: PageProps) {
+    const { platform: slug } = await params
+    const integration = getIntegrationBySlug(slug)
     if (!integration) notFound()
 
     const allIntegrations = getAllIntegrations().filter(i => i.slug !== integration.slug)
