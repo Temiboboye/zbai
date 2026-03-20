@@ -1,0 +1,136 @@
+.main {
+    min-height: 100vh;
+    background: var(--dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.hero {
+    padding: 140px 0 60px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 52px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--gray-400);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.posts {
+    padding: 0 0 80px;
+}
+
+.postsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+}
+
+.postCard {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    border-radius: 16px;
+    padding: 32px;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.postCard:hover {
+    border-color: var(--green);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(185, 255, 102, 0.1);
+}
+
+.postCategory {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 12px;
+}
+
+.postCard h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.postCard p {
+    font-size: 15px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 16px;
+}
+
+.postMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: var(--gray-500);
+}
+
+.readMore {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.cta {
+    padding: 0 0 80px;
+}
+
+.ctaBox {
+    text-align: center;
+    padding: 48px;
+    background: var(--dark);
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    box-shadow: 0 12px 48px rgba(185, 255, 102, 0.1);
+}
+
+.ctaBox h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.ctaBox p {
+    font-size: 16px;
+    color: var(--gray-400);
+    margin-bottom: 24px;
+}
+
+.footer {
+    padding: 40px 0;
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+}
+
+.footer p {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 32px; }
+    .postsGrid { grid-template-columns: 1fr; }
+    .ctaBox { padding: 32px 20px; }
+}

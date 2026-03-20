@@ -274,11 +274,22 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.footerContent}>
             <div className={styles.footerLinks}>
-              <a href="#features">Features</a>
+              <a href="/email-checker">Email Checker</a>
+              <a href="/email-verifier">Email Verifier</a>
+              <a href="/free-email-verification">Free Verification</a>
+              <a href="/free-tools">Free Tools</a>
               <a href="/comparison">Compare</a>
+              <a href="/blog">Blog</a>
+              <a href="/about">About</a>
+              <a href="/integrations/hubspot">HubSpot</a>
+              <a href="/integrations/salesforce">Salesforce</a>
+              <a href="/integrations/mailchimp">Mailchimp</a>
               <a href="#pricing">Pricing</a>
               <a href="/login">Login</a>
               <a href="/signup">Sign Up</a>
+              <a href="/privacy">Privacy</a>
+              <a href="/terms">Terms</a>
+              <a href="/gdpr">GDPR</a>
             </div>
             <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>
           </div>
