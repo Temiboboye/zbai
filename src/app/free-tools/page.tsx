@@ -373,6 +373,9 @@ export default function FreeToolsPage() {
                                 <div className={styles.toolIcon}>{tool.icon}</div>
                                 <h3>{tool.title}</h3>
                                 <p>{tool.description}</p>
+                                <a href={`/free-tools/${tool.id === 'syntax' ? 'email-syntax-checker' : tool.id === 'mx' ? 'mx-record-lookup' : tool.id === 'disposable' ? 'disposable-email-detector' : tool.id === 'pattern' ? 'email-pattern-generator' : 'domain-age-checker'}`} style={{ color: 'var(--green)', fontSize: '13px', textDecoration: 'none', marginTop: '8px', display: 'inline-block' }} onClick={(e) => e.stopPropagation()}>
+                                    Open Dedicated Page →
+                                </a>
                             </div>
                         ))}
                     </div>

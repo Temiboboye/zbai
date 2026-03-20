@@ -59,6 +59,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/blog/how-to-avoid-spam-traps`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     ]
 
-    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...integrationPages, ...blogPages]
+    const toolPages: MetadataRoute.Sitemap = [
+        { url: `${baseUrl}/free-tools/email-syntax-checker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/free-tools/mx-record-lookup`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/free-tools/disposable-email-detector`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/free-tools/email-pattern-generator`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+        { url: `${baseUrl}/free-tools/domain-age-checker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
+    ]
+
+    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...integrationPages, ...blogPages, ...toolPages]
 }
 
