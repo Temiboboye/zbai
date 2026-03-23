@@ -233,6 +233,63 @@ class PaymentService:
             db.commit()
             raise e
 
+    async def create_guest_stripe_checkout(self, db: Session, pack_id: str) -> Dict:
+        """Create Stripe Checkout Session for a Guest (no User ID)"""
+        pack = self.validate_pack(pack_id)
+        if not pack:
+            raise ValueError("Invalid pack")
+            
+        if not settings.STRIPE_SECRET_KEY:
+             raise ValueError("Stripe not configured")
+
+        # Create Pending Transaction with no user
+        transaction = Transaction(
+            user_id=None,
+            type="credit",
+            amount=pack['credits'],
+            currency_amount=float(pack['price']),
+            description=f"Guest Stripe Purchase - {pack_id}",
+            source="stripe",
+            status="pending"
+        )
+        db.add(transaction)
+        db.commit()
+        db.refresh(transaction)
+        
+        try:
+            # For checkout session, we need customer_email collection
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': f"{pack['credits']:,} Credits",
+                        },
+                        'unit_amount': int(pack['price'] * 100), # cents
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=f"{self.app_url}/dashboard?payment=success&session_id={{CHECKOUT_SESSION_ID}}",
+                cancel_url=f"{self.app_url}/#pricing",
+                metadata={
+                    "transaction_id": transaction.id,
+                    "pack_id": pack_id,
+                    "is_guest": "true"
+                }
+            )
+            
+            transaction.reference_id = session.id
+            db.commit()
+            
+            return {"sessionId": session.id, "url": session.url}
+            
+        except Exception as e:
+            transaction.status = "failed"
+            db.commit()
+            raise e
+
     async def create_service_checkout_session(self, db: Session, service_type: str) -> Dict:
         """Create Stripe Checkout Session for Service (No Auth Required)"""
         
@@ -301,25 +358,62 @@ class PaymentService:
                 if transaction and transaction.status != 'completed':
                     transaction.status = 'completed'
                     
+                    # If this is a guest transaction, create or find the user
+                    if transaction.user_id is None:
+                        customer_email = session.get('customer_details', {}).get('email')
+                        if customer_email:
+                            user = db.query(User).filter(User.email == customer_email).first()
+                            if not user:
+                                import secrets
+                                import datetime
+                                from app.core.security import get_password_hash, generate_reset_token
+                                # Create new user
+                                user = User(
+                                    email=customer_email,
+                                    hashed_password=get_password_hash(secrets.token_urlsafe(24)),
+                                    is_active=True,
+                                    is_verified=True,
+                                    credits=0
+                                )
+                                db.add(user)
+                                db.commit()
+                                db.refresh(user)
+                                
+                                # Send welcome email and password reset link
+                                try:
+                                    reset_token = generate_reset_token()
+                                    user.reset_token = reset_token
+                                    user.reset_token_expires = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+                                    db.commit()
+                                    
+                                    email_service.send_welcome_email(user.email, user.email.split('@')[0])
+                                    email_service.send_password_reset_email(user.email, reset_token)
+                                except Exception as e:
+                                    logger.error(f"Failed to send guest welcome emails: {e}")
+                            
+                            transaction.user_id = user.id
+                            db.commit()
+
                     # Update User Credits
-                    user = db.query(User).filter(User.id == transaction.user_id).first()
-                    if user:
-                        user.credits += transaction.amount
+                    if transaction.user_id:
+                        user = db.query(User).filter(User.id == transaction.user_id).first()
+                        if user:
+                            user.credits += transaction.amount
+                            
+                            # Email
+                            try:
+                                email_service.send_purchase_confirmation(
+                                    user.email,
+                                    user.email.split('@')[0],
+                                    transaction.amount,
+                                    transaction.currency_amount,
+                                    transaction.reference_id or "stripe",
+                                    "Stripe (Card)"
+                                )
+                            except Exception:
+                                pass
                         
-                        # Email
-                        try:
-                            email_service.send_purchase_confirmation(
-                                user.email,
-                                user.email.split('@')[0],
-                                transaction.amount,
-                                transaction.currency_amount,
-                                transaction.reference_id or "stripe",
-                                "Stripe (Card)"
-                            )
-                        except Exception:
-                            pass
-                    
-                    db.commit()
+                        db.commit()
 
             # Handle YC Lead Gen Service (Direct Checkout without pre-transaction)
             elif metadata.get('service_type') == 'yc_lead_gen':

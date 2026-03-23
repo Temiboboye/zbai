@@ -37,6 +37,19 @@ async def stripe_checkout(
         logger.error(f"Stripe error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/stripe/create-guest-checkout")
+async def stripe_guest_checkout(
+    req: PurchaseRequest,
+    db: Session = Depends(get_db)
+):
+    try:
+        return await payment_service.create_guest_stripe_checkout(db, req.pack_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Stripe guest error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/stripe/create-service-checkout")
 async def stripe_service_checkout(
     db: Session = Depends(get_db)
