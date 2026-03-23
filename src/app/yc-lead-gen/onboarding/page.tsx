@@ -1,10 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import styles from '../page.module.css';
 
-export default function YCOnboardingPage() {
+export default function YCOnboardingPageWrapper() {
+    return (
+        <Suspense fallback={
+            <div className={styles.container}>
+                <section className={styles.heroSection} style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <p style={{ color: 'var(--gray-400)' }}>Loading...</p>
+                </section>
+            </div>
+        }>
+            <YCOnboardingPage />
+        </Suspense>
+    );
+}
+
+function YCOnboardingPage() {
     const searchParams = useSearchParams();
     const sessionId = searchParams.get('session_id');
     const [submitted, setSubmitted] = useState(false);
