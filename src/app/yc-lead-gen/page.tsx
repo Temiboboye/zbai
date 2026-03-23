@@ -105,6 +105,76 @@ export default function YCLeadGenPage() {
                 </div>
             </section>
 
+            {/* What You Get */}
+            <section className={styles.featuresSection} id="deliverables">
+                <h2 className={styles.sectionTitle}>What You Get for <span className="text-gradient">$997</span></h2>
+                <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>📋</div>
+                        <h3 className={styles.featureTitle}>2,000+ Verified Leads</h3>
+                        <p className={styles.featureText}>
+                            Hand-picked contacts matching your exact ICP — title, company size, industry, funding stage. Every email verified before delivery.
+                        </p>
+                    </div>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>✍️</div>
+                        <h3 className={styles.featureTitle}>5-Email Cold Sequence</h3>
+                        <p className={styles.featureText}>
+                            Conversion-optimized outreach sequence written, tested, and loaded — ready to send on day one.
+                        </p>
+                    </div>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>🔒</div>
+                        <h3 className={styles.featureTitle}>Dedicated Sending Domain</h3>
+                        <p className={styles.featureText}>
+                            Full DNS setup — DKIM, SPF, DMARC — so your primary domain reputation is never at risk.
+                        </p>
+                    </div>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>🔥</div>
+                        <h3 className={styles.featureTitle}>2-Week Email Warmup</h3>
+                        <p className={styles.featureText}>
+                            Gradual ramp-up so your emails land in Primary inbox, not Promotions or Spam.
+                        </p>
+                    </div>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>🚀</div>
+                        <h3 className={styles.featureTitle}>30 Days Active Management</h3>
+                        <p className={styles.featureText}>
+                            We launch campaigns, monitor performance, A/B test subject lines, and optimize reply rates — hands-on for a full month.
+                        </p>
+                    </div>
+                    <div className={styles.featureCard}>
+                        <div className={styles.featureIcon}>📊</div>
+                        <h3 className={styles.featureTitle}>Weekly Performance Reports</h3>
+                        <p className={styles.featureText}>
+                            Open rates, reply rates, meetings booked, pipeline generated — full transparency every week.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Guarantee */}
+            <section className={styles.featuresSection} style={{ paddingTop: '0' }}>
+                <div style={{
+                    maxWidth: '700px',
+                    margin: '0 auto',
+                    padding: '2.5rem',
+                    borderRadius: '16px',
+                    background: 'linear-gradient(135deg, rgba(39,201,63,0.08), rgba(39,201,63,0.02))',
+                    border: '1px solid rgba(39,201,63,0.2)',
+                    textAlign: 'center'
+                }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛡️</div>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#fff' }}>
+                        The 15-Meeting Guarantee
+                    </h3>
+                    <p style={{ color: '#ccc', lineHeight: '1.7', fontSize: '1.05rem' }}>
+                        If you don&apos;t book at least <strong style={{ color: '#27c93f' }}>15 qualified meetings</strong> in your first 30 days, we keep running campaigns for free until you do. Still not satisfied? <strong style={{ color: '#fff' }}>Full refund. No questions asked.</strong>
+                    </p>
+                </div>
+            </section>
+
             {/* How it Works */}
             <section className={styles.stepsSection} id="how-it-works">
                 <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
