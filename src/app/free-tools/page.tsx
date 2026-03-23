@@ -453,7 +453,7 @@ export default function FreeToolsPage() {
                             verification, confidence scoring, and bulk processing.
                         </p>
                         <div className={styles.ctaActions}>
-                            <a href="/signup" className="btn btn-primary">Create Account</a>
+                            <a href="/#pricing" className="btn btn-primary">Get Started</a>
                             <a href="/#pricing" className="btn btn-outline">View Pricing</a>
                         </div>
                     </div>
