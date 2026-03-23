@@ -1076,7 +1076,7 @@ Start saving: {self.app_url}/dashboard
             <p style="color:#ff6b6b;font-weight:bold;text-align:center;">⏰ This offer expires in 48 hours</p>
 
             <center>
-                <a href="{self.app_url}/dashboard" class="button">Lock In Your Founding Member Price →</a>
+                <a href="{self.app_url}/billing" class="button">Lock In Your Founding Member Price →</a>
             </center>
 
             <hr class="divider">
@@ -1104,7 +1104,7 @@ This price is locked forever — it never increases.
 
 Offer expires in 48 hours.
 
-Claim your price: {self.app_url}/dashboard
+Claim your price: {self.app_url}/billing
 
 — The ZeroBounce AI Team"""
 
