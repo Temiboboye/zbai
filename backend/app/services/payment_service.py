@@ -320,7 +320,7 @@ class PaymentService:
                     'quantity': 1,
                 }],
                 mode='payment',
-                success_url=f"{self.app_url}/yc-lead-gen?payment=success&session_id={{CHECKOUT_SESSION_ID}}",
+                success_url=f"{self.app_url}/yc-lead-gen/onboarding?payment=success&session_id={{CHECKOUT_SESSION_ID}}",
                 cancel_url=f"{self.app_url}/yc-lead-gen?payment=cancelled",
                 metadata={
                     "service_type": service_type,

@@ -255,3 +255,108 @@ async def create_campaign(
     db.commit()
     db.refresh(campaign)
     return campaign
+
+
+# --- Service Onboarding (Public — post-payment) ---
+
+class ServiceOnboardingRequest(BaseModel):
+    fullName: str
+    email: EmailStr
+    companyName: str
+    companyWebsite: str
+    productDescription: str
+    targetTitles: str
+    targetIndustries: str
+    targetCompanySize: Optional[str] = None
+    targetGeography: Optional[str] = None
+    existingCustomers: Optional[str] = None
+    competitors: Optional[str] = None
+    valueProposition: Optional[str] = None
+    additionalNotes: Optional[str] = None
+    sessionId: Optional[str] = None
+    service: str = "yc_lead_gen"
+
+
+@router.post("/service-onboarding")
+async def service_onboarding(
+    data: ServiceOnboardingRequest,
+    db: Session = Depends(get_db),
+):
+    """Public endpoint for post-payment onboarding form. No auth required."""
+    import json
+    import logging
+    logger = logging.getLogger(__name__)
+
+    try:
+        # Save as a lead  
+        lead = Lead(
+            user_id=1,  # Admin user
+            name=data.fullName,
+            email=data.email,
+            company=data.companyName,
+            status="qualified",
+            source="yc_lead_gen_purchase",
+            notes=json.dumps({
+                "company_website": data.companyWebsite,
+                "product_description": data.productDescription,
+                "target_titles": data.targetTitles,
+                "target_industries": data.targetIndustries,
+                "target_company_size": data.targetCompanySize,
+                "target_geography": data.targetGeography,
+                "existing_customers": data.existingCustomers,
+                "competitors": data.competitors,
+                "value_proposition": data.valueProposition,
+                "additional_notes": data.additionalNotes,
+                "stripe_session_id": data.sessionId,
+                "service": data.service,
+                "submitted_at": datetime.utcnow().isoformat(),
+            }),
+        )
+        db.add(lead)
+        db.commit()
+        db.refresh(lead)
+
+        # Send notification email to admin
+        try:
+            from app.services.email_service import email_service
+            import requests
+
+            admin_html = f"""<div style="font-family: Arial, sans-serif; max-width: 600px; color: #333;">
+<h2 style="color: #27c93f;">🎉 New YC Lead Gen Purchase!</h2>
+<table style="width: 100%; border-collapse: collapse;">
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.fullName}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.email}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Company</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.companyName}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Website</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.companyWebsite}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Product</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.productDescription}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Target Titles</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.targetTitles}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Target Industries</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.targetIndustries}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Company Size</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.targetCompanySize or 'Not specified'}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Geography</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.targetGeography or 'Not specified'}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Existing Customers</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.existingCustomers or 'Not specified'}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Competitors</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.competitors or 'Not specified'}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Value Prop</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.valueProposition or 'Not specified'}</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Notes</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{data.additionalNotes or 'None'}</td></tr>
+</table>
+<p style="margin-top: 1rem; color: #666;">Stripe Session: {data.sessionId or 'N/A'}</p>
+</div>"""
+
+            requests.post(
+                email_service.api_url,
+                headers={"Authorization": f"Bearer {email_service.api_key}", "Content-Type": "application/json"},
+                json={
+                    "from": email_service.from_email,
+                    "to": ["temitayoboboye@gmail.com"],
+                    "subject": f"🎉 New YC Lead Gen Purchase: {data.companyName} ({data.fullName})",
+                    "html": admin_html,
+                }
+            )
+        except Exception as email_err:
+            logger.error(f"Failed to send admin notification: {email_err}")
+
+        return {"ok": True, "lead_id": lead.id}
+
+    except Exception as e:
+        logger.error(f"Service onboarding error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
