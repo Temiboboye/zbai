@@ -286,7 +286,6 @@ export default function Home() {
               <a href="/integrations/mailchimp">Mailchimp</a>
               <a href="#pricing">Pricing</a>
               <a href="/login">Login</a>
-              <a href="/signup">Sign Up</a>
               <a href="/privacy">Privacy</a>
               <a href="/terms">Terms</a>
               <a href="/gdpr">GDPR</a>

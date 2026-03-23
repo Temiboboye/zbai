@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import styles from './Pricing.module.css';
 
 const plans = [
@@ -35,6 +38,37 @@ const plans = [
 ];
 
 export default function Pricing() {
+    const [loading, setLoading] = useState<string | null>(null);
+
+    const handleGuestPurchase = async (packId: string) => {
+        try {
+            setLoading(packId);
+            const response = await fetch('/api/payment/stripe/create-guest-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ pack_id: packId }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Checkout failed');
+            }
+
+            const { url } = await response.json();
+            if (url) {
+                window.location.href = url;
+            } else {
+                throw new Error('No checkout URL received');
+            }
+        } catch (error) {
+            console.error('Guest checkout error:', error);
+            alert('Failed to initiate checkout. Please try again.');
+        } finally {
+            setLoading(null);
+        }
+    };
     return (
         <section id="pricing" className={styles.pricing}>
             <div className={styles.container}>
@@ -68,8 +102,12 @@ export default function Pricing() {
                                 ))}
                             </ul>
 
-                            <button className={`btn ${plan.variant === 'dark' ? 'btn-green' : 'btn-primary'} ${styles.cta}`}>
-                                {plan.buttonText}
+                            <button 
+                                className={`btn ${plan.variant === 'dark' ? 'btn-green' : 'btn-primary'} ${styles.cta}`}
+                                onClick={() => handleGuestPurchase(plan.packId)}
+                                disabled={loading === plan.packId}
+                            >
+                                {loading === plan.packId ? 'Loading...' : plan.buttonText}
                             </button>
                         </div>
                     ))}

@@ -37,7 +37,7 @@ export default function Navbar() {
 
         <div className={styles.actions}>
           <Link href="/login" className="btn btn-outline">Login</Link>
-          <Link href="/signup" className="btn btn-primary">Sign Up</Link>
+          <Link href="/#pricing" className="btn btn-primary">Get Started</Link>
         </div>
 
         {/* Mobile Hamburger Button */}
@@ -63,7 +63,7 @@ export default function Navbar() {
         </div>
         <div className={styles.mobileActions}>
           <Link href="/login" className="btn btn-outline" onClick={closeMobileMenu}>Login</Link>
-          <Link href="/signup" className="btn btn-primary" onClick={closeMobileMenu}>Sign Up</Link>
+          <Link href="/#pricing" className="btn btn-primary" onClick={closeMobileMenu}>Get Started</Link>
         </div>
       </div>
     </nav>
