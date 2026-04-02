@@ -7,6 +7,7 @@ import {
 } from 'recharts';
 import { useCredits } from '@/contexts/CreditContext';
 import { useAuth } from '@/contexts/AuthContext';
+import WelcomeActivation from '@/components/WelcomeActivation';
 import styles from './page.module.css';
 
 // Custom Tooltip for Charts
@@ -69,6 +70,8 @@ export default function DashboardPage() {
 
     if (!data) return null;
 
+    const showActivation = data.total_verified < 5;
+
     const pieData = Object.entries(data.quality_distribution).map(([name, value]) => ({
         name,
         value
@@ -76,6 +79,10 @@ export default function DashboardPage() {
 
     return (
         <div className={styles.container}>
+            {showActivation ? (
+                <WelcomeActivation totalVerified={data.total_verified} />
+            ) : (
+            <>
             <div className={styles.header}>
                 <h1>Analytics Dashboard</h1>
                 <p>Overview of your email verification performance</p>
@@ -212,6 +219,8 @@ export default function DashboardPage() {
                     ))}
                 </div>
             </div>
+            </>
+            )}
         </div>
     );
 }

@@ -5,6 +5,16 @@ import styles from './Pricing.module.css';
 
 const plans = [
     {
+        name: 'Micro',
+        price: '$3',
+        credits: '250',
+        costPerCredit: '$0.012',
+        features: ['7-Day Rollover', 'Email Support', 'AI Verification', 'Single & Bulk'],
+        buttonText: 'Try for $3',
+        variant: 'gray',
+        packId: 'pack_250'
+    },
+    {
         name: 'Starter',
         price: '$8.40',
         credits: '1,000',

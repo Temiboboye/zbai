@@ -15,6 +15,7 @@ from app.services.credit_manager import CreditManager
 from app.services.email_service import email_service # Optional: send confirmation email
 
 CREDIT_PACKS = {
+    'pack_250': {'credits': 250, 'price': 3.00, 'name': 'Micro'},
     'pack_1k': {'credits': 1000, 'price': 8.40, 'name': 'Starter'},
     'pack_10k': {'credits': 10000, 'price': 55.30, 'name': 'Professional'},
     'pack_50k': {'credits': 50000, 'price': 209.30, 'name': 'Business'},
