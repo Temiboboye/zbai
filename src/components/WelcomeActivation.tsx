@@ -75,8 +75,6 @@ export default function WelcomeActivation({ totalVerified }: WelcomeActivationPr
         }
     };
 
-    const creditsUsed = 100 - balance;
-    const progressPercent = Math.min((creditsUsed / 100) * 100, 100);
 
     const getBadgeClass = (label: string) => {
         if (label === 'Safe to Send') return styles.badgeSafe;
@@ -95,24 +93,35 @@ export default function WelcomeActivation({ totalVerified }: WelcomeActivationPr
             {/* Hero + Inline Verify */}
             <div className={styles.hero}>
                 <span className={styles.heroEmoji}>👋</span>
-                <h2 className={styles.heroTitle}>Verify Your First Email</h2>
+                <h2 className={styles.heroTitle}>{balance > 0 ? 'Verify Your First Email' : 'Get Started with ZeroBounce AI'}</h2>
                 <p className={styles.heroSubtitle}>
-                    Paste any email below to see our AI verification in action. You have {balance} free credits to start.
+                    {balance > 0
+                        ? `Paste any email below to see our AI verification in action. You have ${balance} credits.`
+                        : 'Buy credits to start verifying emails with 99.9% accuracy. Plans start at just $3.'
+                    }
                 </p>
 
-                <form onSubmit={handleVerify} className={styles.verifyForm}>
-                    <input
-                        type="email"
-                        placeholder="e.g. john@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className={styles.verifyInput}
-                        required
-                    />
-                    <button type="submit" className={styles.verifyBtn} disabled={loading}>
-                        {loading ? '⏳ Verifying...' : '⚡ Verify'}
-                    </button>
-                </form>
+                {balance > 0 ? (
+                    <form onSubmit={handleVerify} className={styles.verifyForm}>
+                        <input
+                            type="email"
+                            placeholder="e.g. john@company.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={styles.verifyInput}
+                            required
+                        />
+                        <button type="submit" className={styles.verifyBtn} disabled={loading}>
+                            {loading ? '⏳ Verifying...' : '⚡ Verify'}
+                        </button>
+                    </form>
+                ) : (
+                    <div className={styles.verifyForm}>
+                        <Link href="/billing" className={styles.verifyBtn} style={{ textDecoration: 'none', textAlign: 'center', flex: 'none', padding: '16px 40px' }}>
+                            🚀 Buy Credits — Starting at $3
+                        </Link>
+                    </div>
+                )}
 
                 {/* Inline Result */}
                 {result && !result.error && (
@@ -162,26 +171,30 @@ export default function WelcomeActivation({ totalVerified }: WelcomeActivationPr
                 )}
             </div>
 
-            {/* Credits Progress */}
+            {/* Credits Balance */}
             <div className={styles.progressSection}>
                 <div className={styles.progressTop}>
-                    <span className={styles.progressLabel}>Free Credits</span>
+                    <span className={styles.progressLabel}>Credits Balance</span>
                     <span className={styles.progressCount}>
-                        <strong>{creditsUsed}</strong> / 100 used
+                        <strong>{balance.toLocaleString()}</strong> credits remaining
                     </span>
-                </div>
-                <div className={styles.progressBar}>
-                    <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
                 </div>
             </div>
 
             {/* Quick Actions */}
             <div className={styles.actionsGrid}>
+                <Link href="/billing" className={styles.actionCard}>
+                    <span className={styles.actionEmoji}>🚀</span>
+                    <div className={styles.actionTitle}>Buy Credits</div>
+                    <div className={styles.actionDesc}>
+                        Plans start at just $3 for 250 verified emails
+                    </div>
+                </Link>
                 <Link href="/bulk" className={styles.actionCard}>
                     <span className={styles.actionEmoji}>📁</span>
                     <div className={styles.actionTitle}>Upload a CSV</div>
                     <div className={styles.actionDesc}>
-                        Verify up to 100 emails at once with your free credits
+                        Verify your entire email list in one go
                     </div>
                 </Link>
                 <Link href="/api-keys" className={styles.actionCard}>
@@ -189,13 +202,6 @@ export default function WelcomeActivation({ totalVerified }: WelcomeActivationPr
                     <div className={styles.actionTitle}>Get Your API Key</div>
                     <div className={styles.actionDesc}>
                         Integrate verification into your app or workflow
-                    </div>
-                </Link>
-                <Link href="/billing" className={styles.actionCard}>
-                    <span className={styles.actionEmoji}>🚀</span>
-                    <div className={styles.actionTitle}>Buy More Credits</div>
-                    <div className={styles.actionDesc}>
-                        Plans start at just $3 for 250 emails
                     </div>
                 </Link>
             </div>
