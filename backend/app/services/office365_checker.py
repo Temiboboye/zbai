@@ -117,11 +117,27 @@ class Office365Checker:
                         'details': 'User confirmed via Microsoft Login API',
                         'if_exists_result': if_exists
                     }
-                else:
+                elif if_exists == 1:
                     return {
                         'exists': False,
                         'method': 'microsoft_login_api',
-                        'details': f'User not found (IfExistsResult={if_exists})',
+                        'details': 'User not found',
+                        'if_exists_result': if_exists
+                    }
+                elif if_exists in (5, 6):
+                    # 5 = Federated/external IdP (e.g. Gmail, Yahoo)
+                    # 6 = External directory
+                    return {
+                        'exists': True,
+                        'method': 'microsoft_login_api',
+                        'details': f'User exists (external IdP, code={if_exists})',
+                        'if_exists_result': if_exists
+                    }
+                else:
+                    return {
+                        'exists': None,
+                        'method': 'microsoft_login_api',
+                        'details': f'Unknown result (IfExistsResult={if_exists})',
                         'if_exists_result': if_exists
                     }
             else:
