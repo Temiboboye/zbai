@@ -189,6 +189,32 @@
 .cardInvalid h3 { color: #ef4444; }
 .cardUnknown h3 { color: #f59e0b; }
 
+.clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.activeCard {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.cardValid.activeCard { border-color: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
+.cardInvalid.activeCard { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
+.cardUnknown.activeCard { border-color: #f59e0b; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+
+.filterLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-transform: capitalize;
+}
+
 /* Results Table */
 .resultsSection {
     background: var(--gray-900);

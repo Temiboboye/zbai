@@ -20,6 +20,7 @@ export default function MSCheckerPage() {
     const [results, setResults] = useState<MSCheckResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [filter, setFilter] = useState<string | null>(null);
     const [showPaywall, setShowPaywall] = useState(false);
     const { balance, deductCredits, refreshBalance } = useCredits();
     const { token, isAuthenticated } = useAuth();
@@ -45,6 +46,7 @@ export default function MSCheckerPage() {
         setLoading(true);
         setResults([]);
         setProgress(0);
+        setFilter(null);
 
         // Process in batches of 50 for smoother UX
         const batchSize = 50;
@@ -100,6 +102,15 @@ export default function MSCheckerPage() {
     const validCount = results.filter(r => r.status === 'valid').length;
     const invalidCount = results.filter(r => r.status === 'invalid').length;
     const unknownCount = results.filter(r => r.status === 'unknown' || r.status === 'error').length;
+
+    const filteredResults = filter
+        ? results.filter(r => {
+            if (filter === 'unknown') return r.status === 'unknown' || r.status === 'error';
+            return r.status === filter;
+        })
+        : results;
+
+    const toggleFilter = (f: string) => setFilter(prev => prev === f ? null : f);
 
     const exportValid = () => {
         const validEmails = results.filter(r => r.status === 'valid').map(r => r.email).join('\n');
@@ -185,19 +196,31 @@ export default function MSCheckerPage() {
             {results.length > 0 && (
                 <>
                     <div className={styles.summary}>
-                        <div className={`${styles.summaryCard} ${styles.cardTotal}`}>
+                        <div
+                            className={`${styles.summaryCard} ${styles.cardTotal} ${styles.clickable} ${filter === null ? styles.activeCard : ''}`}
+                            onClick={() => setFilter(null)}
+                        >
                             <h3>{results.length}</h3>
                             <p>Total</p>
                         </div>
-                        <div className={`${styles.summaryCard} ${styles.cardValid}`}>
+                        <div
+                            className={`${styles.summaryCard} ${styles.cardValid} ${styles.clickable} ${filter === 'valid' ? styles.activeCard : ''}`}
+                            onClick={() => toggleFilter('valid')}
+                        >
                             <h3>{validCount}</h3>
                             <p>Valid</p>
                         </div>
-                        <div className={`${styles.summaryCard} ${styles.cardInvalid}`}>
+                        <div
+                            className={`${styles.summaryCard} ${styles.cardInvalid} ${styles.clickable} ${filter === 'invalid' ? styles.activeCard : ''}`}
+                            onClick={() => toggleFilter('invalid')}
+                        >
                             <h3>{invalidCount}</h3>
                             <p>Invalid</p>
                         </div>
-                        <div className={`${styles.summaryCard} ${styles.cardUnknown}`}>
+                        <div
+                            className={`${styles.summaryCard} ${styles.cardUnknown} ${styles.clickable} ${filter === 'unknown' ? styles.activeCard : ''}`}
+                            onClick={() => toggleFilter('unknown')}
+                        >
                             <h3>{unknownCount}</h3>
                             <p>Unknown</p>
                         </div>
@@ -206,7 +229,10 @@ export default function MSCheckerPage() {
                     {/* Results Table */}
                     <div className={styles.resultsSection}>
                         <div className={styles.resultsHeader}>
-                            <h3>Results</h3>
+                            <h3>
+                                Results
+                                {filter && <span className={styles.filterLabel}> — showing {filter}</span>}
+                            </h3>
                             {validCount > 0 && (
                                 <button className={styles.exportBtn} onClick={exportValid}>
                                     📥 Export Valid ({validCount})
@@ -223,7 +249,7 @@ export default function MSCheckerPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {results.map((r, i) => (
+                                {filteredResults.map((r, i) => (
                                     <tr key={i}>
                                         <td>{i + 1}</td>
                                         <td className={styles.emailCell}>{r.email}</td>
