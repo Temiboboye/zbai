@@ -329,13 +329,15 @@ class EmailVerificationService:
     
     async def _use_specialized_checker(self, email: str, domain: str, mx_records: list) -> Optional[Dict]:
         """Route email to specialized checker based on provider"""
-        o365_indicators = [
-            'outlook.com', 'hotmail.com', 'live.com', 'msn.com',
-            'office365.com', 'microsoft.com'
+        # Match base domain names (without TLD) to cover international variants
+        # e.g. hotmail.fr, hotmail.co.uk, outlook.de, live.co.uk, etc.
+        o365_domain_bases = [
+            'outlook', 'hotmail', 'live', 'msn', 'office365', 'microsoft'
         ]
         
         mx_is_o365 = any('outlook' in mx.lower() or 'microsoft' in mx.lower() for mx in mx_records)
-        domain_is_o365 = any(indicator in domain.lower() for indicator in o365_indicators)
+        domain_base = domain.lower().split('.')[0]
+        domain_is_o365 = domain_base in o365_domain_bases
         
         # Check SPF for O365 (cached at domain level)
         spf_is_o365 = False
