@@ -48,6 +48,7 @@ function DashboardInner({
         { href: '/email-finder', icon: '🔎', label: 'Email Finder' },
         { href: '/api-keys', icon: '🔑', label: 'API Keys' },
         { href: '/blacklist', icon: '🚫', label: 'Blacklist Monitor' },
+        { href: '/ms-checker', icon: '🔷', label: 'Microsoft Checker' },
         { href: '/billing', icon: '💳', label: 'Billing' },
         { href: '/profile', icon: '👤', label: 'Profile' },
     ];

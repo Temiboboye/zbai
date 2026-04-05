@@ -10,7 +10,7 @@ from app.core.database import engine, Base, get_db
 from app.core.rate_limiter import limiter
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.api import blacklist, sort, analytics, keys, auth, payment, verify, admin, crm
+from app.api import blacklist, sort, analytics, keys, auth, payment, verify, admin, crm, ms_checker
 from app.core.deps import get_current_user_id
 
 # Initialize Sentry for error tracking
@@ -60,6 +60,7 @@ app.include_router(keys.router, prefix="/v1/keys", tags=["keys"])
 app.include_router(payment.router, prefix="/v1/payment", tags=["payment"])
 app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
 app.include_router(crm.router, prefix="/v1/crm", tags=["crm"])
+app.include_router(ms_checker.router, prefix="/v1/ms-check", tags=["ms-check"])
 
 @app.get("/v1/credits")
 async def get_user_credits(
