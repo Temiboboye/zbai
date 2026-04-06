@@ -1,6 +1,7 @@
 """
 Microsoft Login API Email Checker — Backend API Endpoint
 Uses GetCredentialType to validate ANY email address regardless of domain.
+Includes rate limiting and throttle backoff to avoid Microsoft blocks.
 """
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,6 +12,7 @@ from app.services.office365_checker import office365_checker
 from app.services.credit_manager import CreditManager
 from typing import List
 import structlog
+import time
 
 router = APIRouter()
 logger = structlog.get_logger()
@@ -33,8 +35,8 @@ class MSCheckRequest(BaseModel):
                 cleaned.append(e)
         if len(cleaned) == 0:
             raise ValueError('At least 1 valid email required')
-        if len(cleaned) > 500:
-            raise ValueError('Maximum 500 emails per request')
+        if len(cleaned) > 10000:
+            raise ValueError('Maximum 10,000 emails per request')
         return cleaned
 
 
@@ -47,7 +49,7 @@ async def ms_check_emails(
     """
     Validate emails using Microsoft Login API (GetCredentialType).
     Works with ANY domain — not limited to Office 365.
-    Deducts 1 credit per email.
+    Deducts 1 credit per email. Includes throttle protection.
     """
     count = len(req.emails)
     
@@ -62,10 +64,23 @@ async def ms_check_emails(
         raise HTTPException(status_code=500, detail="Credit deduction failed")
     
     results = []
+    delay = 0.15  # 150ms between requests (~6.5 req/s)
+    consecutive_throttles = 0
     
-    for email in req.emails:
+    for i, email in enumerate(req.emails):
         try:
             check = office365_checker.check_user_via_login_api(email)
+            
+            # Handle throttle at this level too — adaptive backoff
+            if check.get('throttled'):
+                consecutive_throttles += 1
+                if consecutive_throttles >= 3:
+                    # Microsoft is seriously throttling, increase delay
+                    delay = min(delay * 2, 5.0)
+                    logger.warning("ms_check_throttle_backoff", new_delay=delay, email_index=i)
+                    time.sleep(5)
+            else:
+                consecutive_throttles = 0
             
             exists = check.get('exists')
             if_exists_result = check.get('if_exists_result', -1)
@@ -114,8 +129,20 @@ async def ms_check_emails(
                 'if_exists_result': -1,
                 'details': f'Error: {str(e)}',
             })
+        
+        # Rate limit: small delay between requests
+        if i < len(req.emails) - 1:
+            time.sleep(delay)
+        
+        # Batch commit every 100 emails to avoid huge transactions
+        if (i + 1) % 100 == 0:
+            try:
+                db.commit()
+            except Exception as e:
+                logger.error("ms_check_batch_commit_failed", error=str(e))
+                db.rollback()
     
-    # Commit all history entries
+    # Final commit
     try:
         db.commit()
     except Exception as e:

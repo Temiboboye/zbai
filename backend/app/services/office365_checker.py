@@ -57,102 +57,137 @@ class Office365Checker:
         except Exception as e:
             return {'detected': False, 'details': str(e)}
     
-    def check_user_via_login_api(self, email: str) -> Dict:
+    def check_user_via_login_api(self, email: str, max_retries: int = 3) -> Dict:
         """
         Check if user exists using Microsoft Login API (GetCredentialType endpoint).
         This is the most reliable method as it bypasses catch-all configurations.
+        Includes throttle detection and automatic retry with exponential backoff.
         
         Returns:
             Dict with 'exists' (bool), 'method' (str), 'details' (str)
         """
-        try:
-            url = "https://login.microsoftonline.com/common/GetCredentialType?mkt=en-US"
-            
-            # Generate unique client request ID
-            client_id = str(uuid.uuid4())
-            
-            # Standard payload for credential type check
-            payload = {
-                "username": email,
-                "isOtherIdpSupported": True,
-                "checkPhones": False,
-                "isRemoteNGCSupported": True,
-                "isCookieBannerShown": False,
-                "isFidoSupported": True,
-                "originalRequest": "",
-                "country": "US",
-                "forceotclogin": False,
-                "isExternalFederationDisallowed": False,
-                "isRemoteConnectSupported": False,
-                "federationFlags": 0,
-                "isSignup": False,
-                "flowToken": "",
-                "isAccessPassSupported": True,
-                "isQrCodePinSupported": True
-            }
-            
-            headers = {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'client-request-id': client_id,
-                'Accept': 'application/json',
-                'Origin': 'https://login.microsoftonline.com'
-            }
-            
-            response = requests.post(url, json=payload, headers=headers, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
+        import time as _time
+        
+        for attempt in range(max_retries + 1):
+            try:
+                url = "https://login.microsoftonline.com/common/GetCredentialType?mkt=en-US"
                 
-                # IfExistsResult codes:
-                # 0 = User exists in the tenant
-                # 1 = User does not exist
-                # 5/6 = Federated/External (varies)
-                if_exists = data.get('IfExistsResult', 1)
+                # Generate unique client request ID
+                client_id = str(uuid.uuid4())
                 
-                if if_exists == 0:
+                # Standard payload for credential type check
+                payload = {
+                    "username": email,
+                    "isOtherIdpSupported": True,
+                    "checkPhones": False,
+                    "isRemoteNGCSupported": True,
+                    "isCookieBannerShown": False,
+                    "isFidoSupported": True,
+                    "originalRequest": "",
+                    "country": "US",
+                    "forceotclogin": False,
+                    "isExternalFederationDisallowed": False,
+                    "isRemoteConnectSupported": False,
+                    "federationFlags": 0,
+                    "isSignup": False,
+                    "flowToken": "",
+                    "isAccessPassSupported": True,
+                    "isQrCodePinSupported": True
+                }
+                
+                headers = {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'client-request-id': client_id,
+                    'Accept': 'application/json',
+                    'Origin': 'https://login.microsoftonline.com'
+                }
+                
+                response = requests.post(url, json=payload, headers=headers, timeout=15)
+                
+                # Handle HTTP-level throttling (429)
+                if response.status_code == 429:
+                    if attempt < max_retries:
+                        wait = 3 * (2 ** attempt)  # 3s, 6s, 12s
+                        _time.sleep(wait)
+                        continue
                     return {
-                        'exists': True,
+                        'exists': None,
                         'method': 'microsoft_login_api',
-                        'details': 'User confirmed via Microsoft Login API',
-                        'if_exists_result': if_exists
+                        'details': 'Throttled by Microsoft (HTTP 429)',
+                        'throttled': True
                     }
-                elif if_exists == 1:
-                    return {
-                        'exists': False,
-                        'method': 'microsoft_login_api',
-                        'details': 'User not found',
-                        'if_exists_result': if_exists
-                    }
-                elif if_exists in (5, 6):
-                    # 5 = Federated/external IdP (e.g. Gmail, Yahoo)
-                    # 6 = External directory
-                    return {
-                        'exists': True,
-                        'method': 'microsoft_login_api',
-                        'details': f'User exists (external IdP, code={if_exists})',
-                        'if_exists_result': if_exists
-                    }
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    # Check for throttle in response body
+                    throttle_status = data.get('ThrottleStatus', 0)
+                    if throttle_status == 1:
+                        if attempt < max_retries:
+                            wait = 3 * (2 ** attempt)  # 3s, 6s, 12s
+                            _time.sleep(wait)
+                            continue
+                        return {
+                            'exists': None,
+                            'method': 'microsoft_login_api',
+                            'details': 'Throttled by Microsoft',
+                            'throttled': True,
+                            'if_exists_result': -1
+                        }
+                    
+                    # IfExistsResult codes:
+                    # 0 = User exists in the tenant
+                    # 1 = User does not exist
+                    # 5/6 = Federated/External (varies)
+                    if_exists = data.get('IfExistsResult', 1)
+                    
+                    if if_exists == 0:
+                        return {
+                            'exists': True,
+                            'method': 'microsoft_login_api',
+                            'details': 'User confirmed via Microsoft Login API',
+                            'if_exists_result': if_exists
+                        }
+                    elif if_exists == 1:
+                        return {
+                            'exists': False,
+                            'method': 'microsoft_login_api',
+                            'details': 'User not found',
+                            'if_exists_result': if_exists
+                        }
+                    elif if_exists in (5, 6):
+                        # 5 = Federated/external IdP (e.g. Gmail, Yahoo)
+                        # 6 = External directory
+                        return {
+                            'exists': True,
+                            'method': 'microsoft_login_api',
+                            'details': f'User exists (external IdP, code={if_exists})',
+                            'if_exists_result': if_exists
+                        }
+                    else:
+                        return {
+                            'exists': None,
+                            'method': 'microsoft_login_api',
+                            'details': f'Unknown result (IfExistsResult={if_exists})',
+                            'if_exists_result': if_exists
+                        }
                 else:
                     return {
                         'exists': None,
                         'method': 'microsoft_login_api',
-                        'details': f'Unknown result (IfExistsResult={if_exists})',
-                        'if_exists_result': if_exists
+                        'details': f'API returned status {response.status_code}'
                     }
-            else:
+                    
+            except Exception as e:
+                if attempt < max_retries:
+                    _time.sleep(2)
+                    continue
                 return {
                     'exists': None,
                     'method': 'microsoft_login_api',
-                    'details': f'API returned status {response.status_code}'
+                    'details': f'Error: {str(e)}'
                 }
-                
-        except Exception as e:
-            return {
-                'exists': None,
-                'method': 'microsoft_login_api',
-                'details': f'Error: {str(e)}'
-            }
         
     def check_email_deep(self, email: str) -> Dict:
         """
