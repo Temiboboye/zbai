@@ -48,8 +48,8 @@ export default function MSCheckerPage() {
         setProgress(0);
         setFilter(null);
 
-        // Process in batches of 50 for smoother UX
-        const batchSize = 50;
+        // Process in batches of 10 to stay within timeout limits
+        const batchSize = 10;
         const allResults: MSCheckResult[] = [];
 
         for (let i = 0; i < emails.length; i += batchSize) {

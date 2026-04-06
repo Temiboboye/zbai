@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
+export const maxDuration = 300; // Allow up to 5 minutes for large batches
+
 export async function POST(req: NextRequest) {
     try {
         const auth = req.headers.get('Authorization') || '';
@@ -12,25 +14,43 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Emails array is required' }, { status: 400 });
         }
 
-        const response = await fetch(`${BACKEND_URL}/v1/ms-check`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': auth
-            },
-            body: JSON.stringify({ emails })
-        });
+        // Extended timeout for large batches (10 emails × ~0.65s each = ~6.5s + buffer)
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
 
-        if (!response.ok) {
-            const error = await response.json();
-            return NextResponse.json(
-                { error: error.detail || 'MS Check failed' },
-                { status: response.status }
-            );
+        try {
+            const response = await fetch(`${BACKEND_URL}/v1/ms-check`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': auth
+                },
+                body: JSON.stringify({ emails }),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeout);
+
+            if (!response.ok) {
+                const error = await response.json();
+                return NextResponse.json(
+                    { error: error.detail || 'MS Check failed' },
+                    { status: response.status }
+                );
+            }
+
+            const data = await response.json();
+            return NextResponse.json(data);
+        } catch (fetchError: any) {
+            clearTimeout(timeout);
+            if (fetchError.name === 'AbortError') {
+                return NextResponse.json(
+                    { error: 'Request timed out — try a smaller batch' },
+                    { status: 504 }
+                );
+            }
+            throw fetchError;
         }
-
-        const data = await response.json();
-        return NextResponse.json(data);
 
     } catch (error) {
         console.error('MS Check error:', error);
