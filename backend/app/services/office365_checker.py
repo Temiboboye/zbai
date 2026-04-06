@@ -57,16 +57,21 @@ class Office365Checker:
         except Exception as e:
             return {'detected': False, 'details': str(e)}
     
-    def check_user_via_login_api(self, email: str, max_retries: int = 3) -> Dict:
+    def check_user_via_login_api(self, email: str, max_retries: int = 3, proxy: str = None) -> Dict:
         """
         Check if user exists using Microsoft Login API (GetCredentialType endpoint).
         This is the most reliable method as it bypasses catch-all configurations.
         Includes throttle detection and automatic retry with exponential backoff.
+        Supports optional proxy for IP rotation.
         
         Returns:
             Dict with 'exists' (bool), 'method' (str), 'details' (str)
         """
         import time as _time
+        
+        proxies = {}
+        if proxy:
+            proxies = {"http": proxy, "https": proxy}
         
         for attempt in range(max_retries + 1):
             try:
@@ -103,7 +108,7 @@ class Office365Checker:
                     'Origin': 'https://login.microsoftonline.com'
                 }
                 
-                response = requests.post(url, json=payload, headers=headers, timeout=15)
+                response = requests.post(url, json=payload, headers=headers, timeout=15, proxies=proxies)
                 
                 # Handle HTTP-level throttling (429)
                 if response.status_code == 429:
