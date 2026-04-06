@@ -12,10 +12,14 @@ from app.services.office365_checker import office365_checker
 from app.services.credit_manager import CreditManager
 from typing import List
 import structlog
-import time
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 router = APIRouter()
 logger = structlog.get_logger()
+
+# Thread pool for blocking Microsoft API calls
+_executor = ThreadPoolExecutor(max_workers=2)
 
 from pydantic import BaseModel, validator
 import re
@@ -50,6 +54,7 @@ async def ms_check_emails(
     Validate emails using Microsoft Login API (GetCredentialType).
     Works with ANY domain — not limited to Office 365.
     Deducts 1 credit per email. Includes throttle protection.
+    Uses asyncio.sleep + thread pool to avoid blocking the event loop.
     """
     count = len(req.emails)
     
@@ -66,19 +71,24 @@ async def ms_check_emails(
     results = []
     delay = 0.15  # 150ms between requests (~6.5 req/s)
     consecutive_throttles = 0
+    loop = asyncio.get_event_loop()
     
     for i, email in enumerate(req.emails):
         try:
-            check = office365_checker.check_user_via_login_api(email)
+            # Run the blocking API call in a thread pool so it doesn't block the event loop
+            check = await loop.run_in_executor(
+                _executor, 
+                office365_checker.check_user_via_login_api, 
+                email
+            )
             
             # Handle throttle at this level too — adaptive backoff
             if check.get('throttled'):
                 consecutive_throttles += 1
                 if consecutive_throttles >= 3:
-                    # Microsoft is seriously throttling, increase delay
                     delay = min(delay * 2, 5.0)
                     logger.warning("ms_check_throttle_backoff", new_delay=delay, email_index=i)
-                    time.sleep(5)
+                    await asyncio.sleep(5)  # Non-blocking sleep
             else:
                 consecutive_throttles = 0
             
@@ -130,9 +140,9 @@ async def ms_check_emails(
                 'details': f'Error: {str(e)}',
             })
         
-        # Rate limit: small delay between requests
+        # Rate limit: non-blocking delay between requests
         if i < len(req.emails) - 1:
-            time.sleep(delay)
+            await asyncio.sleep(delay)
         
         # Batch commit every 100 emails to avoid huge transactions
         if (i + 1) % 100 == 0:
