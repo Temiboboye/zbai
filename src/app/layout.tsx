@@ -87,10 +87,11 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // Add your verification codes here when you have them
-    // google: 'your-google-verification-code',
+    google: 'KJ2DGgo3plyXr6dQC-QYALj08jeR1N_3b4I3Ap8vHsQ',
     // yandex: 'your-yandex-verification-code',
-    // bing: 'your-bing-verification-code',
+    other: {
+      'msvalidate.01': '5D69574C2E979B5FAFBACD2374877E25',
+    },
   },
 };
 
@@ -128,6 +129,17 @@ gtag('config', 'G-F2XQ4ZX0N4');`}
                 description: 'AI-powered email verification platform with 98%+ accuracy, catch-all confidence scoring, and email pattern recognition.',
                 sameAs: ['https://twitter.com/zerobounceai'],
                 contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://zerobounceai.com' },
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'ZeroBounce AI',
+                url: 'https://zerobounceai.com',
+                potentialAction: {
+                  '@type': 'SearchAction',
+                  target: { '@type': 'EntryPoint', urlTemplate: 'https://zerobounceai.com/email-format/{search_term_string}' },
+                  'query-input': 'required name=search_term_string',
+                },
               },
               {
                 '@context': 'https://schema.org',

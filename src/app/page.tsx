@@ -289,6 +289,16 @@ export default function Home() {
               <a href="/privacy">Privacy</a>
               <a href="/terms">Terms</a>
               <a href="/gdpr">GDPR</a>
+              <a href="/alternative-to/neverbounce">NeverBounce Alternative</a>
+              <a href="/alternative-to/hunter-io">Hunter.io Alternative</a>
+              <a href="/alternative-to/zerobounce">ZeroBounce Alternative</a>
+              <a href="/blog/email-verification-guide">Email Verification Guide</a>
+              <a href="/blog/catch-all-email-verification">Catch-All Guide</a>
+              <a href="/blog/reduce-email-bounce-rate">Reduce Bounce Rate</a>
+              <a href="/email-verification-for/saas">Email Verification for SaaS</a>
+              <a href="/email-verification-for/ecommerce">Email Verification for E-Commerce</a>
+              <a href="/verify/gmail">Verify Gmail</a>
+              <a href="/verify/outlook">Verify Outlook</a>
             </div>
             <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>
           </div>

@@ -48,6 +48,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${baseUrl}/integrations/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
     }))
 
+    const alternativePages: MetadataRoute.Sitemap = getAllCompetitorSlugs().map(slug => ({
+        url: `${baseUrl}/alternative-to/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
+    }))
+
     const blogPages: MetadataRoute.Sitemap = [
         { url: `${baseUrl}/blog/email-verification-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
         { url: `${baseUrl}/blog/zerobounce-ai-vs-competitors`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
@@ -67,6 +71,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/free-tools/domain-age-checker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     ]
 
-    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...integrationPages, ...blogPages, ...toolPages]
+    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...integrationPages, ...alternativePages, ...blogPages, ...toolPages]
 }
 

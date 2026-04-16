@@ -21,8 +21,10 @@ export default function EmailDeliverabilityGuide() {
             headline: 'Email Deliverability Guide — How to Land in the Inbox (2026)',
             description: 'Comprehensive guide to email deliverability for marketers and sales teams.',
             author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-            publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
             datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/email-deliverability-guide' },
         },
         {
             '@context': 'https://schema.org',

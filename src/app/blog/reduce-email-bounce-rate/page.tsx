@@ -21,8 +21,10 @@ export default function ReduceBounceBlog() {
             headline: 'How to Reduce Email Bounce Rate — 7 Proven Strategies (2026)',
             description: 'Reduce email bounce rate with verified lists and AI-powered tools.',
             author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-            publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
             datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/reduce-email-bounce-rate' },
         },
         {
             '@context': 'https://schema.org',

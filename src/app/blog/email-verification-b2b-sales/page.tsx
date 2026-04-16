@@ -21,8 +21,10 @@ export default function B2BSalesBlog() {
             headline: 'Email Verification for B2B Sales Teams (2026)',
             description: 'How B2B sales teams use email verification to boost reply rates.',
             author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-            publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
             datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/email-verification-b2b-sales' },
         },
         {
             '@context': 'https://schema.org',

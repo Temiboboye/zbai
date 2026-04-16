@@ -20,8 +20,10 @@ export default function SpamTrapsBlog() {
             '@type': 'Article',
             headline: 'How to Avoid Spam Traps — Protect Your Sender Reputation (2026)',
             author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-            publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
             datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/how-to-avoid-spam-traps' },
         },
         {
             '@context': 'https://schema.org',

@@ -21,8 +21,10 @@ export default function CatchAllBlog() {
             headline: 'Best Catch-All Email Verification Tools (2026)',
             description: 'How to verify catch-all emails with AI confidence scoring.',
             author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-            publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
             datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/catch-all-email-verification' },
         },
         {
             '@context': 'https://schema.org',

@@ -14,15 +14,28 @@ export const metadata: Metadata = {
 }
 
 export default function EmailVerificationGuide() {
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: 'The Complete Email Verification Guide (2026)',
-        description: 'Learn how to verify emails across every major provider with AI-powered verification.',
-        author: { '@type': 'Organization', name: 'ZeroBounce AI' },
-        publisher: { '@type': 'Organization', name: 'ZeroBounce AI' },
-        datePublished: '2026-03-20',
-    }
+    const jsonLd = [
+        {
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: 'The Complete Email Verification Guide (2026)',
+            description: 'Learn how to verify emails across every major provider with AI-powered verification.',
+            author: { '@type': 'Organization', name: 'ZeroBounce AI' },
+            publisher: { '@type': 'Organization', name: 'ZeroBounce AI', logo: { '@type': 'ImageObject', url: 'https://zerobounceai.com/og-image.png' } },
+            datePublished: '2026-03-20',
+            dateModified: '2026-04-16',
+            mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://zerobounceai.com/blog/email-verification-guide' },
+        },
+        {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://zerobounceai.com' },
+                { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://zerobounceai.com/blog' },
+                { '@type': 'ListItem', position: 3, name: 'Email Verification Guide', item: 'https://zerobounceai.com/blog/email-verification-guide' },
+            ],
+        },
+    ]
 
     return (
         <main className={styles.main}>
