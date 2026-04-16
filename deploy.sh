@@ -52,7 +52,32 @@ full_deploy() {
     echo "6. Checking service status..."
     run_remote "cd $PROJECT_DIR && docker compose -f $COMPOSE_FILE ps"
     
+    echo "7. Pinging search engines..."
+    ping_search_engines
+    
     echo -e "${GREEN}✅ Full deployment complete!${NC}"
+}
+
+# Function: Ping Search Engines (IndexNow + Google/Bing Sitemap)
+ping_search_engines() {
+    echo -e "${YELLOW}🔍 Notifying search engines of updates...${NC}"
+    
+    # Ping IndexNow (Bing/Yandex instant indexing)
+    echo "  → Submitting to IndexNow..."
+    INDEXNOW_RESULT=$(curl -s -X POST https://zerobounceai.com/api/indexnow \
+        -H "Content-Type: application/json" \
+        -H "x-indexnow-secret: zbai-indexnow-2026" 2>&1)
+    echo "  IndexNow: $INDEXNOW_RESULT" | head -c 200
+    echo ""
+    
+    # Ping Google & Bing sitemaps
+    echo "  → Pinging Google & Bing sitemaps..."
+    PING_RESULT=$(curl -s -X POST https://zerobounceai.com/api/ping-google \
+        -H "x-indexnow-secret: zbai-indexnow-2026" 2>&1)
+    echo "  Sitemap ping: $PING_RESULT" | head -c 200
+    echo ""
+    
+    echo -e "${GREEN}  ✅ Search engines notified!${NC}"
 }
 
 # Function: Quick Deployment
@@ -71,6 +96,9 @@ quick_deploy() {
     
     echo "4. Waiting for services..."
     sleep 5
+    
+    echo "5. Pinging search engines..."
+    ping_search_engines
     
     echo -e "${GREEN}✅ Quick deployment complete!${NC}"
 }
@@ -224,11 +252,14 @@ case "$1" in
     drip-send)
         drip_send "$@"
         ;;
+    seo-ping)
+        ping_search_engines
+        ;;
     backup)
         backup_database
         ;;
     *)
-        echo "Usage: $0 {full|quick|restart|logs|status|email|drip|drip-preview|drip-test|drip-send|backup}"
+        echo "Usage: $0 {full|quick|restart|logs|status|email|drip|drip-preview|drip-test|drip-send|seo-ping|backup}"
         echo ""
         echo "Options:"
         echo "  full          - Full deployment (rebuild all containers)"
@@ -241,6 +272,7 @@ case "$1" in
         echo "  drip-preview  - Preview drip (dry run, no emails sent)"
         echo "  drip-test     - Send all 5 test emails to admin inbox"
         echo "  drip-send N   - Send specific drip #N (1-5) to all free users"
+        echo "  seo-ping      - Ping Google, Bing & IndexNow with all URLs"
         echo "  backup        - Backup database"
         exit 1
         ;;
