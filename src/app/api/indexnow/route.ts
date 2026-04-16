@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         }
 
         try {
-            const response = await fetch('https://api.indexnow.org/IndexNow', {
+            const response = await fetch('https://www.bing.com/IndexNow', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify(payload),
