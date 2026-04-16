@@ -2,8 +2,14 @@ import { MetadataRoute } from 'next'
 import { getAllCompetitorSlugs } from './data/competitors'
 import { getAllProviderSlugs } from './data/providers'
 import { getAllIndustrySlugs } from './data/industries'
-import { getAllCompanySlugs } from './data/companies'
+import { getAllCompanySlugs, getAllCompanyDomains } from './data/companies'
 import { getAllIntegrationSlugs } from './data/integrations'
+import { getAllGlossarySlugs } from './data/glossary'
+import { getAllFreeToolSlugs } from './data/freeTools'
+import { getAllUseCaseSlugs } from './data/useCases'
+import { getAllJobTitleSlugs } from './data/jobTitles'
+import { getAllPricingVsSlugs } from './data/pricingVs'
+import { getAllVerificationExampleSlugs } from './data/examples'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://zerobounceai.com'
@@ -52,6 +58,44 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${baseUrl}/alternative-to/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
     }))
 
+    const glossaryPages: MetadataRoute.Sitemap = getAllGlossarySlugs().map(slug => ({
+        url: `${baseUrl}/glossary/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6,
+    }))
+
+    const newFreeToolPages: MetadataRoute.Sitemap = getAllFreeToolSlugs().map(slug => ({
+        url: `${baseUrl}/free-tools/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
+    }))
+
+    const useCasePages: MetadataRoute.Sitemap = getAllUseCaseSlugs().map(slug => ({
+        url: `${baseUrl}/email-verification-for/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8,
+    }))
+
+    const jobTitlePages: MetadataRoute.Sitemap = getAllJobTitleSlugs().map(slug => ({
+        url: `${baseUrl}/email-format-for/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7,
+    }))
+
+    const pricingVsPages: MetadataRoute.Sitemap = getAllPricingVsSlugs().map(slug => ({
+        url: `${baseUrl}/pricing/vs/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9,
+    }))
+
+    const domainPages: MetadataRoute.Sitemap = getAllCompanyDomains().map(domain => ({
+        url: `${baseUrl}/email-lookup/${domain}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7,
+    }))
+
+    const examplePages: MetadataRoute.Sitemap = getAllVerificationExampleSlugs().map(slug => ({
+        url: `${baseUrl}/verify-email/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6,
+    }))
+
+    const DEPARTMENTS = ['sales', 'marketing', 'engineering', 'hr', 'finance']
+    const departmentPages: MetadataRoute.Sitemap = []
+    for (const comp of getAllCompanySlugs()) {
+        for (const dept of DEPARTMENTS) {
+            departmentPages.push({
+                url: `${baseUrl}/email-format/${comp}/${dept}`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.5,
+            })
+        }
+    }
+
     const blogPages: MetadataRoute.Sitemap = [
         { url: `${baseUrl}/blog/email-verification-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
         { url: `${baseUrl}/blog/zerobounce-ai-vs-competitors`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
@@ -71,6 +115,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${baseUrl}/free-tools/domain-age-checker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
     ]
 
-    return [...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, ...integrationPages, ...alternativePages, ...blogPages, ...toolPages]
+    return [
+        ...corePages, ...competitorPages, ...providerPages, ...industryPages, ...companyPages, 
+        ...integrationPages, ...alternativePages, ...blogPages, ...toolPages,
+        ...glossaryPages, ...newFreeToolPages, ...useCasePages, ...jobTitlePages,
+        ...pricingVsPages, ...domainPages, ...examplePages, ...departmentPages
+    ]
 }
 

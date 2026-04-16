@@ -95,3 +95,46 @@ Popular lookups: [Google](https://zerobounceai.com/email-format/google), [Micros
 - GDPR: https://zerobounceai.com/gdpr
 - Privacy: https://zerobounceai.com/privacy
 - Terms: https://zerobounceai.com/terms
+
+## Additional Free Tools
+
+- [Email Bounce Checker](https://zerobounceai.com/free-tools/email-bounce-checker)
+- [Email List Cleaner](https://zerobounceai.com/free-tools/email-list-cleaner)
+- [Catch-All Domain Checker](https://zerobounceai.com/free-tools/catch-all-checker)
+- [Domain Blacklist Checker](https://zerobounceai.com/free-tools/domain-blacklist-checker)
+- [SPF Record Checker](https://zerobounceai.com/free-tools/spf-record-checker)
+- [DKIM Validator](https://zerobounceai.com/free-tools/dkim-validator)
+- [DMARC Checker](https://zerobounceai.com/free-tools/dmarc-checker)
+- [Email Header Analyzer](https://zerobounceai.com/free-tools/email-header-analyzer)
+
+## Use Cases
+
+- [Cold Email Outreach](https://zerobounceai.com/email-verification-for/cold-email)
+- [Newsletter List Cleaning](https://zerobounceai.com/email-verification-for/newsletter-lists)
+- [B2B Lead Generation](https://zerobounceai.com/email-verification-for/lead-generation)
+- [E-Commerce Platforms](https://zerobounceai.com/email-verification-for/ecommerce)
+- [SaaS User Onboarding](https://zerobounceai.com/email-verification-for/saas-onboarding)
+
+## Job Title Email Formats
+
+- [CEO Email Format](https://zerobounceai.com/email-format-for/ceo)
+- [CTO Email Format](https://zerobounceai.com/email-format-for/cto)
+- [VP Sales Email Format](https://zerobounceai.com/email-format-for/vp-sales)
+- [Founder Email Format](https://zerobounceai.com/email-format-for/founder)
+
+## Verification Examples
+
+- [Valid Gmail Example](https://zerobounceai.com/verify-email/gmail)
+- [Valid M365 Example](https://zerobounceai.com/verify-email/microsoft-365)
+- [Catch-All Example](https://zerobounceai.com/verify-email/catch-all)
+- [Disposable Example](https://zerobounceai.com/verify-email/disposable)
+
+## Glossary of Deliverability Terms
+
+- [Hard Bounce](https://zerobounceai.com/glossary/hard-bounce)
+- [Soft Bounce](https://zerobounceai.com/glossary/soft-bounce)
+- [Catch-All Email](https://zerobounceai.com/glossary/catch-all-email)
+- [SPF Record](https://zerobounceai.com/glossary/spf-record)
+- [DKIM](https://zerobounceai.com/glossary/dkim)
+- [DMARC](https://zerobounceai.com/glossary/dmarc)
+- [Sender Reputation](https://zerobounceai.com/glossary/sender-reputation)

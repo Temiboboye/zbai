@@ -472,3 +472,7 @@ export function getAllCompanySlugs(): string[] {
 export function getCompaniesByIndustry(industry: string): Company[] {
   return companies.filter(c => c.industry === industry)
 }
+
+export function getAllCompanyDomains(): string[] {
+  return companies.map(c => c.domain)
+}
