@@ -86,7 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${baseUrl}/verify-email/${slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6,
     }))
 
-    const DEPARTMENTS = ['sales', 'marketing', 'engineering', 'hr', 'finance']
+    const DEPARTMENTS = ['sales', 'marketing', 'engineering', 'hr', 'finance', 'operations', 'executive', 'legal', 'it', 'product']
     const departmentPages: MetadataRoute.Sitemap = []
     for (const comp of getAllCompanySlugs()) {
         for (const dept of DEPARTMENTS) {

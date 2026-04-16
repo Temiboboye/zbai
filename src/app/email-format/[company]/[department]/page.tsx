@@ -9,7 +9,12 @@ const DEPARTMENTS = [
     { slug: 'marketing', name: 'Marketing' },
     { slug: 'engineering', name: 'Engineering' },
     { slug: 'hr', name: 'Human Resources' },
-    { slug: 'finance', name: 'Finance' }
+    { slug: 'finance', name: 'Finance' },
+    { slug: 'operations', name: 'Operations' },
+    { slug: 'executive', name: 'Executive' },
+    { slug: 'legal', name: 'Legal' },
+    { slug: 'it', name: 'Information Technology' },
+    { slug: 'product', name: 'Product' }
 ]
 
 interface PageProps {
