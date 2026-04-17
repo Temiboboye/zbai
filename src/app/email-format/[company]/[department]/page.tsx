@@ -22,13 +22,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    const params = []
-    for (const company of companies) {
-        for (const dept of DEPARTMENTS) {
-            params.push({ company: company.slug, department: dept.slug })
-        }
-    }
-    return params
+    return []
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

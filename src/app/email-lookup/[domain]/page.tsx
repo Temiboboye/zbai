@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    return companies.map((c) => ({ domain: c.domain }))
+    return []
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
