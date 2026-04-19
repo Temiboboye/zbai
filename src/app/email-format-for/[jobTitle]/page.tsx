@@ -144,6 +144,30 @@ export default async function JobTitleEmailFormatPage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Related Resources</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href="/email-lookup/google.com">🔎 Google Email Lookup</a>
+                        <a href="/email-lookup/microsoft.com">🔎 Microsoft Email Lookup</a>
+                        <a href="/email-lookup/salesforce.com">🔎 Salesforce Email Lookup</a>
+                        <a href="/email-format/google/sales">🏢 Google Sales Dept</a>
+                        <a href="/email-format/microsoft/engineering">🏢 Microsoft Engineering Dept</a>
+                        <a href="/email-format/apple/executive">🏢 Apple Executive Dept</a>
+                        <a href="/glossary/sender-reputation">📖 What is Sender Reputation?</a>
+                        <a href="/glossary/spam-trap">📖 What is a Spam Trap?</a>
+                        <a href="/glossary/catch-all-email">📖 What is Catch-All Email?</a>
+                        <a href="/free-tools/email-bounce-checker">🔧 Bounce Checker Tool</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Catch-All Checker Tool</a>
+                        <a href="/verify-email/gmail">⚡ Gmail API Example</a>
+                        <a href="/verify-email/microsoft-365">⚡ M365 API Example</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                        <a href="/pricing/vs/hunter-io">💸 vs Hunter.io Pricing</a>
+                    </div>
+                </div>
+            </section>
+
             <footer className={styles.footer}>
                 <div className={styles.container}>
                     <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>

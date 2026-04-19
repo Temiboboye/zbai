@@ -172,6 +172,29 @@ export default async function PricingVsPage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Related Resources</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href={`/alternative-to/${slug}`}>🔄 {pricing.competitorName} Alternative</a>
+                        <a href={`/compare/${slug}`}>📊 Full {pricing.competitorName} Comparison</a>
+                        <a href="/free-tools/email-bounce-checker">🔧 Free Bounce Checker</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Free Catch-All Checker</a>
+                        <a href="/free-tools/dkim-validator">🔧 Free DKIM Validator</a>
+                        <a href="/glossary/email-deliverability">📖 Email Deliverability</a>
+                        <a href="/glossary/sender-reputation">📖 Sender Reputation</a>
+                        <a href="/glossary/bounce-rate">📖 Bounce Rate</a>
+                        <a href="/email-format-for/ceo">👔 CEO Email Format</a>
+                        <a href="/email-format-for/vp-sales">👔 VP Sales Format</a>
+                        <a href="/email-lookup/google.com">🔎 Google Email Lookup</a>
+                        <a href="/email-lookup/microsoft.com">🔎 Microsoft Email Lookup</a>
+                        <a href="/verify-email/gmail">⚡ Gmail Verification Example</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                    </div>
+                </div>
+            </section>
+
             <footer className={styles.footer}>
                 <div className={styles.container}>
                     <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>

@@ -159,6 +159,46 @@ export default async function EmailLookupDomainPage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Department Links for THIS Company */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>{company.name} Department Email Formats</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href={`/email-format/${company.slug}/sales`}>🏢 {company.name} Sales</a>
+                        <a href={`/email-format/${company.slug}/marketing`}>🏢 {company.name} Marketing</a>
+                        <a href={`/email-format/${company.slug}/engineering`}>🏢 {company.name} Engineering</a>
+                        <a href={`/email-format/${company.slug}/hr`}>🏢 {company.name} HR</a>
+                        <a href={`/email-format/${company.slug}/executive`}>🏢 {company.name} Executive</a>
+                        <a href={`/email-format/${company.slug}/finance`}>🏢 {company.name} Finance</a>
+                        <a href={`/email-format/${company.slug}/legal`}>🏢 {company.name} Legal</a>
+                        <a href={`/email-format/${company.slug}/it`}>🏢 {company.name} IT</a>
+                        <a href={`/email-format/${company.slug}/operations`}>🏢 {company.name} Operations</a>
+                        <a href={`/email-format/${company.slug}/product`}>🏢 {company.name} Product</a>
+                    </div>
+                </div>
+            </section>
+
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Related Resources</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href="/email-format-for/ceo">👔 CEO Email Format</a>
+                        <a href="/email-format-for/cto">👔 CTO Email Format</a>
+                        <a href="/email-format-for/vp-sales">👔 VP Sales Format</a>
+                        <a href="/glossary/catch-all-email">📖 What is Catch-All?</a>
+                        <a href="/glossary/mx-record">📖 What is an MX Record?</a>
+                        <a href="/glossary/sender-reputation">📖 Sender Reputation</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Catch-All Checker</a>
+                        <a href="/free-tools/email-bounce-checker">🔧 Bounce Checker</a>
+                        <a href="/verify-email/gmail">⚡ Gmail Verification Example</a>
+                        <a href="/verify-email/catch-all">⚡ Catch-All Example</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                        <a href="/email-verification-for/lead-generation">📧 Lead Gen Verification</a>
+                    </div>
+                </div>
+            </section>
+
             <footer className={styles.footer}>
                 <div className={styles.container}>
                     <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>

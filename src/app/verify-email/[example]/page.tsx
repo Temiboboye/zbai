@@ -123,6 +123,30 @@ export default async function VerificationExamplePage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Related Resources</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href="/glossary/hard-bounce">📖 What is a Hard Bounce?</a>
+                        <a href="/glossary/soft-bounce">📖 What is a Soft Bounce?</a>
+                        <a href="/glossary/catch-all-email">📖 What is Catch-All?</a>
+                        <a href="/glossary/disposable-email">📖 What is a Disposable Email?</a>
+                        <a href="/glossary/smtp">📖 What is SMTP?</a>
+                        <a href="/free-tools/email-bounce-checker">🔧 Bounce Checker Tool</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Catch-All Checker</a>
+                        <a href="/free-tools/dkim-validator">🔧 DKIM Validator</a>
+                        <a href="/email-lookup/google.com">🔎 Google Email Lookup</a>
+                        <a href="/email-lookup/microsoft.com">🔎 Microsoft Email Lookup</a>
+                        <a href="/email-format-for/ceo">👔 CEO Email Format</a>
+                        <a href="/email-format-for/cto">👔 CTO Email Format</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                        <a href="/email-verification-for/saas-onboarding">📧 SaaS Onboarding</a>
+                        <a href="/pricing/vs/neverbounce">💸 vs NeverBounce Pricing</a>
+                    </div>
+                </div>
+            </section>
+
             <footer className={styles.footer}>
                 <div className={styles.container}>
                     <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>

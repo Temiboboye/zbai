@@ -149,6 +149,27 @@ export default async function DepartmentEmailFormatPage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Related Resources</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href={`/email-lookup/${company.domain}`}>🔎 {company.domain} Email Lookup</a>
+                        <a href={`/email-format/${compSlug}`}>🏢 All {company.name} Email Formats</a>
+                        <a href="/email-format-for/ceo">👔 CEO Email Format</a>
+                        <a href="/email-format-for/cto">👔 CTO Email Format</a>
+                        <a href="/email-format-for/vp-sales">👔 VP Sales Email Format</a>
+                        <a href="/glossary/catch-all-email">📖 What is Catch-All Email?</a>
+                        <a href="/glossary/sender-reputation">📖 Sender Reputation</a>
+                        <a href="/glossary/role-based-email">📖 Role-Based Emails</a>
+                        <a href="/free-tools/email-bounce-checker">🔧 Bounce Checker</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Catch-All Checker</a>
+                        <a href="/verify-email/gmail">⚡ Gmail API Example</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                    </div>
+                </div>
+            </section>
+
             <footer className={styles.footer}>
                 <div className={styles.container}>
                     <p>© 2026 ZeroBounce AI. All rights reserved. GDPR Compliant.</p>

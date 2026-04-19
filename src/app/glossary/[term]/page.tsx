@@ -110,6 +110,27 @@ export default async function GlossaryTermPage({ params }: PageProps) {
                 </section>
             )}
 
+            {/* Cross-Template Internal Links */}
+            <section className={styles.seoLinks}>
+                <div className={styles.container}>
+                    <h3>Explore ZeroBounce AI</h3>
+                    <div className={styles.linksGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                        <a href="/free-tools/email-bounce-checker">🔧 Email Bounce Checker</a>
+                        <a href="/free-tools/catch-all-checker">🔧 Catch-All Checker</a>
+                        <a href="/free-tools/spf-record-checker">🔧 SPF Record Checker</a>
+                        <a href="/free-tools/dkim-validator">🔧 DKIM Validator</a>
+                        <a href="/email-format-for/ceo">👔 CEO Email Format</a>
+                        <a href="/email-format-for/cto">👔 CTO Email Format</a>
+                        <a href="/email-format-for/vp-sales">👔 VP Sales Email Format</a>
+                        <a href="/email-verification-for/cold-email">📧 Cold Email Verification</a>
+                        <a href="/email-verification-for/lead-generation">📧 Lead Gen Verification</a>
+                        <a href="/verify-email/gmail">⚡ Gmail Verification Example</a>
+                        <a href="/verify-email/catch-all">⚡ Catch-All Example</a>
+                        <a href="/email-lookup/google.com">🔎 Google Email Lookup</a>
+                    </div>
+                </div>
+            </section>
+
             {/* CTA */}
             <section className={styles.cta}>
                 <div className={styles.container}>
